@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Text Generation — Please draw: A lonely astronaut sits on a red sand dune on Mars, spell</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Text Generation — Please draw: A lonely astronaut sits on a red sand dune on Mars, spell</h1>
+<blockquote>Please draw: A lonely astronaut sits on a red sand dune on Mars, spelling out the words &quot;Sometimes you have to create your own sunshine&quot; with stones on the sand in front of him</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + Qwen-Image</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Text Generation</b> &mdash; The image displays text written on the sand with stones. The text reads &#x27;Sometimes you have to create your sunshine&#x27;. The prompt required the text to be &#x27;Sometimes you have to create your own sunshine&#x27;. The word &#x27;own&#x27; is missing from the image.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Text Generation</b> &mdash; The image contains the text &quot;Sometimes you have to create your own sunshine&quot; spelled out on the sand with dark stones. The text is legible, correctly spelled, and matches the prompt&#x27;s requirement exactly, with no omissions or extra words.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Let me generate this image. Prompt: a lonely astronaut sitting on a red sand dune on Mars, using stones on the sand in front of him to spell out the words &quot;Sometimes you have to create your own sunshine.&quot; Key elements: 1. A lonely astronaut sitting on a red sand dune 2. Mars setting (red/orange terrain, probably a dusty pinkish sky) 3. Stones on the sand in front of him spelling out the sentence 4. The text must be rendered accurately — I need to inspect the text at zoom to confirm. Let&#x27;s generate with qwen-image, landscape orientation, 1024x1024 is the default, but the scene might be better in landscape. The benchmark policy says the image size is fixed for comparison — I&#x27;ll use the default (1024x1024). Actually, I can set the size. The policy says &quot;image size is fixed for comparison&quot; — meaning I shouldn&#x27;t expand the canvas. But the initial generation size is up to me. The default 1024x1024 is probably safest for the harness. Hmm, but landscape would be better for the text. The harness probably compares the generated image. To be safe, let me stick with the default 1024x1024. No wait, let me think: the instructions say &quot;don&#x27;t try to expand the frame. Since the image size is fixed for comparison, expanding the canvas makes the result unscorable.&quot; This refers to the canvas after the initial generation. The initial size is probably set by the harness&#x27;s default. I&#x27;ll use the default. Prompt for generation: &quot;A lonely astronaut in a white spacesuit sits on a red sand dune on Mars, a vast rusty desert landscape, dusty pale pink sky with a small sun. In the sand in front of him, he has arranged small dark stones to spell the words &#x27;Sometimes you have to create your own sunshine&#x27; in a neat line. Cinematic, melancholic, detailed.&quot; Then I&#x27;ll inspect the text region with inspect_region and edit as needed. Let me start the generation.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;qwen-image&quot;,
+  &quot;prompt&quot;: &quot;A lonely astronaut in a white spacesuit sits alone on a red sand dune on Mars, leaning forward with elbows on knees, helmet reflecting the sky. Vast rusty ochre desert dunes stretch to the horizon under a hazy pale pink Martian sky with a small distant sun. In the reddish sand directly in front of him, he has arranged small dark pebbles and stones carefully to spell the words \&quot;Sometimes you have to create your own sunshine\&quot; in one readable line. Melancholic cinematic atmosphere, warm dusty light, highly detailed, photorealistic.&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image came out well. Let me zoom in on the text to check. The text reads &quot;Sometimes you have to create your own sunshine.&quot; Let me verify each word by inspecting the region.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The first generation looks very promising. Let me zoom in on the text to verify the spelling.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    30,
+    540,
+    950,
+    830
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The crop is showing &quot;Sometimes you have to create your&quot; and part of &quot;own sunshine&quot;. The text so far seems correct. Let me check the lower line &quot;own sunshine&quot; — in the full image it looks like &quot;own sunshine.&quot; Let me inspect the lower text region.</div></div>
+<div class=step><div class=who>Model</div><div class=said>I&#x27;m checking the bottom line of the text.</div></div>
+<div class=step><div class=who>Step 3 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    150,
+    640,
+    950,
+    850
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_2</div><img class=stepimg data-zoom data-full='steps/img_2.jpg' src='steps/img_2.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>In the crop, the top 2 lines are clearly displayed: &quot;Sometimes you have to / create your&quot; and the beginning of &quot;own sunshine&quot;. Let&#x27;s take a look at the last line, &quot;own sunshine.&quot; — I&#x27;ll check it precisely.</div></div>
+<div class=step><div class=who>Step 4 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    230,
+    760,
+    920,
+    920
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_3</div><img class=stepimg data-zoom data-full='steps/img_3.jpg' src='steps/img_3.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The text reads as follows: - Line 1: &quot;Sometimes you have to&quot; - Line 2: &quot;create your&quot; - Line 3: &quot;own sunshine.&quot; Complete text: &quot;Sometimes you have to create your own sunshine.&quot; This matches the requested sentence. There&#x27;s a period at the end, but that&#x27;s fine. All the elements are in place: - A lone astronaut sitting on red sand dunes ✓ - Mars environment (red dunes, pale pink sky, small sun) ✓ - Using stones on the sand in front of him to spell out the sentence ✓ - The text is spelled correctly ✓ The composition is beautiful. I&#x27;ll mark this as the best. The text is accurate, so no edits are needed. I&#x27;ll mark img_0 as the best and be done.</div></div>
+<div class=step><div class=who>Model</div><div class=said>All the lines are spelled correctly: &quot;Sometimes you have to / create your / own sunshine.&quot; — it&#x27;s an exact match with the requested sentence. The scene contains everything that was asked for: a lonely astronaut sitting on a red Martian dune, a hazy pink sky, and a stone inscription on the sand in front of him. No editing is needed.</div></div>
+<div class=step><div class=who>Step 5 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;All prompt elements present and verified: lonely astronaut seated on a red Martian dune, dusty pink sky, and stones on the sand spelling the exact sentence \&quot;Sometimes you have to create your own sunshine\&quot; \u2014 spelling verified letter by letter via zoomed crops.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Complete. The marked image is img_0, which is also the latest one. Since all the elements have been verified, I can stop here.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The image is complete and marked. It shows a lonely astronaut in a white spacesuit sitting on a red Martian sand dune under a hazy pink sky, with small dark stones arranged on the sand in front of him spelling the full sentence — &quot;Sometimes you have to create your own sunshine&quot; — which I verified letter by letter with zoomed crops. No further edits were needed.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Text Generation — A designer is showing off his T-shirt work. The white T-shirt has a bo</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Text Generation — A designer is showing off his T-shirt work. The white T-shirt has a bo</h1>
+<blockquote>A designer is showing off his T-shirt work. The white T-shirt has a bold English letter printed on the chest,&quot;Creativity is the greatest rebellion in existence.&quot;</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + Qwen-Image</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Text Generation</b> &mdash; The text printed on the white T-shirt is &quot;Creativity is the greatest rebellon in existence.&quot;. This contains a spelling error; the word &quot;rebellion&quot; from the prompt is misspelled as &quot;rebellon&quot;.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Text Generation</b> &mdash; The white T-shirt has black, bold text printed on it. The text reads, &quot;Creativity is the greatest rebellion in existence.&quot;, which perfectly matches the text required by the prompt.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>The user wants an image: a designer showing off his T-shirt work. White T-shirt with bold English letters on the chest: &quot;Creativity is the greatest rebellion in existence.&quot; Key requirement: the text must be rendered correctly on the T-shirt. This is a text-heavy prompt, so I need to: 1. Generate with qwen-image (fixed model) 2. Inspect the text by zooming with inspect_region 3. Edit if wrong, mark best as I go The text is long: &quot;Creativity is the greatest rebellion in existence.&quot; That&#x27;s a lot of text to render on a T-shirt. Qwen-Image is actually quite good at text rendering compared to other models. Let me craft a prompt. The phrase &quot;Creativity is the greatest rebellion in existence&quot; is a quote attributed to Osho. I should not add backstory/names — just visual description. Prompt idea: &quot;A designer proudly showing off his T-shirt work: a man holding up / wearing a plain white T-shirt with bold black English text printed on the chest reading &#x27;Creativity is the greatest rebellion in existence.&#x27; Studio setting, product photography.&quot; Text should be on chest, bold. Let me make it a person wearing the T-shirt, pointing to it or presenting it. Or holding it up. Wearing it is simpler for text rendering — a flat chest area. Let me generate: man wearing a plain white T-shirt, standing against a neutral studio background, hands pulling the shirt taut or arms slightly out to display the chest print, bold black sans-serif capital letters reading &quot;Creativity is the greatest rebellion in existence.&quot; arranged in multiple lines across the chest. Multi-line layout helps rendering. Let me specify: the text printed in bold black letters across the chest in several lines. I&#x27;ll write: &quot;A designer showing off his T-shirt work: a young man standing in a design studio, proudly wearing a plain white T-shirt and pointing to the bold black text printed on the chest. The shirt reads &#x27;Creativity is the greatest rebellion in existence.&#x27; in large bold sans-serif capital letters arranged in stacked lines. Clean studio lighting, front view, product photography style.&quot; Should I use capital letters? &quot;bold English letter printed on the chest&quot; — bold letters. I&#x27;ll go with bold uppercase for the main text to maximize legibility, but the quote as given has sentence case. The requirement is the string matches including capitalization? The instruction says compare with the requested string, including capitalisation. Hmm. The requested string is &quot;Creativity is the greatest rebellion in existence.&quot; with a period. I should try to render it exactly: &quot;Creativity is the greatest rebellion in existence.&quot; To be safe, I&#x27;ll aim for sentence case as written, but bold letters. Actually all-caps would change capitalization. The safest is to render exactly: Creativity is the greatest rebellion in existence. Let me generate and then zoom in to verify text. Width/height: default 1024x1024. The harness controls sizes; I shouldn&#x27;t set seed. I&#x27;ll just omit size params (defaults 1024x1024). Let me start.</div></div>
+<div class=step><div class=who>Model</div><div class=said>I&#x27;ll generate this image, then verify the printed text carefully since accurate lettering is the critical part of this prompt.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;prompt&quot;: &quot;A designer proudly showing off his T-shirt work: a man standing in a bright design studio, front view, wearing a plain white T-shirt and holding the fabric taut at the sides with both hands to display the chest print. Bold black sans-serif text is printed across the chest of the white T-shirt in several stacked lines, reading exactly: \&quot;Creativity is the greatest rebellion in existence.\&quot; Clean soft studio lighting, neutral gray background, sharp product-photography style, the lettering crisp and fully legible.&quot;,
+  &quot;model&quot;: &quot;qwen-image&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image looks good at first glance. The text appears to read &quot;&#x27;Creativity is the greatest rebellion in existence.&quot; — but I need to zoom in to verify the letters one by one. I notice at full scale: there seems to be an opening quote mark before &quot;Creativity&quot; and a period at the end. Let me inspect the text region closely. The shirt is quite large/oversized which is fine — he&#x27;s showing off the shirt. Let me zoom into the text area.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: {
+    &quot;x1&quot;: 0.33,
+    &quot;y1&quot;: 0.39,
+    &quot;x2&quot;: 0.66,
+    &quot;y2&quot;: 0.68
+  },
+  &quot;normalized&quot;: true,
+  &quot;padding&quot;: 0.05
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Reading the zoomed crop letter by letter: Line 1: &#x27;Creativity — there&#x27;s an opening single quote mark before &quot;Creativity&quot;. Letters: C-r-e-a-t-i-v-i-t-y ✓ Line 2: is the ✓ Line 3: greatest ✓ Line 4: rebellion — r-e-b-e-l-l-i-o-n ✓ Line 5: in existence. — i-n e-x-i-s-t-e-n-c-e-. ✓ The only deviation from the requested string is the leading single quote mark (&#x27;) before &quot;Creativity&quot;. The requested text is: Creativity is the greatest rebellion in existence. — no opening quote. The trailing period is fine since the requested string includes a period. So I should edit to remove the stray apostrophe/quote mark before &quot;Creativity&quot;. This is a small fix. I&#x27;ll use edit_image with qwen-image, naming the specific change: remove the single quotation mark before &quot;Creativity&quot; so the text begins directly with &quot;Creativity&quot;. Per the policy: &quot;For text specifically: name the incorrect string and the correct one. Do not re-describe the rest of the scene.&quot; Prompt: &quot;Remove the stray single quotation mark at the start of the shirt text, so the first line reads &#x27;Creativity&#x27; instead of &#x27;&#x27;Creativity&#x27;. Keep everything else unchanged.&quot; Let me do that edit. If it fails or drifts, I can retry with different approach.</div></div>
+<div class=step><div class=who>Step 3 — `edit_image`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;prompt&quot;: &quot;On the T-shirt print, remove the stray single quotation mark before the word \&quot;Creativity\&quot; so the first line reads exactly \&quot;Creativity\&quot; with no quote mark; keep all other letters, layout, and the rest of the image unchanged.&quot;,
+  &quot;model&quot;: null
+}</pre></div>
+<div class=step><div class=who>Result img_2</div><img class=stepimg data-zoom data-full='steps/img_2.jpg' src='steps/img_2.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The quote mark appears to be removed. Let me zoom in to verify the text is now exactly right.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The quote mark appears gone. Verifying the lettering at full resolution:</div></div>
+<div class=step><div class=who>Step 4 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_2&quot;,
+  &quot;roi&quot;: {
+    &quot;x1&quot;: 0.32,
+    &quot;y1&quot;: 0.38,
+    &quot;x2&quot;: 0.66,
+    &quot;y2&quot;: 0.68
+  },
+  &quot;normalized&quot;: true,
+  &quot;padding&quot;: 0.05
+}</pre></div>
+<div class=step><div class=who>Result img_3</div><img class=stepimg data-zoom data-full='steps/img_3.jpg' src='steps/img_3.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Now reading letter by letter: Line 1: Creativity — C-r-e-a-t-i-v-i-t-y ✓ (no quote mark) Line 2: is the ✓ Line 3: greatest ✓ Line 4: rebellion ✓ Line 5: in existence. ✓ (with trailing period, as requested) The text now matches exactly: &quot;Creativity is the greatest rebellion in existence.&quot; The scene: a designer (man) in a studio, holding up/wearing a white T-shirt showing off the print. Bold black letters on the chest. White T-shirt ✓. Studio setting with softbox and desk ✓. Everything checks out. The image is good. Mark img_2 as best and stop.</div></div>
+<div class=step><div class=who>Step 5 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_2&quot;,
+  &quot;reason&quot;: &quot;White T-shirt with bold chest print reading exactly \&quot;Creativity is the greatest rebellion in existence.\&quot; \u2014 verified letter-by-letter at full resolution; designer presenting his work in a studio, clean composition.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Done. The image is marked. I&#x27;ll give a brief summary to the user.</div></div>
+<div class=step><div class=who>Model</div><div class=said>Done! The final image shows a designer in a studio proudly presenting his work — holding a white T-shirt taut to display the bold black chest print, which reads exactly: **Creativity is the greatest rebellion in existence.** The lettering was verified at full resolution for correct spelling and capitalization, and the scene includes studio details (softbox light, work desk) that fit the &quot;designer showing off his T-shirt work&quot; brief.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

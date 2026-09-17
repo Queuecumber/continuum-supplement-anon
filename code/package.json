@@ -1,0 +1,17 @@
+{
+  "name": "continuum-pi",
+  "version": "0.0.0",
+  "description": "Continuum MCP tools as a Pi extension",
+  "type": "module",
+  "keywords": [
+    "pi-package"
+  ],
+  "pi": {
+    "extensions": [
+      "./pi-extension/extensions"
+    ]
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  }
+}

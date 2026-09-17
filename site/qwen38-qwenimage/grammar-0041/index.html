@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Grammar — Generated image: A ceramic mushroom man with arms like branches but no</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Grammar — Generated image: A ceramic mushroom man with arms like branches but no</h1>
+<blockquote>Generated image: A ceramic mushroom man with arms like branches but no fungus cover on his head.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + Qwen-Image</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Grammar - Negation</b> &mdash; The prompt specifies that the mushroom man should have &#x27;no fungus cover on his head&#x27;. The image, however, clearly depicts the character with a large, red mushroom cap with white spots on its head. This is a fungus cover, directly contradicting the negative constraint in the prompt.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image shows a figurine that appears to be made of ceramic, with a glossy finish. The figure is a mushroom man, having a humanoid body with a mushroom cap. Its arms are brown and shaped like tree branches, complete with smaller twig-like offshoots.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Negation</b> &mdash; The figure in the image has a smooth, spherical, off-white head. There is no fungus cover, cap, or any other feature on top of its head, correctly adhering to the negative constraint in the prompt.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image depicts a figure with a body shaped like a mushroom stem and a round head, giving it the appearance of a &#x27;mushroom man&#x27;. The texture and finish of the white body are consistent with ceramic. The figure&#x27;s arms are brown, have a woody texture, and are shaped like tree branches.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>I need to investigate further. Let me check the details. The user is asking for a generated image: &quot;a ceramic mushroom man with arms like branches, but no fungal cap on his head.&quot; Interpreting this: the character is a mushroom man (a figure in the shape of a mushroom) made of ceramic, with arms like tree branches, and his head has no fungal cap — meaning instead of a typical mushroom cap on top of the head, the head is bare/cap-less (the &quot;fungal cap&quot; on the head is missing — that is, he&#x27;s a mushroom body but the cap on the head is absent). So: a man with a mushroom body? Or a man with a mushroom head? &quot;A mushroom man&quot; = a humanoid mushroom character. The head has no fungal cap — his head is exposed (like a bald, bare mushroom stem head, or a human face without a cap). The arms are made of tree branches (wooden branch arms). Made of ceramic — matte/clay texture, maybe with a glaze. Generate with qwen-image. Fill in the visual details: a full-body or three-quarter shot of a ceramic mushroom man, smooth matte ceramic texture, soft studio lighting, neutral background, the arms as bare wooden branches with small twigs, the head a smooth round cap-less head (bald, mushroom-stem-like head, no cap, no fungus). Let me carefully craft the prompt so the head doesn&#x27;t end up having a cap. &quot;A ceramic figurine of an anthropomorphic mushroom man, smooth matte white ceramic body with a pale stem-like torso, the head is a smooth round bald head with no cap, no mushroom cap on the head, simple carved face, arms made of twisted brown tree branches with small twigs and knots, standing pose, soft studio lighting, plain warm beige background, minimalist product photo style.&quot; The negative concept (no cap) is hard, but I&#x27;ll just describe the head as bare/smooth. After that, inspect and edit. Let&#x27;s generate.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;prompt&quot;: &quot;A ceramic figurine of an anthropomorphic mushroom man, full body standing pose. His body is a smooth matte ceramic mushroom-stem torso in pale cream color, and his head is a smooth, round, completely bare bald head with a simple sculpted face \u2014 no mushroom cap, no fungus covering on top of the head, just smooth ceramic. His arms are made of gnarled brown tree branches with small twigs and knots instead of hands. Soft even studio lighting, plain warm beige background, minimalist studio product photography, centered composition.&quot;,
+  &quot;model&quot;: &quot;qwen-image&quot;,
+  &quot;width&quot;: 1024,
+  &quot;height&quot;: 1024
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Image: A ceramic mushroom figure with a large round white cap on its head. The user&#x27;s request was &quot;no fungal cover on the head.&quot; The current head has a giant mushroom cap (with gills) on it—this is exactly the fungal cover that shouldn&#x27;t be there. The figure has a white mushroom cap on its head, and that&#x27;s the problem. The arms are branches, so that&#x27;s correct. Interpretation: &quot;Mushroom man&quot; = a man who is a mushroom; &quot;no fungal cover on the head&quot;—meaning his head shouldn&#x27;t have a cap/fungus on it. So the head should be a bare human head (a face without a cap), while the body can still look like a mushroom? Hmm. Actually, &quot;mushroom man&quot; with &quot;no fungal cover on the head&quot;—the figure is a mushroom man, and his head is bare (no cap). So the head is a smooth, bare head (like a bald, smooth ceramic head with a face), and the body/torso might still be a mushroom-shaped stem body. Current state: The face is on the cap, and the cap is sitting on top of the stem like a hat. Need to remove the cap shape so the head becomes a bare round head. Approach: An edit where the head becomes a bare smooth ceramic head without a cap. This is a significant structural change: the cap is the head. Better approach: Regenerate with a clearer prompt: &quot;Head is a smooth bare round ceramic head with a simple face, no mushroom cap on the head&quot;—I already said this, but the model made the cap into the head itself. Let me try editing: &quot;Remove the mushroom cap from the head; the head is a smooth round bald ceramic head with a face, seamlessly connected to the stem neck, no cap or gills.&quot; Alternative: Inpaint the head region. But the structural change (cap → bare head) is large; edit_image might handle it. Let me try edit_image first. Prompt: &quot;Replace the mushroom cap on top of the head with a smooth, bare, rounded bald ceramic head. The face sits directly on the smooth head, with no cap, no gills, no overhang. The head flows seamlessly into the neck.&quot; This should work. Let me try it.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The arms are correct as branches, but the model gave the character a large mushroom cap on top of the head — that&#x27;s exactly the fungal cover that&#x27;s being prohibited. Let&#x27;s fix the head.</div></div>
+<div class=step><div class=who>Step 2 — `edit_image`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;model&quot;: &quot;qwen-image&quot;,
+  &quot;prompt&quot;: &quot;Remove the mushroom cap from the figure&#x27;s head. The head should be a smooth, rounded, bare bald ceramic head in the same cream color as the body, with the simple face directly on the smooth head. No cap, no gills, no overhanging dome on top of the head. The smooth bare head flows seamlessly into the neck of the stem body. Keep everything else \u2014 the ceramic stem body, the branch arms, the background and lighting \u2014 exactly the same.&quot;,
+  &quot;references&quot;: [
+    &quot;img_0&quot;
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Now, the head has become a smooth, bare, rounded head without a fungal cap, the body is a mushroom-shaped stem (the mushroom man part), and the arms are branches. The ceramic texture is good too. Checklist: - Ceramic: Yes, matte ceramic look ✓ - Mushroom man: The body is a mushroom stem shape (the figure is a mushroom man) ✓ — though, now that the cap is gone, one could argue it looks more like a &quot;stem man.&quot; The body is a classic mushroom stem shape, so it reads as a mushroom man. The prompt says &quot;a mushroom man with a fungal cap on the head but not covering the head,&quot; meaning it should be a mushroom man, but the head should be bare. This matches: mushroom body, bare head. - Branch-like arms: ✓ - No fungal cover on the head: ✓ The head is a smooth, bald one. This matches. Let me look at it in detail and double-check for any artifacts. The face is simple, and the head looks smooth. Looks good. Mark as best and done. Just to be safe, let me briefly check the head region at full resolution and confirm there are no cap remnants.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The cap is gone — the head is now a smooth, bare ceramic head, the body is a mushroom stem, and the arms remain as branches. Let me zoom in on the head to confirm no cap remnants remain.</div></div>
+<div class=step><div class=who>Step 3 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_1&quot;,
+  &quot;roi&quot;: &quot;the head of the figure&quot;,
+  &quot;padding&quot;: 0.1
+}</pre></div>
+<div class=step><div class=who>Result img_2</div><img class=stepimg data-zoom data-full='steps/img_2.jpg' src='steps/img_2.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The head is completely smooth and bare — no cap, no gills, no fungal cover. The face is simple, and the ceramic is clean. This satisfies all the elements: - Ceramic mushroom man: The body is a ceramic mushroom stem (mushroom-shaped torso), with a bare head ✓ - Branch-like arms ✓ - No fungal cover on the head ✓ Mark img_1 as the best and done.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The head is completely smooth and bare, with no cap or gill residue. All the requested elements are in place: a ceramic mushroom figure (a mushroom-shaped stem body), arms like tree branches, and a head without a cap or any fungal cover.</div></div>
+<div class=step><div class=who>Step 4 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_1&quot;,
+  &quot;reason&quot;: &quot;Ceramic mushroom man with branch arms and a smooth bare head (no fungus cap), matching all prompt requirements; verified head has no cap remnants.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Done. Summarize concisely.</div></div>
+<div class=step><div class=who>Model</div><div class=said>Done. The final image (img_1, marked as best) shows a ceramic mushroom man: a cream, matte-ceramic mushroom-stem body, arms made of gnarled brown tree branches, and a smooth, rounded, completely bare head with no fungus cap or cover — the initial version had a full mushroom cap on the head, which I edited out.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

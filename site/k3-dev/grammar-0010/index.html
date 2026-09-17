@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Grammar — Create a picture of an archaeologist brushing sand off a sarcophagus i</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Grammar — Create a picture of an archaeologist brushing sand off a sarcophagus i</h1>
+<blockquote>Create a picture of an archaeologist brushing sand off a sarcophagus in front of an Egyptian pyramid, looking focused.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Consistency</b> &mdash; The man in the image is looking down at the object he is working on. His gaze is fixed on the brush and the sand, and his facial muscles appear tense, which is consistent with the expression of being &#x27;focused&#x27;.</li>
+<li><span class='tag fail'>FAIL</span><b>Action - Contact Interaction</b> &mdash; The image shows a man holding a brush and making contact with sand that is on top of an object. However, the object is a decorated chest, not a sarcophagus. Therefore, the action of &#x27;brushing sand off a sarcophagus&#x27; is not accurately depicted.</li>
+<li><span class='tag fail'>FAIL</span><b>World Knowledge</b> &mdash; The image contains a large, stone pyramid in the background, which is consistent with an Egyptian pyramid. However, the object in the foreground is a decorated chest with a curved lid, which does not match the typical appearance of an Egyptian sarcophagus (a stone coffin).</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Consistency</b> &mdash; The person in the image is shown kneeling and leaning forward, with their head tilted down and their gaze directed at the sarcophagus lid they are working on. This posture and direction of gaze indicate that they are focused on their task.</li>
+<li><span class='tag pass'>PASS</span><b>Action - Contact Interaction</b> &mdash; The person, who appears to be an archaeologist, is holding a brush. The bristles of the brush are in contact with the surface of a stone sarcophagus, and particles of sand are shown in the air around the brush, indicating the action of brushing sand off the object.</li>
+<li><span class='tag pass'>PASS</span><b>World Knowledge</b> &mdash; The image includes a large, triangular structure in the background that is consistent with the appearance of an Egyptian pyramid. The object in the foreground is a rectangular stone box with carved inscriptions resembling hieroglyphics, which is a correct representation of a sarcophagus.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Generate with flux2-dev, then inspect and iterate.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;flux2-dev&quot;,
+  &quot;prompt&quot;: &quot;An archaeologist kneeling at an archaeological dig site in front of a large ancient Egyptian pyramid, carefully brushing sand off a stone sarcophagus with a soft brush. She wears a khaki field shirt, wide-brimmed hat, and has a focused, intent expression. Golden desert sand, warm late-afternoon sunlight, hieroglyphics carved on the sarcophagus lid, dust motes in the air. Cinematic realistic photography, shallow depth of field, warm tones.&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image looks quite good: archaeologist kneeling, brushing sand off a sarcophagus, pyramid in background, focused expression. Check details — her face is looking down focused, hieroglyphics look plausible. Maybe inspect the face/hands briefly. This looks good enough. Mark best and stop. Maybe inspect face region quickly.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The first generation looks strong — let me check the fine details before finalizing.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;padding&quot;: 60,
+  &quot;roi&quot;: &quot;the archaeologist&#x27;s face and hands&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Face looks focused, hands are fine, brush natural. Image is good. Mark best and stop.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The details hold up well — a focused expression looking down at the work, natural hands holding the brush, and plausible hieroglyphic carvings. All requested elements are present and correct.</div></div>
+<div class=step><div class=who>Step 3 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;All prompt elements present and correct: archaeologist brushing sand off a hieroglyph-carved sarcophagus, Egyptian pyramid behind, focused expression, warm desert light. Fine details (face, hands, brush) verified clean at full resolution.&quot;
+}</pre></div>
+<div class=step><div class=who>Model</div><div class=said>The image is complete and marked as the final result. It shows: - **An archaeologist** in khaki field clothes and a wide-brimmed hat, kneeling at a dig site - **Brushing sand off a sarcophagus** — a soft brush in hand, dust and sand visibly lifting off the carved stone lid with hieroglyphics - **An Egyptian pyramid** rising in the background under warm late-afternoon desert light - **A focused expression** — verified at full resolution, with natural hands and clean detail throughout No further edits were needed; the first generation matched the prompt on inspection.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

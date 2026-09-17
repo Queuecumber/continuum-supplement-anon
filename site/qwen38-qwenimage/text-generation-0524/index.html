@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Text Generation — One reading the coach&#x27;s cartoon logo, he points forward with glasses o</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Text Generation — One reading the coach&#x27;s cartoon logo, he points forward with glasses o</h1>
+<blockquote>One reading the coach&#x27;s cartoon logo, he points forward with glasses on, and the background is an unfolded page with the words &quot;Knowledge Lights The Path To A Brighter Future Always&quot; on it.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + Qwen-Image</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Text Generation</b> &mdash; The text on the unfolded page is not entirely correct. While it correctly displays &#x27;KNOWLEDGE LIGHTS THE PATH TO A&#x27; and &#x27;ALWAYS&#x27;, it fails to generate the words &#x27;BRIGHTER FUTURE&#x27;. Instead, it shows a garbled word that looks like &#x27;BRIFL?AHTER&#x27; and completely omits the word &#x27;FUTURE&#x27;.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Text Generation</b> &mdash; The image contains the text &#x27;Knowledge Lights The Path To A Brighter Future Always&#x27; written in black on the unfolded page in the background. The text is spelled correctly and matches the prompt exactly without any omissions or extra words.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>The user is asking for a cartoon logo of a coach (probably a coach as a person) pointing forward, wearing glasses, on top of a background that looks like an unfolded page, with the words &quot;Knowledge Lights The Path To A Brighter Future Always&quot; written on it. Let me parse the prompt: &quot;a coach with a cartoon-style logo reading, pointing forward while wearing glasses, and the background is an unfolded page with the words &#x27;Knowledge Lights The Path To A Brighter Future Always&#x27; on it.&quot; So the elements are: 1. Cartoon-style logo of a coach (male, wearing glasses), reading (holding a book?), pointing forward 2. Background: an unfolded page 3. Text on the page: &quot;Knowledge Lights The Path To A Brighter Future Always&quot; This is a logo design with text. I should generate it with qwen-image. Text rendering is the tricky part — the words &quot;Knowledge Lights The Path To A Brighter Future Always&quot; are quite a lot to put on the page. Let me make the generation prompt: &quot;A cartoon-style logo of a friendly coach character wearing glasses, holding an open book he&#x27;s reading, one hand pointing forward toward the viewer, standing in front of a large unfolded page/book background. On the page, the words &#x27;Knowledge Lights The Path To A Brighter Future Always&#x27; are neatly written in a clean serif font. Flat vector illustration style, bright educational colors, logo design, clean composition.&quot; First, generate at a square 1024x1024. After that, I&#x27;ll verify the text with inspect_region and fix it if it&#x27;s wrong. Let&#x27;s get started.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;qwen-image&quot;,
+  &quot;prompt&quot;: &quot;A cartoon logo design of a friendly male coach character wearing round glasses, dressed in a smart blazer, one hand holding an open book up to read while his other arm points forward toward the viewer with an extended index finger. Behind him is a large unfolded paper page, like an open scroll of parchment, filling the background. Written across the unfolded page in neat dark serif lettering is the exact sentence \&quot;Knowledge Lights The Path To A Brighter Future Always\&quot;. Flat vector illustration style, warm educational color palette of teal, gold and cream, clean bold outlines, logo composition, crisp and simple.&quot;,
+  &quot;width&quot;: 1024,
+  &quot;height&quot;: 1024
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image turned out great. Let me check the text. The text reads &quot;Knowledge Lights The Path To A Brighter Future Always&quot; — but I can see some quotation marks around it: there&#x27;s a &#x27; at the beginning and a &quot; at the end. Let me zoom in and check. The visible text: &quot;Knowledge Lights The Path To A Brighter Future Always&quot;&quot; — the quotation marks around it are an extra element. The exact string that was requested is: &quot;Knowledge Lights The Path To A Brighter Future Always&quot; (with quotation marks as delimiters in the user&#x27;s prompt). So the text on the page should be the sentence itself. Quotation marks appearing in the rendering are probably undesirable, but let me zoom in to confirm. Also, the capitalization: &quot;Knowledge Lights The Path To A Brighter Future Always&quot; — the user&#x27;s string is exactly &quot;Knowledge Lights The Path To A Brighter Future Always&quot; (capitalizing each word). The image displays &quot;Knowledge Lights The Path To A Brighter Future Always&quot; — the capitalization matches. Good. Let me inspect the text region to confirm the spelling and check for the quotation marks.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    280,
+    180,
+    760,
+    360
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The text in the crop reads as follows: &#x27;Knowledge Lights The Path To A Brighter Future Always&quot; — there are extra quotation marks: at the beginning a left single quotation mark (&#x27;) and at the end two right double quotation marks (″). The requested sentence is exactly &quot;Knowledge Lights The Path To A Brighter Future Always&quot; (the quotation marks in the user&#x27;s prompt are just delimiters). So the text itself is spelled correctly with correct capitalization, but it&#x27;s wrapped in extra quotes that should be removed. Let me use edit_image to fix this: remove the quotation marks around the sentence on the page. Instruction: &quot;Remove the quotation marks around the sentence on the scroll — the text should read exactly &#x27;Knowledge Lights The Path To A Brighter Future Always&#x27; without any quotation marks.&quot; Let&#x27;s be careful — I&#x27;ll describe the delta.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The spelling and capitalization are correct, but there are extra quotation marks wrapped around the sentence (a `&#x27;` at the beginning and a `″` at the end). I&#x27;ll remove them.</div></div>
+<div class=step><div class=who>Step 3 — `edit_image`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;model&quot;: &quot;qwen-image&quot;,
+  &quot;prompt&quot;: &quot;Remove the quotation marks around the sentence on the scroll. The text must read exactly \&quot;Knowledge Lights The Path To A Brighter Future Always\&quot; with no opening or closing quote marks, in the same dark serif font and position. Keep everything else identical.&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_2</div><img class=stepimg data-zoom data-full='steps/img_2.jpg' src='steps/img_2.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The quotation marks have been removed. Let me zoom in and check the text once more.</div></div>
+<div class=step><div class=who>Step 4 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_2&quot;,
+  &quot;roi&quot;: [
+    300,
+    200,
+    760,
+    360
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_3</div><img class=stepimg data-zoom data-full='steps/img_3.jpg' src='steps/img_3.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The text currently reads &quot;Knowledge Lights The Path To A Brighter Future Always&quot; — it&#x27;s an exact match with the requested string, with correct capitalization, and no extra quotation marks. Checking all the elements: 1. ✅ A coach wearing glasses (round black glasses), in a blazer — a cartoon-style logo 2. ✅ Reading — holding an open book up to his face 3. ✅ Pointing forward — extending his arm and pointing toward the viewer / to the front 4. ✅ Background: an unfolded page — an open parchment scroll / page 5. ✅ The words &quot;Knowledge Lights The Path To A Brighter Future Always&quot; on it Everything is in place. This is good. Mark img_2 as the best and finish.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The text has been verified: &quot;Knowledge Lights The Path To A Brighter Future Always&quot; — the spelling and capitalization are accurate, and there are no extra quotation marks. All the requested elements are in place: the cartoon coach wearing round glasses, reading from an open book, pointing forward, on top of a background of an unfolded parchment page.</div></div>
+<div class=step><div class=who>Step 5 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_2&quot;,
+  &quot;reason&quot;: &quot;Cartoon coach with glasses, reading a book and pointing forward, on an unfolded page background with the exact verified sentence \&quot;Knowledge Lights The Path To A Brighter Future Always\&quot;.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Done. The marked image is img_2, which is the final version with the corrected text. Let me summarize.</div></div>
+<div class=step><div class=who>Model</div><div class=said>Done! The final logo (img_2, marked as best) shows: - **A cartoon coach** with round glasses and a smart blazer - **Reading** — holding an open book up to his face - **Pointing forward** — arm extended, index finger toward the viewer - **Unfolded page background** — a parchment scroll filling the frame - **The exact sentence** written on the page: &quot;Knowledge Lights The Path To A Brighter Future Always&quot; (zoom-verified, no stray quotation marks) It&#x27;s a clean flat-vector logo in a teal/gold/cream palette, ready to use as a coaching or education brand mark.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

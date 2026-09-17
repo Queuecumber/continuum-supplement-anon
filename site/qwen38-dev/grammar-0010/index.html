@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Grammar — Create a picture of an archaeologist brushing sand off a sarcophagus i</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Grammar — Create a picture of an archaeologist brushing sand off a sarcophagus i</h1>
+<blockquote>Create a picture of an archaeologist brushing sand off a sarcophagus in front of an Egyptian pyramid, looking focused.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Consistency</b> &mdash; The man in the image is looking down at the object he is working on. His gaze is fixed on the brush and the sand, and his facial muscles appear tense, which is consistent with the expression of being &#x27;focused&#x27;.</li>
+<li><span class='tag fail'>FAIL</span><b>Action - Contact Interaction</b> &mdash; The image shows a man holding a brush and making contact with sand that is on top of an object. However, the object is a decorated chest, not a sarcophagus. Therefore, the action of &#x27;brushing sand off a sarcophagus&#x27; is not accurately depicted.</li>
+<li><span class='tag fail'>FAIL</span><b>World Knowledge</b> &mdash; The image contains a large, stone pyramid in the background, which is consistent with an Egyptian pyramid. However, the object in the foreground is a decorated chest with a curved lid, which does not match the typical appearance of an Egyptian sarcophagus (a stone coffin).</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Consistency</b> &mdash; The archaeologist is shown kneeling and leaning over the sarcophagus, with his gaze directed downward at his work. His facial expression appears intent, visually conveying focus.</li>
+<li><span class='tag pass'>PASS</span><b>Action - Contact Interaction</b> &mdash; The image depicts a man holding a brush, with the bristles of the brush making contact with sand on the surface of a sarcophagus. A small cloud of sand particles is visible, indicating the action of brushing.</li>
+<li><span class='tag pass'>PASS</span><b>World Knowledge</b> &mdash; The image features a large, triangular pyramid in the background, consistent with the appearance of an Egyptian pyramid. In the foreground, there is a stone, human-shaped coffin decorated with hieroglyph-like carvings and a sculpted head, which is identifiable as an Egyptian sarcophagus.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Let&#x27;s generate this image. Prompt: An archaeologist brushing sand off a sarcophagus in front of an Egyptian pyramid, looking focused. Let&#x27;s write a detailed prompt for flux2-dev.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;prompt&quot;: &quot;A focused archaeologist in a linen shirt and khaki trousers, kneeling beside an ancient Egyptian stone sarcophagus half-buried in golden sand, gently brushing sand off its surface with a soft-bristled brush, brow furrowed with concentration, weathered face lit by warm golden-hour sunlight. Behind them, a massive Egyptian pyramid rises against a clear warm sky, soft haze over the desert. Cinematic photorealistic style, shallow depth of field, warm amber and sand tones, fine dust motes in the air, detailed stone carvings on the sarcophagus.&quot;,
+  &quot;model&quot;: &quot;flux2-dev&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image came out great. A focused archaeologist is kneeling, brushing sand off a sarcophagus with a pyramid in the background. The pyramid is clearly visible, and the archaeologist&#x27;s face shows a look of concentration as he works. The brush and the flying dust particles are visible too. Let me zoom in on the face to check the focus expression, and verify whether there are any artifacts.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The first generation looks strong. Let me verify the facial expression and details by zooming in before deciding anything.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    250,
+    180,
+    480,
+    380
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>My crop was off — the face is lower than that. Let me try cropping a bit lower to get a closer look at the archaeologist&#x27;s face.</div></div>
+<div class=step><div class=who>Model</div><div class=said>That crop missed the face. Let me try a lower region.</div></div>
+<div class=step><div class=who>Step 3 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    280,
+    240,
+    480,
+    420
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_2</div><img class=stepimg data-zoom data-full='steps/img_2.jpg' src='steps/img_2.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>My rectangle still seems to be off — the coordinates might be different from what I was assuming. The face in the original image is roughly at the center, around (430, 300). Let me use a text-based roi instead — &quot;archaeologist&#x27;s face&quot; — that&#x27;s more reliable.</div></div>
+<div class=step><div class=who>Model</div><div class=said>Let me use a text-based region instead.</div></div>
+<div class=step><div class=who>Step 4 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: &quot;the archaeologist&#x27;s face&quot;,
+  &quot;padding&quot;: 0.2
+}</pre></div>
+<div class=step><div class=who>Result img_3</div><img class=stepimg data-zoom data-full='steps/img_3.jpg' src='steps/img_3.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The face shows a clear, focused expression—furrowed brows, gaze fixed downward on the sarcophagus. The brush is in his hand, with sand/dust particles flying. The sarcophagus has hieroglyphs and a carved face on it. The pyramid is in the background. This matches the prompt very well. Let me check the hands—his hand and the brush. The hand gripping the brush looks natural. The hand seems fine. One small point: there&#x27;s a hand visible at the bottom-left edge, but it looks like his other hand resting on the sarcophagus—no problem. The image is good and matches all the elements: an archaeologist brushing sand off a sarcophagus, a pyramid in the background, a focused expression. I&#x27;ll mark this as the best and stop—this is a good enough result, and over-editing risks degrading it.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The close-up confirms everything: the archaeologist&#x27;s furrowed brow and downcast gaze read as clearly focused, his hands naturally hold the brush while sand drifts from the sarcophagus, the hieroglyph-carved sarcophagus with its sculpted face is clearly visible, and the pyramid dominates the background under warm golden light. The image matches the prompt on every element — no edits needed.</div></div>
+<div class=step><div class=who>Step 5 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;All prompt elements present and correct: focused archaeologist (furrowed brow, concentrated expression verified in close-up), brushing sand off a hieroglyph-carved sarcophagus, pyramid in background, natural hands and cinematic golden-hour lighting.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image has been marked as the best, and I&#x27;m confident in it. Done — I&#x27;ll convey a brief summary to the user.</div></div>
+<div class=step><div class=who>Model</div><div class=said>Done! Here&#x27;s the picture: an archaeologist kneeling in the desert at golden hour, brow furrowed in concentration as he brushes sand off a hieroglyph-carved sarcophagus, with a great pyramid rising behind him and fine dust drifting through the warm light. I verified the focused expression and the brush/hand details in a zoomed crop — everything matches your description, so I marked it as the final result.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

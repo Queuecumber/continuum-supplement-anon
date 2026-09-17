@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Grammar — In the watercolor style, a fox has crystal-like horns and its tail is</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Grammar — In the watercolor style, a fox has crystal-like horns and its tail is</h1>
+<blockquote>In the watercolor style, a fox has crystal-like horns and its tail is not fluffy, but consists of flowing nebulae.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + Qwen-Image</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Grammar - Negation</b> &mdash; The fox&#x27;s tail is depicted as a standard fluffy, furry tail with a white tip. It is not made of nebulae, and therefore the &#x27;not fluffy&#x27; condition is not met.</li>
+<li><span class='tag fail'>FAIL</span><b>Compound - Imagination</b> &mdash; The fox has a crown of light blue, translucent crystals on its head, which fulfills the &#x27;crystal-like horns&#x27; part of the prompt. However, the tail is a conventional fluffy, furry tail, from which flowing, nebula-like energy emanates. The tail itself does not &#x27;consist of&#x27; flowing nebulae.</li>
+<li><span class='tag pass'>PASS</span><b>Style</b> &mdash; The image is rendered in a watercolor style, characterized by soft color blending, visible brushwork, and a texture that resembles paint on paper, particularly in the background and along the edges of the subject.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Negation</b> &mdash; The fox&#x27;s tail is not depicted with a fluffy, fur-like texture. Instead, it is rendered as a flowing, cosmic pattern of colors and shapes, which is consistent with the negative constraint of &#x27;not fluffy&#x27;.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Imagination</b> &mdash; The image features a fox with multifaceted, translucent horns that resemble crystals on its head. The fox&#x27;s tail is depicted as a flowing nebula, complete with swirling colors like purple, blue, and teal, along with stars and a central spiral galaxy.</li>
+<li><span class='tag pass'>PASS</span><b>Style</b> &mdash; The image is rendered in a watercolor style, characterized by the textured paper background, soft color washes and blends, visible paint splatters and drips, particularly around the tail, and the transparent quality of the pigments.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>The user is asking for a watercolor-style image: a fox with crystal-like horns, and a tail that isn&#x27;t fluffy but made of flowing nebulae. Let me generate with qwen-image. I should write a detailed prompt. Watercolor style, a fox with crystal-like horns (like translucent gemstone/ice horns), and a tail made of flowing nebulae (cosmic clouds, starry, swirling galaxies) rather than fluffy fur. First, let me generate at 1024x1024. Prompt: &quot;Watercolor painting of a fox sitting gracefully, the fox has crystal-like translucent gemstone horns on its head like prismatic quartz, its tail is not fluffy fur but made of flowing cosmic nebulae, swirling galaxies of purple, pink and blue cosmic dust with tiny stars, soft watercolor washes, wet-on-wet technique, delicate ink linework, white paper background, ethereal and whimsical&quot; After that, inspect, edit as needed, and mark the best.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;qwen-image&quot;,
+  &quot;prompt&quot;: &quot;Delicate watercolor painting of a graceful fox sitting in profile, rendered with soft wet-on-wet washes and fine ink linework on textured white paper. The fox has crystal-like horns growing from its head: translucent prismatic quartz horns with subtle facets and a faint iridescent glow. Its tail is not fluffy fur but a flowing, ribbon-like tail made of nebulae: swirling cosmic gas clouds in violet, magenta, teal and deep blue, with tiny pinprick stars and a soft galaxy spiral, trailing and dissolving into the paper. Loose watercolor blooms, pigment granulation, bleeding edges, ethereal and whimsical mood, lots of white negative space.&quot;,
+  &quot;width&quot;: 1024,
+  &quot;height&quot;: 1024
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image turned out great. Let me check: a watercolor-style fox, crystal-like horns (translucent, prismatic, with iridescence), and a tail made of flowing nebulae with a galaxy spiral and stars, not fluffy. The watercolor style is clearly expressed—soft washes, white paper, ink lines. Let me zoom in to check the details: the horns look crystal-like, and the tail is clearly nebula-like. One thing I&#x27;m wondering about: is the tail connected to the fox? Yes, it flows out from the rear of the fox. The fox&#x27;s body itself has fur texture, but that&#x27;s fine—the prompt only said the tail isn&#x27;t fluffy. Let me quickly inspect the horn and tail regions to make sure the quality is good.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: &quot;the crystal horns on the fox&#x27;s head&quot;,
+  &quot;padding&quot;: 0.1
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Step 3 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: &quot;the nebula tail&quot;,
+  &quot;padding&quot;: 0.05
+}</pre></div>
+<div class=step><div class=who>Result img_2</div><img class=stepimg data-zoom data-full='steps/img_2.jpg' src='steps/img_2.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Both details check out: 1. Horns: Translucent crystal shards with facets, prismatic iridescence (pale blue, pink, lavender, mint) — clearly crystal-like, watercolor rendering. 2. Tail: A flowing nebula tail with galaxy spirals, stars, and violet/teal watercolor washes — clearly not fluffy fur, but cosmic gas clouds. The overall image is a clean watercolor on white paper, the fox is seated in profile, and the composition is beautiful. All elements of the prompt are present and correct. This is good enough — no edits needed. Mark img_0 as the best and finish.</div></div>
+<div class=step><div class=who>Model</div><div class=said>Both key features are being rendered as intended: the horn is a faceted, translucent, prismatic crystal shard, and the tail is a flowing, nebula-like ribbon with galactic swirls and pinprick stars, not fluffy fur. The overall image is also a proper watercolor — soft washes, fine ink linework, granulation, and white paper with negative space. All elements of the prompt are present and correct, so this is the version I&#x27;ll be submitting.</div></div>
+<div class=step><div class=who>Step 4 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;Watercolor fox with faceted crystal-like prismatic horns and a flowing nebula tail (galaxy swirl, stars, no fluffy fur); all prompt elements verified via close-up crops.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>The task is complete. The image is marked as the best. I&#x27;ll provide a concise summary.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The finished watercolor is ready (marked as best). It shows: - **Watercolor style** — wet-on-wet washes, fine ink linework, pigment granulation and soft blooms on textured white paper - **Crystal-like horns** — a cluster of translucent, faceted quartz shards in iridescent pale blue, lavender, pink and mint, growing from the fox&#x27;s head - **Nebula tail** — instead of fluffy fur, the tail flows outward as a ribbon of cosmic gas: violet and magenta washes, a teal-and-gold spiral galaxy, and scattered pinprick stars, trailing and dissolving into the paper I verified both the horns and the tail at full resolution before finalizing; each element matches the prompt, so no further edits were needed.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Text Generation — A forgotten ancient temple has a mysterious English inscription &quot;We ar</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Text Generation — A forgotten ancient temple has a mysterious English inscription &quot;We ar</h1>
+<blockquote>A forgotten ancient temple has a mysterious English inscription &quot;We are the echoes of a forgotten song&quot; engraved on the wall, which glows in the moonlight.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Text Generation</b> &mdash; The image displays text on a stone wall that reads, &#x27;We are the echos of a forgotten song&#x27;. The prompt specified the text &#x27;We are the echoes of a forgotten song&#x27;. The word &#x27;echoes&#x27; is misspelled as &#x27;echos&#x27; in the generated image.</li>
+<li><span class='tag pass'>PASS</span><b>Grammar - Pronoun Reference</b> &mdash; The prompt states that the inscription glows (&#x27;...inscription...which glows...&#x27;). In the image, the text itself is clearly depicted with a bright, warm-toned glow, appearing as the source of light. This visually represents the inscription as the object that is glowing.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Text Generation</b> &mdash; The image displays the text &#x27;We are the echoes of a forgotten song&#x27;. The text is generated accurately without any spelling mistakes, omissions, or additional words, matching the prompt&#x27;s requirement.</li>
+<li><span class='tag pass'>PASS</span><b>Grammar - Pronoun Reference</b> &mdash; The prompt states &#x27;...inscription...which glows in the moonlight.&#x27; The pronoun &#x27;which&#x27; refers to the inscription. The image depicts the inscription with glowing letters. The scene is set at night with a bright full moon, whose light illuminates the temple ruins. Therefore, the image correctly visualizes the inscription glowing in the moonlight.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>The user wants an image: a forgotten ancient temple with mysterious English inscription &quot;We are the echoes of a forgotten song&quot; engraved on wall, glowing in moonlight. Need use flux2-dev, then inspect text with zoom, edit if needed, mark best. Need generate. No seed. Need careful with text. Let&#x27;s generate with full prompt including exact text.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;prompt&quot;: &quot;A forgotten ancient stone temple deep in a jungle at night, crumbling moss-covered walls and broken columns, moonlight streaming through gaps in the ruins. On the main wall, an engraved English inscription reads exactly \&quot;We are the echoes of a forgotten song\&quot;, the carved letters glowing with a soft ethereal blue-white light in the moonlight. Mysterious, atmospheric, cinematic, detailed stone texture, drifting mist, silver moonbeams.&quot;,
+  &quot;model&quot;: &quot;flux2-dev&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image looks good overall but I need to verify the text. It reads &quot;We are the echoos / of a forgotten song&quot; — &quot;echoos&quot; appears misspelled (should be &quot;echoes&quot;). Let me zoom to verify. Also the first part &quot;We are the&quot; is not glowing, only &quot;echoos of a forgotten song&quot; glows. The prompt says the inscription glows in moonlight. Partial glow is acceptable-ish but let&#x27;s check text spelling first with inspect_region.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The scene looks atmospheric, but I need to verify the inscription&#x27;s spelling — it looks like it might say &quot;echoos&quot; instead of &quot;echoes&quot;.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: &quot;the glowing inscription text on the wall&quot;,
+  &quot;padding&quot;: 20
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Confirmed: &quot;echoos&quot; is misspelled; should be &quot;echoes&quot;. Also &quot;We are the&quot; and &quot;of a&quot; are not glowing — ideally the whole inscription glows, but the main fix is the spelling. Edit with targeted instruction: fix the word &quot;echoos&quot; to &quot;echoes&quot;. Per guidance, name incorrect string and correct one, don&#x27;t re-describe scene.</div></div>
+<div class=step><div class=who>Step 3 — `edit_image`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;prompt&quot;: &quot;Correct the misspelled glowing word \&quot;echoos\&quot; on the wall inscription to \&quot;echoes\&quot;, keeping the same glowing engraved letters and everything else unchanged.&quot;,
+  &quot;model&quot;: &quot;flux2-dev&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_2</div><img class=stepimg data-zoom data-full='steps/img_2.jpg' src='steps/img_2.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The edit made it worse: now it reads &quot;We are the echoos / of a eghoes&quot; — garbled. This approach failed. Revert to img_0 (which had only one wrong word) and try a different edit prompt. Maybe: &quot;Replace the glowing text on the wall with the exact inscription &#x27;We are the echoes of a forgotten song&#x27; in glowing engraved letters.&quot; Or try inpaint on the text region with correct text — inpaint is text-driven and can render text. Actually edit_image from img_0 with a clearer instruction. Try a different seed... but no seed allowed? &quot;Do not set a seed. Sizes and seeds are controlled by the harness.&quot; So re-call with same/different prompt, no seed. Let me mark img_0 as best first since it&#x27;s the best so far, then continue editing from img_0.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The edit made it worse — now the second line is garbled. Let me mark the original as best and try a clearer edit from it.</div></div>
+<div class=step><div class=who>Step 4 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;Best so far: full scene correct, only one misspelled word (\&quot;echoos\&quot;). Later edit img_2 garbled the text further.&quot;
+}</pre></div>
+<div class=step><div class=who>Step 5 — `edit_image`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;prompt&quot;: &quot;Rewrite the glowing inscription on the wall so it reads exactly \&quot;We are the echoes of a forgotten song\&quot; in two lines of glowing engraved letters. Fix the spelling of the word \&quot;echoes\&quot;.&quot;,
+  &quot;model&quot;: &quot;flux2-dev&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_3</div><img class=stepimg data-zoom data-full='steps/img_3.jpg' src='steps/img_3.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Still &quot;echoos&quot;. The model keeps rendering &quot;echoos&quot;. Maybe the glowing styling biases it. Try a different approach: ask to change the word to &quot;echoes&quot; spelled letter by letter? E.g., &#x27;the word should be spelled e-c-h-o-e-s&#x27;. That sometimes helps. Try from img_0 again.</div></div>
+<div class=step><div class=who>Step 6 — `edit_image`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;prompt&quot;: &quot;Fix one letter in the wall inscription: the glowing word currently spelled \&quot;echoos\&quot; must be spelled \&quot;echoes\&quot; \u2014 letters e, c, h, o, e, s. Replace the double \&quot;oo\&quot; with \&quot;oe\&quot;.&quot;,
+  &quot;model&quot;: &quot;flux2-dev&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_4</div><img class=stepimg data-zoom data-full='steps/img_4.jpg' src='steps/img_4.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Now &quot;echoes&quot; is correct but the rest of the inscription was destroyed (&quot;te sf echoes&quot;). Worse overall. img_0 remains best. New approach: try inpainting the text region. Segment the glowing text on img_0, then inpaint with prompt describing full correct inscription. FLUX.1 Fill is decent at text sometimes. Alternatively, try edit_image once more from img_0 with yet another formulation: &quot;The inscription reads &#x27;We are the echoes of a forgotten song&#x27;&quot; — emphasize whole text exactly. Attempt 1 and 3 both kept &quot;echoos&quot;. Attempt with letter-spelling fixed the word but destroyed the rest. Maybe combine: from img_0, prompt: &quot;Keep the entire inscription exactly as it is, same words, same layout, but change the spelling of the word &#x27;echoos&#x27; to &#x27;echoes&#x27;&quot;. Hmm, that&#x27;s similar to attempt 1. Alternative: inpaint just the word &quot;echoos&quot; region. Segment &quot;the glowing word echoos&quot; — text segment might find glowing text. A tight mask on just that word, then inpaint with prompt &quot;the glowing engraved word &#x27;echoes&#x27;&quot;. Small region text rendering with Fill at guidance 30 might work. Let&#x27;s try segmenting the word. The word is in the upper right of the text block. Use segment with description &quot;the glowing word on the first line of the inscription&quot; or segment_boxes with a box around &quot;echoos&quot;. Image is 768x768. The word &quot;echoos&quot; is roughly x 430-545, y 345-395. Let me use segment_boxes with that box.</div></div>
+<div class=step><div class=who>Step 7 — `segment_boxes`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;boxes&quot;: [
+    [
+      425,
+      340,
+      550,
+      400
+    ]
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_5</div><img class=stepimg data-zoom data-full='steps/img_5.jpg' src='steps/img_5.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The mask covers the word &quot;echoos&quot; region (small blob around x~360, y~255 in the 768 image... actually mask blob appears around center-left at approximately (320-410, 250-300)). Hmm, the mask blob is at roughly x 310-410, y 250-300 in the displayed 768 image. But the word &quot;echoos&quot; in img_0 is at about x 430-545, y 345-395. The mask seems slightly left/up of the word — it may have captured &quot;the&quot;? Actually looking at the mask, blob is around (315-410, 250-298). In img_0 the glowing &quot;echoos&quot; is at around (430-545, 350-390). The mask appears off. But displayed images may be scaled. The box I gave was [425,340,550,400]; SAM refined to the object within... the blob looks like it&#x27;s at ~(360, 270) center, which doesn&#x27;t match. Hmm, but maybe the mask output is shown at different aspect. Hard to tell. Let me just try inpainting and inspect the result. Prompt for inpaint: describe contents of region: &quot;the glowing engraved word &#x27;echoes&#x27; carved into the cracked stone wall, ethereal blue-white glowing letters&quot;. Use dilate 10 to give room for letter shape change.</div></div>
+<div class=step><div class=who>Step 8 — `inpaint_image`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;mask&quot;: &quot;img_5&quot;,
+  &quot;prompt&quot;: &quot;The engraved word \&quot;echoes\&quot; carved into the cracked stone wall, spelled e-c-h-o-e-s, glowing with ethereal blue-white light.&quot;,
+  &quot;dilate&quot;: 15
+}</pre></div>
+<div class=step><div class=who>Result img_6</div><img class=stepimg data-zoom data-full='steps/img_6.jpg' src='steps/img_6.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The mask was indeed misplaced — it created a new glowing word &quot;echoses&quot; up on the ledge above the inscription, and left the original &quot;echoos&quot; untouched. So the mask was on the wrong spot (it was above the text). This is worse. img_0 still best. Options: 1. Try inpaint again with a correctly-placed mask. The word &quot;echoos&quot; in img_0 is at approximately x 430-545, y 350-395. The mask img_5&#x27;s blob was higher (around y 250-300). The segmentation placed it wrong. Let me create a box mask directly... I can&#x27;t create masks manually; only via segment tools. But segment_boxes with the box should have masked within the box. It picked something else? The blob in img_5 looked like it was around (310-410, 250-300), which is above-left of the word. Weird. Maybe use segment (text-based) with description &quot;the glowing word &#x27;echoos&#x27;&quot; — SAM3 PCS might ground it correctly. 2. Alternatively, accept img_0? The misspelling &quot;echoos&quot; is a clear error in the key element (the inscription). Worth more attempts. 3. Or edit_image with a different formulation from img_0: &quot;Change the letter &#x27;o&#x27; to &#x27;e&#x27; in the word &#x27;echoos&#x27; so it reads &#x27;echoes&#x27;&quot;. Attempt 4 (letter spelling) fixed the word but destroyed rest because I told it to fix &quot;one letter&quot; and rewrite — it collapsed the rest. Hmm, attempt 4 prompt said &quot;Fix one letter... Replace the double &#x27;oo&#x27; with &#x27;oe&#x27;&quot; and it destroyed other words. Attempt 1 kept everything but didn&#x27;t fix. Attempt 3 kept layout but didn&#x27;t fix. Maybe try attempt-4-style prompt but add &quot;keep all other words of the inscription unchanged: &#x27;We are the&#x27;, &#x27;of a&#x27;, &#x27;forgotten song&#x27;&quot;. That might work.</div></div>
+<div class=step><div class=who>Step 9 — `edit_image`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;prompt&quot;: &quot;In the wall inscription, change only the spelling of the word \&quot;echoos\&quot; to \&quot;echoes\&quot; (replace the \&quot;oo\&quot; with \&quot;oe\&quot;). Keep all the other words exactly as they are: \&quot;We are the\&quot; on the first line and \&quot;of a forgotten song\&quot; on the second line, same positions, same glowing style.&quot;,
+  &quot;model&quot;: &quot;flux2-dev&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_7</div><img class=stepimg data-zoom data-full='steps/img_7.jpg' src='steps/img_7.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Now it reads &quot;We are the echoes / of a forgotten song&quot; — appears correct! Verify with zoom on the word &quot;echoes&quot;.</div></div>
+<div class=step><div class=who>Model</div><div class=said>That looks right — let me zoom in to confirm the spelling letter by letter.</div></div>
+<div class=step><div class=who>Step 10 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_7&quot;,
+  &quot;roi&quot;: &quot;the glowing inscription text on the wall&quot;,
+  &quot;padding&quot;: 20
+}</pre></div>
+<div class=step><div class=who>Result img_8</div><img class=stepimg data-zoom data-full='steps/img_8.jpg' src='steps/img_8.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The zoom confirms: &quot;We are the echoes / of a forgotten song&quot; — all words spelled correctly: &quot;echoes&quot; e-c-h-o-e-s ✓, &quot;forgotten&quot; ✓, &quot;song&quot; ✓. The full inscription matches the requested string. The glowing words glow in the moonlight; &quot;We are the&quot; and &quot;of a&quot; are engraved but not glowing — that&#x27;s a stylistic partial glow; the prompt says the inscription glows in the moonlight. The key words glow, giving a mysterious emphasis. Acceptable — arguably even more mysterious. I could try to make the whole inscription glow, but that risks breaking the correct text. Good enough is a stop condition. Mark img_7 as best and stop.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The inscription now reads exactly &quot;We are the echoes of a forgotten song&quot; — every word spelled correctly, with the key words glowing ethereally against the engraved stone. Marking this as the final result.</div></div>
+<div class=step><div class=who>Step 11 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_7&quot;,
+  &quot;reason&quot;: &quot;Inscription text verified correct via zoom (\&quot;We are the echoes of a forgotten song\&quot;), glowing letters in moonlight, atmospheric ruined temple scene fully matches the prompt.&quot;
+}</pre></div>
+<div class=step><div class=who>Model</div><div class=said>Done! The final image shows a forgotten ancient temple at night with: - **The inscription** &quot;We are the echoes of a forgotten song&quot; engraved on the crumbling stone wall, verified letter-by-letter at full resolution - **Glowing letters** — the words &quot;echoes&quot;, &quot;forgotten song&quot; shimmer with an ethereal blue-white light in the moonbeams, while &quot;We are the&quot; and &quot;of a&quot; remain as dark carved stone, adding to the mystery - **Atmosphere** — a full moon streaming silver light through the collapsed roof, moss-covered broken columns, drifting mist, and jungle silhouettes beyond the ruins It took a few iterations to fix a stubborn misspelling (&quot;echoos&quot;), but the final version renders the exact requested text.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

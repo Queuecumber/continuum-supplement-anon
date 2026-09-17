@@ -1,0 +1,32 @@
+{
+  "sources": {
+    "epic": {
+      "url": "https://arxiv.org/html/2605.11722v1#S4.T1",
+      "bibkey": "mun2026epic",
+      "table": "1 and 6",
+      "setting": "Deterministic decoding (T=0), FLUX.2-Klein-9B; inference-time methods have a maximum budget of 32 image-model executions."
+    },
+    "geneval2": {
+      "url": "https://arxiv.org/html/2512.16853v1#S5.T4",
+      "bibkey": "kamath2025geneval2",
+      "table": "4",
+      "setting": "Original prompts; Soft-TIFA AM and GM columns, not the adjacent human-evaluation columns."
+    }
+  },
+  "rows": [
+    {"method": "Direct", "generator": "FLUX.2-dev", "gm": 42.09, "am": 83.34, "gm_delta": null, "source": "epic", "table": "6", "url": "https://arxiv.org/html/2605.11722v1#A3.T6", "style": "baseline"},
+    {"method": "EPIC", "generator": "FLUX.2-klein-9B", "gm": 71.46, "am": 90.25, "gm_delta": 37.30, "source": "epic"},
+    {"method": "RAISE", "generator": "FLUX.2-klein-9B", "gm": 52.23, "am": 86.28, "gm_delta": 18.07, "source": "epic"},
+    {"method": "BoN+NVILA", "generator": "FLUX.2-klein-9B", "gm": 41.60, "am": 82.38, "gm_delta": 7.44, "source": "epic"},
+    {"method": "T2I-Copilot", "generator": "FLUX.2-klein-9B", "gm": 36.56, "am": 81.19, "gm_delta": 2.40, "source": "epic"},
+    {"method": "Direct", "generator": "FLUX.2-klein-9B", "gm": 34.16, "am": 79.06, "gm_delta": null, "source": "epic", "style": "baseline"},
+    {"method": "Direct", "generator": "Gemini 2.5 Flash Image", "gm": 44.6, "am": 82.8, "source": "geneval2"},
+    {"method": "Direct", "generator": "Qwen-Image", "gm": 33.8, "am": 80.8, "source": "geneval2"},
+    {"method": "CoT", "generator": "BAGEL", "gm": 23.1, "am": 70.9, "source": "geneval2"},
+    {"method": "Direct", "generator": "SD3.5-large", "gm": 22.8, "am": 69.7, "source": "geneval2"},
+    {"method": "Direct", "generator": "SD3-medium", "gm": 21.3, "am": 66.3, "source": "geneval2"},
+    {"method": "Direct", "generator": "FLUX.1-dev", "gm": 21.1, "am": 67.1, "source": "geneval2"},
+    {"method": "Direct", "generator": "SDXL", "gm": 9.1, "am": 50.1, "source": "geneval2"},
+    {"method": "Direct", "generator": "SD2.1", "gm": 5.2, "am": 40.8, "source": "geneval2"}
+  ]
+}

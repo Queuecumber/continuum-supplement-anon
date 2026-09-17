@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Grammar — Generated image: A ceramic mushroom man with arms like branches but no</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Grammar — Generated image: A ceramic mushroom man with arms like branches but no</h1>
+<blockquote>Generated image: A ceramic mushroom man with arms like branches but no fungus cover on his head.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + FLUX.2-klein-9B</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Grammar - Negation</b> &mdash; The prompt specifies that the figure should have &#x27;no fungus cover on his head&#x27;. However, the image clearly shows a figure with a large, reddish-brown mushroom cap on its head, which is a type of fungus cover. This contradicts the negative constraint in the prompt.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image depicts a figurine that appears to be made of ceramic due to its glossy finish. This figurine is an anthropomorphic mushroom, thus a &#x27;mushroom man&#x27;. The figure has two arms that are brown and textured to look like tree branches. Therefore, the image accurately portrays a ceramic mushroom man with arms like branches.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Negation</b> &mdash; The prompt includes the negative constraint &#x27;no fungus cover on his head&#x27;. The figure in the image has a smooth, pale, bald head with painted facial features. There is no hat, hair, or any form of covering, including a fungus cover or mushroom cap. Therefore, this condition is met.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image displays a figurine with a glossy finish, consistent with the material &#x27;ceramic&#x27;. The figure is humanoid with a stout, rounded body, which fits the &#x27;mushroom man&#x27; description. Its arms are brown and shaped like tree branches, with smaller twigs branching off. This fulfills all parts of the description &#x27;A ceramic mushroom man with arms like branches&#x27;.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>The user wants to generate an image of a &quot;ceramic mushroom-man (ceramic mushroom man)&quot; with arm-shaped branches, but his head doesn&#x27;t have a mushroom cap. Hmm, the wording is a bit strange: &quot;no mushroom cover on his head&quot; — so the body is mushroom-like (ceramic), the arms are like branches, but the head doesn&#x27;t have a mushroom cap. In other words, it&#x27;s a ceramic figure of a mushroom-man, whose arms resemble branches, and the head is bare (no mushroom cap). Let me generate with flux2-klein. I&#x27;ll fill in visual details: a ceramic figurine, glazed pottery texture, a humanoid figure with a mushroom-shaped torso, arms that look like tree branches, a plain bare head (no mushroom cap). Prompt: &quot;A ceramic figurine of a mushroom man, glazed pottery texture, humanoid body with a round mushroom-shaped torso, arms made of knotted tree branches with small twigs, smooth bare head with no mushroom cap, friendly face, standing on a small ceramic pedestal, soft studio lighting, neutral background.&quot; After that, I&#x27;ll inspect and edit. Let&#x27;s get started.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;flux2-klein&quot;,
+  &quot;prompt&quot;: &quot;A ceramic figurine of a mushroom man: glazed pottery texture in earthy terracotta and cream tones, humanoid body with a rounded mushroom-like torso, arms sculpted like knotty tree branches with small twigs and a few tiny leaves, smooth bare rounded head with NO mushroom cap or fungal cover, simple friendly painted face, standing on a small round ceramic base, soft studio lighting, clean light grey background&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image shows a ceramic mushroom man with branch-like arms, but the head is covered by a mushroom cap (brown cap with white spots). The user&#x27;s request is &quot;no mushroom cover on the head&quot;—meaning the head must not be covered by a mushroom cap. Therefore, we need to remove the cap and reveal a bare head. Let&#x27;s edit: remove the brown mushroom cap on top of the head and reveal a bare head. The cap looks like a hat. Use edit_image with a targeted instruction: &quot;Remove the brown mushroom cap from the figure&#x27;s head and reveal a smooth, bare ceramic head with a friendly face.&quot; However, the face is under the brim of the cap. Removing the cap may expose the top of the head. Let&#x27;s try edit_image.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The cap is on — that&#x27;s the wrong part. Let me remove it so the head is bare.</div></div>
+<div class=step><div class=who>Step 2 — `edit_image`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;model&quot;: &quot;flux2-klein&quot;,
+  &quot;prompt&quot;: &quot;Remove the brown mushroom cap covering the figure&#x27;s head, leaving a smooth bare rounded ceramic head with the friendly face fully visible, no hat or cap of any kind&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>With this, the figure has become a ceramic mushroom man with branch-like arms (with small leaves and twigs), and his head is now smooth and bare — no mushroom cap. The body has a mushroom-like torso (brown with a cream-colored belly). The cap has been cleanly removed. This matches the prompt: &quot;A ceramic mushroom man with branch-like arms but no mushroom cover on his head.&quot; The head is bare, the arms are branch-like, and the ceramic texture is preserved. I&#x27;ll mark this as the best. Should I check the head in a bit more detail? The face looks fine, and the head is smooth and bare. Good enough. Mark img_1 as the best and stop.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The cap is gone and the rest of the figure — ceramic glaze, branch-like arms with twigs and leaves, mushroom-shaped body, pedestal — is intact. This matches the description.</div></div>
+<div class=step><div class=who>Step 3 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_1&quot;,
+  &quot;reason&quot;: &quot;Ceramic mushroom man with branch-like arms and a bare head (no fungus cover), exactly as requested.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Complete. Marked the best. Will stop here and give the user a brief summary.</div></div>
+<div class=step><div class=who>Model</div><div class=said>Done. The final image shows a glazed ceramic mushroom man: rounded mushroom-like torso on a small pedestal, arms sculpted as knotty branches with little twigs and green leaves, and a smooth bare head — no mushroom cap — with a simple friendly painted face. It&#x27;s marked as the best result.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

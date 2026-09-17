@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Grammar — In the magic forest, an elf boy did not draw the sword at his waist, b</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Grammar — In the magic forest, an elf boy did not draw the sword at his waist, b</h1>
+<blockquote>In the magic forest, an elf boy did not draw the sword at his waist, but spread his palm, and a glowing flower appeared in his palm.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + Qwen-Image</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Grammar - Negation</b> &mdash; The prompt specifies that the elf boy &#x27;did not draw the sword at his waist&#x27;. However, the image shows the elf boy holding a drawn sword upright in his right hand, which directly contradicts the negative part of the prompt.</li>
+<li><span class='tag pass'>PASS</span><b>Action - Hand (Character/Anthropomorphic)</b> &mdash; The image depicts the elf boy&#x27;s left hand with the palm spread open and facing upwards. A yellow flower with a green stem is shown situated in his palm. The flower is glowing, surrounded by a yellow aura and small, bright sparkles. The hand itself is rendered with a thumb and four fingers, appearing structurally correct.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Negation</b> &mdash; The image shows an elf boy with a sword in a scabbard attached to a belt at his waist. His hands are held out in front of him, and he is not touching or drawing the sword, thus satisfying the negative condition &#x27;did not draw the sword&#x27;.</li>
+<li><span class='tag pass'>PASS</span><b>Action - Hand (Character/Anthropomorphic)</b> &mdash; The elf boy is shown with his hands cupped together, presenting an open palm. A single flower, which is glowing and emitting sparkles of light, is positioned just above his palms. The hands are well-formed with no visible anatomical errors like missing or distorted fingers.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>The user wants an image: &quot;In a magic forest, an elf boy, without drawing the sword at his waist, spreads his palm, and a glowing flower appears in his palm.&quot; Main elements: - Magic forest background - Elf boy (pointed ears) - A sword at his waist (but not drawn — sheathed on his hip) - He is spreading/holding open his palm (open hand, upward or forward) - A glowing flower appears in his palm Let&#x27;s generate with qwen-image (following the policy, model: &quot;qwen-image&quot; for generation, and also for editing). Prompt: &quot;A young elf boy with pointed ears in a magical enchanted forest, dark green cloak, sword sheathed at his waist, he spreads his open palm upward, and a luminous glowing flower floats above his palm casting soft golden light on his face, mystical fireflies, dappled forest light, detailed fantasy illustration.&quot; Let&#x27;s generate at an appropriate size. The default is 1024x1024. That&#x27;s fine. After generation, check, verify the details (palm, sword at waist, glowing flower), edit if necessary, and mark the best. Let&#x27;s write a good prompt: &quot;A fantasy illustration of a young elf boy with long pointed ears, standing in a mystical enchanted forest at dusk. He wears a simple green tunic and a belt, with a sheathed sword strapped at his waist (the sword not drawn). He spreads his right palm flat and open in front of his chest, and above his palm a glowing magical flower blooms, its petals radiating soft golden light, the light illuminating his young face. Background: tall ancient trees, mist, glowing spores and fireflies, soft god rays. Highly detailed, cinematic lighting, painterly fantasy style.&quot; Avoid non-visual things: &quot;did not draw the sword&quot; — that&#x27;s visual enough (sheathed sword at waist). No problem. Let&#x27;s generate.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;prompt&quot;: &quot;Fantasy illustration of a young elf boy with long pointed ears and soft hair, standing in a mystical enchanted forest at dusk. He wears a simple green tunic with a leather belt, and a sword is sheathed at his waist, undrawn. He holds one arm forward with his palm spread open and flat, and a glowing magical flower blooms above his open palm, its petals radiating soft golden light that illuminates his face and hands. Background of tall ancient trees, drifting mist, floating glowing spores and fireflies, gentle god rays through the canopy. Cinematic painterly style, highly detailed, warm glow against cool forest greens.&quot;,
+  &quot;model&quot;: &quot;qwen-image&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Let me inspect the image. This image shows an elf boy with pointed ears in a magical forest, with his palm extended and a glowing flower above his palm. There&#x27;s a sword at his waist. Let me check the details: 1. Elf boy with pointed ears — yes 2. Sword sheathed at his waist (not drawn) — yes, visible at his waist 3. Hand extended with palm open — yes, the flower is floating above his hand 4. Glowing flower inside the palm — yes Let me check the cropped portion to confirm the details are fine. Let me take a look at the hand/flower area and the sword area.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: &quot;the glowing flower and the elf boy&#x27;s open palm&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Step 3 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: &quot;the sword at the boy&#x27;s waist&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_2</div><img class=stepimg data-zoom data-full='steps/img_2.jpg' src='steps/img_2.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image matches the prompt well: - Elf boy with pointed ears ✓ - Magical forest with god rays, fireflies, mist ✓ - Sword sheathed at his waist, not drawn ✓ (the sword is visible, sheathed on his hip, clearly not drawn) - Palm extended open, glowing flower floating above it ✓ The hand and flower are well rendered — the flower is hovering just above the open palm, with light streaming down. The sword is sheathed at the waist. All the elements are present and correct. One small point: the flower is floating slightly above the palm, with the stem descending toward the hand — this reads as &quot;a flower appears on his palm&quot; well enough. The prompt says &quot;a glowing flower appears on his palm&quot; — it&#x27;s in/near his palm and glowing. Good. This image matches the prompt. Mark it as the best and stop. Good enough is a stopping condition.</div></div>
+<div class=step><div class=who>Step 4 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;All prompt elements verified: elf boy with pointed ears in a magical forest, sword sheathed (undrawn) at his waist, open spread palm with a glowing flower blooming above it, glowing spores and god rays. Hand and flower render cleanly on inspection.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image is complete and matches the prompt. All elements have been verified through the cropped portions: - Elf boy with pointed ears ✓ - Magical forest ✓ - Sword sheathed at his waist, not drawn ✓ - Palm extended, glowing flower in his palm ✓ Done. Summarize concisely.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The image is complete and matches the scene: a young elf boy with pointed ears stands in a misty, magical forest with god rays and glowing spores. He hasn&#x27;t drawn his sword — it stays sheathed at his waist — and instead spreads his palm open, where a luminous golden flower blooms above his hand, its glow lighting his face. I verified the hand/flower and the sheathed sword in full-resolution crops, and both render cleanly. I&#x27;ve marked it as the best result.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

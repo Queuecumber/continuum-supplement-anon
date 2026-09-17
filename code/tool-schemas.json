@@ -1,0 +1,1731 @@
+[
+  {
+    "name": "generate_image",
+    "description": "Generate a new image from a text prompt.\n\nArgs:\n    prompt: text description of the image to generate.\n    width: output width in pixels (default 1024).\n    height: output height in pixels (default 1024).\n    steps: diffusion steps; omit for the model default.\n    guidance: guidance scale; omit for the model default.\n    seed: random seed; randomized if omitted.\n    model: generation model (default flux2-dev \u2014 medium cost, more\n        creative). flux2-klein and qwen-image are cheap with high\n        prompt adherence. flux1-dev is a weaker/older base model but\n        has by far the largest LoRA ecosystem \u2014 reach for it when you\n        need a specific adapter, not for base quality.\n        flux2-klein/qwen-image/flux1-dev take LoRAs; flux2-dev does\n        not.\n    loras: LoRA adapters to stack. flux2-klein takes FLUX.2-klein-9B\n        adapters and qwen-image takes Qwen-Image adapters; flux2-dev\n        does NOT support LoRAs (raises ValueError). Put any trigger\n        words in the prompt.\n\nReturns:\n    Inline image bytes (PNG).\n",
+    "inputSchema": {
+      "$defs": {
+        "LoraSpec": {
+          "description": "One LoRA adapter to load onto the pipeline.",
+          "properties": {
+            "source": {
+              "description": "HF repo id (owner/name), HF URL, or local .safetensors path. A path or URL ending in a file selects that file within the repo.",
+              "title": "Source",
+              "type": "string"
+            },
+            "scale": {
+              "default": 1.0,
+              "description": "Adapter strength. 1.0 is full weight; some adapters need a specific value to take visible effect.",
+              "title": "Scale",
+              "type": "number"
+            },
+            "weight_name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Explicit weight file within a multi-file repo; usually inferred from source.",
+              "title": "Weight Name"
+            }
+          },
+          "required": [
+            "source"
+          ],
+          "title": "LoraSpec",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "prompt": {
+          "title": "Prompt",
+          "type": "string"
+        },
+        "width": {
+          "default": 1024,
+          "title": "Width",
+          "type": "integer"
+        },
+        "height": {
+          "default": 1024,
+          "title": "Height",
+          "type": "integer"
+        },
+        "steps": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Steps"
+        },
+        "guidance": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Guidance"
+        },
+        "seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Seed"
+        },
+        "model": {
+          "default": "flux2-dev",
+          "enum": [
+            "flux2-dev",
+            "flux2-klein",
+            "flux1-dev",
+            "qwen-image"
+          ],
+          "title": "Model",
+          "type": "string"
+        },
+        "loras": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/LoraSpec"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Loras"
+        }
+      },
+      "required": [
+        "prompt"
+      ],
+      "title": "generate_imageArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "edit_image",
+    "description": "Edit an image using a text instruction (whole-image, no mask \u2014\nfor masked/region edits use `inpaint_image`).\n\nDescribe only the CHANGE you want, in concrete visual language.\nOmit `steps`, `guidance`, `width`, and `height` unless you need to\noverride the model defaults.\n\nArgs:\n    image: image to edit (ImageContent).\n    prompt: the edit instruction.\n    references: additional images (ImageContent) whose visual\n        details the edit should preserve or borrow.\n    steps: diffusion steps; omit for the model default.\n    guidance: guidance scale; omit for the model default.\n    seed: random seed; randomized if omitted.\n    width: output width; omit for the model default.\n    height: output height; omit for the model default.\n    model: editing model (default firered \u2014 cheap, good for most\n        edits). qwen-image and flux2-klein are also cheap/high\n        adherence; flux2-dev is medium cost, more creative.\n        firered/qwen-image/flux2-klein take LoRAs; flux2-dev does\n        not.\n    loras: LoRA adapters to stack. qwen-image takes\n        Qwen-Image-Edit-2511 adapters (the true base \u2014 prefer it when\n        LoRA fidelity matters); firered loads the same adapters but,\n        as a finetune, may weaken their effect; flux2-klein takes\n        FLUX.2-klein-9B adapters; flux2-dev does NOT support LoRAs\n        (raises ValueError). Put any trigger words in the prompt.\n\nReturns:\n    Inline image bytes (PNG).\n",
+    "inputSchema": {
+      "$defs": {
+        "Annotations": {
+          "additionalProperties": true,
+          "properties": {
+            "audience": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "user",
+                      "assistant"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Audience"
+            },
+            "priority": {
+              "anyOf": [
+                {
+                  "maximum": 1.0,
+                  "minimum": 0.0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Priority"
+            }
+          },
+          "title": "Annotations",
+          "type": "object"
+        },
+        "ImageContent": {
+          "additionalProperties": true,
+          "description": "Image content for a message.",
+          "properties": {
+            "type": {
+              "const": "image",
+              "title": "Type",
+              "type": "string"
+            },
+            "data": {
+              "title": "Data",
+              "type": "string"
+            },
+            "mimeType": {
+              "title": "Mimetype",
+              "type": "string"
+            },
+            "annotations": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Annotations"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "_meta": {
+              "anyOf": [
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Meta"
+            }
+          },
+          "required": [
+            "type",
+            "data",
+            "mimeType"
+          ],
+          "title": "ImageContent",
+          "type": "object"
+        },
+        "LoraSpec": {
+          "description": "One LoRA adapter to load onto the pipeline.",
+          "properties": {
+            "source": {
+              "description": "HF repo id (owner/name), HF URL, or local .safetensors path. A path or URL ending in a file selects that file within the repo.",
+              "title": "Source",
+              "type": "string"
+            },
+            "scale": {
+              "default": 1.0,
+              "description": "Adapter strength. 1.0 is full weight; some adapters need a specific value to take visible effect.",
+              "title": "Scale",
+              "type": "number"
+            },
+            "weight_name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Explicit weight file within a multi-file repo; usually inferred from source.",
+              "title": "Weight Name"
+            }
+          },
+          "required": [
+            "source"
+          ],
+          "title": "LoraSpec",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "image": {
+          "$ref": "#/$defs/ImageContent"
+        },
+        "prompt": {
+          "title": "Prompt",
+          "type": "string"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/ImageContent"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "References"
+        },
+        "steps": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Steps"
+        },
+        "guidance": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Guidance"
+        },
+        "seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Seed"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Width"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Height"
+        },
+        "model": {
+          "anyOf": [
+            {
+              "enum": [
+                "firered",
+                "flux2-dev",
+                "flux2-klein",
+                "qwen-image"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "firered",
+          "title": "Model"
+        },
+        "loras": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/LoraSpec"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Loras"
+        }
+      },
+      "required": [
+        "image",
+        "prompt"
+      ],
+      "title": "edit_imageArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "inpaint_image",
+    "description": "Inpaint the masked region of an image with FLUX.1 Fill.\n\nWhite mask pixels are regenerated; black pixels are preserved\npixel-exact. Write the prompt as a description of the desired\nCONTENTS of the region (e.g. 'a red silk shirt'), not an edit\ninstruction ('make it red').\n\nPrefer edit_image first: a targeted instruction naming what to\nreplace and what it should become usually localizes well and gives\nbetter quality than inpainting. Use this tool when pixel-exact\npreservation outside the region is required, when edit_image keeps\nleaking changes outside the target, or when the region is only\nexpressible as a precise mask.\n\nLimitations: the fill is driven by TEXT ONLY \u2014 it cannot copy a\nspecific object, person, or pattern from another image (use `loras`\nfor trained subjects, or edit_image with references when the whole\nimage may change). Structural changes much larger than the mask are\nunreliable even with `dilate`, and small regions come back with\nlimited fine detail. If 2-3 seeds fail, rework the mask or switch\napproach rather than iterating.\n\nArgs:\n    image: image to inpaint (ImageContent).\n    mask: grayscale mask (ImageContent); white = regenerate,\n        black = preserve.\n    prompt: description of the desired contents of the masked\n        region.\n    steps: diffusion steps (default 50).\n    guidance: guidance scale (default 30.0).\n    seed: random seed; randomized if omitted.\n    dilate: grow the fill region by ~N px before inpainting \u2014 use\n        10-30 for shape-changing/removal edits so the mask\n        silhouette doesn't anchor the old shape, and describe what\n        replaces the removed parts (e.g. 'bare arms').\n    loras: FLUX.1-dev LoRA adapters (FLUX.1 Fill takes FLUX.1-dev\n        adapters). Put any trigger words in the prompt.\n\nReturns:\n    Inline image bytes (PNG).\n",
+    "inputSchema": {
+      "$defs": {
+        "Annotations": {
+          "additionalProperties": true,
+          "properties": {
+            "audience": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "user",
+                      "assistant"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Audience"
+            },
+            "priority": {
+              "anyOf": [
+                {
+                  "maximum": 1.0,
+                  "minimum": 0.0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Priority"
+            }
+          },
+          "title": "Annotations",
+          "type": "object"
+        },
+        "ImageContent": {
+          "additionalProperties": true,
+          "description": "Image content for a message.",
+          "properties": {
+            "type": {
+              "const": "image",
+              "title": "Type",
+              "type": "string"
+            },
+            "data": {
+              "title": "Data",
+              "type": "string"
+            },
+            "mimeType": {
+              "title": "Mimetype",
+              "type": "string"
+            },
+            "annotations": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Annotations"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "_meta": {
+              "anyOf": [
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Meta"
+            }
+          },
+          "required": [
+            "type",
+            "data",
+            "mimeType"
+          ],
+          "title": "ImageContent",
+          "type": "object"
+        },
+        "LoraSpec": {
+          "description": "One LoRA adapter to load onto the pipeline.",
+          "properties": {
+            "source": {
+              "description": "HF repo id (owner/name), HF URL, or local .safetensors path. A path or URL ending in a file selects that file within the repo.",
+              "title": "Source",
+              "type": "string"
+            },
+            "scale": {
+              "default": 1.0,
+              "description": "Adapter strength. 1.0 is full weight; some adapters need a specific value to take visible effect.",
+              "title": "Scale",
+              "type": "number"
+            },
+            "weight_name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Explicit weight file within a multi-file repo; usually inferred from source.",
+              "title": "Weight Name"
+            }
+          },
+          "required": [
+            "source"
+          ],
+          "title": "LoraSpec",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "image": {
+          "$ref": "#/$defs/ImageContent"
+        },
+        "mask": {
+          "$ref": "#/$defs/ImageContent"
+        },
+        "prompt": {
+          "title": "Prompt",
+          "type": "string"
+        },
+        "steps": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Steps"
+        },
+        "guidance": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Guidance"
+        },
+        "seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Seed"
+        },
+        "dilate": {
+          "default": 0,
+          "title": "Dilate",
+          "type": "integer"
+        },
+        "loras": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/LoraSpec"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Loras"
+        }
+      },
+      "required": [
+        "image",
+        "mask",
+        "prompt"
+      ],
+      "title": "inpaint_imageArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "outpaint_image",
+    "description": "Extend an image beyond its borders (outpainting) with FLUX.1 Fill.\n\nPads the canvas and generates the new border area to match the\nprompt. Write the prompt as a description of the full scene being\nrevealed (e.g. 'a wide sandy beach under a sunset sky'), not an\nedit instruction.\n\nArgs:\n    image: image to extend (ImageContent).\n    prompt: description of the full scene being revealed.\n    left/right/top/bottom: pixels to add on each side; at least\n        one side must be > 0.\n    overlap: pixels of the original border regenerated on padded\n        sides so tone and structures blend across the transition\n        (0 disables; risks a visible seam along the image edge).\n    steps: diffusion steps (default 50).\n    guidance: guidance scale (default 30.0).\n    seed: random seed; randomized if omitted.\n    loras: FLUX.1-dev LoRA adapters. Put any trigger words in the\n        prompt.\n\nReturns:\n    Inline image bytes (PNG) at the expanded canvas size.\n\nRaises:\n    ValueError: if no side has padding > 0 or padding is negative.\n",
+    "inputSchema": {
+      "$defs": {
+        "Annotations": {
+          "additionalProperties": true,
+          "properties": {
+            "audience": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "user",
+                      "assistant"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Audience"
+            },
+            "priority": {
+              "anyOf": [
+                {
+                  "maximum": 1.0,
+                  "minimum": 0.0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Priority"
+            }
+          },
+          "title": "Annotations",
+          "type": "object"
+        },
+        "ImageContent": {
+          "additionalProperties": true,
+          "description": "Image content for a message.",
+          "properties": {
+            "type": {
+              "const": "image",
+              "title": "Type",
+              "type": "string"
+            },
+            "data": {
+              "title": "Data",
+              "type": "string"
+            },
+            "mimeType": {
+              "title": "Mimetype",
+              "type": "string"
+            },
+            "annotations": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Annotations"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "_meta": {
+              "anyOf": [
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Meta"
+            }
+          },
+          "required": [
+            "type",
+            "data",
+            "mimeType"
+          ],
+          "title": "ImageContent",
+          "type": "object"
+        },
+        "LoraSpec": {
+          "description": "One LoRA adapter to load onto the pipeline.",
+          "properties": {
+            "source": {
+              "description": "HF repo id (owner/name), HF URL, or local .safetensors path. A path or URL ending in a file selects that file within the repo.",
+              "title": "Source",
+              "type": "string"
+            },
+            "scale": {
+              "default": 1.0,
+              "description": "Adapter strength. 1.0 is full weight; some adapters need a specific value to take visible effect.",
+              "title": "Scale",
+              "type": "number"
+            },
+            "weight_name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Explicit weight file within a multi-file repo; usually inferred from source.",
+              "title": "Weight Name"
+            }
+          },
+          "required": [
+            "source"
+          ],
+          "title": "LoraSpec",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "image": {
+          "$ref": "#/$defs/ImageContent"
+        },
+        "prompt": {
+          "title": "Prompt",
+          "type": "string"
+        },
+        "left": {
+          "default": 0,
+          "title": "Left",
+          "type": "integer"
+        },
+        "right": {
+          "default": 0,
+          "title": "Right",
+          "type": "integer"
+        },
+        "top": {
+          "default": 0,
+          "title": "Top",
+          "type": "integer"
+        },
+        "bottom": {
+          "default": 0,
+          "title": "Bottom",
+          "type": "integer"
+        },
+        "overlap": {
+          "default": 20,
+          "title": "Overlap",
+          "type": "integer"
+        },
+        "steps": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Steps"
+        },
+        "guidance": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Guidance"
+        },
+        "seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Seed"
+        },
+        "loras": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/LoraSpec"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Loras"
+        }
+      },
+      "required": [
+        "image",
+        "prompt"
+      ],
+      "title": "outpaint_imageArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "inspect_region",
+    "description": "Crop a region out of an image for full-resolution visual\ninspection.\n\nUse this when a VLM may have downsampled the full image and needs a\nsmall cutout to inspect details (logos, small text, hands, edges).\n\nArgs:\n    image: image to crop from (ImageContent).\n    roi: region to crop. Pass a text description such as 'the logo'\n        to segment with SAM, a rectangle as [x1, y1, x2, y2], or an\n        object with x/y/width/height or x1/y1/x2/y2. Rectangle\n        coordinates are pixels unless normalized=true.\n    normalized: treat rectangle coordinates as 0-1 fractions of\n        image width/height instead of absolute pixels.\n    padding: extra context around the crop \u2014 pixels, or a fraction\n        of each crop dimension when between 0 and 1.\n    min_size: minimum crop side length in pixels.\n    threshold: SAM3 instance filter (text roi only).\n    mask_threshold: SAM3 mask binarization (text roi only).\n\nReturns:\n    Inline image bytes (PNG) of the crop at source resolution.\n",
+    "inputSchema": {
+      "$defs": {
+        "Annotations": {
+          "additionalProperties": true,
+          "properties": {
+            "audience": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "user",
+                      "assistant"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Audience"
+            },
+            "priority": {
+              "anyOf": [
+                {
+                  "maximum": 1.0,
+                  "minimum": 0.0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Priority"
+            }
+          },
+          "title": "Annotations",
+          "type": "object"
+        },
+        "ImageContent": {
+          "additionalProperties": true,
+          "description": "Image content for a message.",
+          "properties": {
+            "type": {
+              "const": "image",
+              "title": "Type",
+              "type": "string"
+            },
+            "data": {
+              "title": "Data",
+              "type": "string"
+            },
+            "mimeType": {
+              "title": "Mimetype",
+              "type": "string"
+            },
+            "annotations": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Annotations"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "_meta": {
+              "anyOf": [
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Meta"
+            }
+          },
+          "required": [
+            "type",
+            "data",
+            "mimeType"
+          ],
+          "title": "ImageContent",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "image": {
+          "$ref": "#/$defs/ImageContent"
+        },
+        "roi": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "type": "object"
+            }
+          ],
+          "title": "Roi"
+        },
+        "normalized": {
+          "default": false,
+          "title": "Normalized",
+          "type": "boolean"
+        },
+        "padding": {
+          "default": 0.0,
+          "title": "Padding",
+          "type": "number"
+        },
+        "min_size": {
+          "default": 1,
+          "title": "Min Size",
+          "type": "integer"
+        },
+        "threshold": {
+          "default": 0.3,
+          "title": "Threshold",
+          "type": "number"
+        },
+        "mask_threshold": {
+          "default": 0.5,
+          "title": "Mask Threshold",
+          "type": "number"
+        }
+      },
+      "required": [
+        "image",
+        "roi"
+      ],
+      "title": "inspect_regionArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "segment",
+    "description": "Run text-driven concept segmentation (SAM3 PCS) on an image.\n\nReturns a mask you can pass to inpaint_image's `mask` parameter\nfor constrained inpainting.\n\nArgs:\n    image: image to segment (ImageContent).\n    description: text description of the region to segment, e.g.\n        \"all clothing\" or \"the sky\".\n    threshold: filters detected instances.\n    mask_threshold: binarizes masks.\n    negative_descriptions: segmented separately and subtracted\n        from the positive mask.\n\nReturns:\n    Inline mask image bytes (grayscale PNG, white = matching\n    region).\n",
+    "inputSchema": {
+      "$defs": {
+        "Annotations": {
+          "additionalProperties": true,
+          "properties": {
+            "audience": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "user",
+                      "assistant"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Audience"
+            },
+            "priority": {
+              "anyOf": [
+                {
+                  "maximum": 1.0,
+                  "minimum": 0.0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Priority"
+            }
+          },
+          "title": "Annotations",
+          "type": "object"
+        },
+        "ImageContent": {
+          "additionalProperties": true,
+          "description": "Image content for a message.",
+          "properties": {
+            "type": {
+              "const": "image",
+              "title": "Type",
+              "type": "string"
+            },
+            "data": {
+              "title": "Data",
+              "type": "string"
+            },
+            "mimeType": {
+              "title": "Mimetype",
+              "type": "string"
+            },
+            "annotations": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Annotations"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "_meta": {
+              "anyOf": [
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Meta"
+            }
+          },
+          "required": [
+            "type",
+            "data",
+            "mimeType"
+          ],
+          "title": "ImageContent",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "image": {
+          "$ref": "#/$defs/ImageContent"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "threshold": {
+          "default": 0.3,
+          "title": "Threshold",
+          "type": "number"
+        },
+        "mask_threshold": {
+          "default": 0.5,
+          "title": "Mask Threshold",
+          "type": "number"
+        },
+        "negative_descriptions": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Negative Descriptions"
+        }
+      },
+      "required": [
+        "image",
+        "description"
+      ],
+      "title": "segmentArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "segment_points",
+    "description": "Run point-prompt segmentation (SAM3 Tracker / PVS) on an image.\n\nArgs:\n    image: image to segment (ImageContent).\n    points: positive [x, y] clicks for one target.\n    negative_points: negative clicks for refinement.\n    labels: overrides point labels directly (1=positive,\n        0=negative).\n    normalized: treat coordinates as 0-1 fractions of image\n        width/height instead of absolute pixels.\n    multimask_output: request candidate masks; by default the\n        highest-IoU candidate is selected.\n    mask_index: force a specific candidate mask.\n    mask_threshold: mask decoding threshold.\n    max_hole_area: fill holes up to this area in post-processing.\n    max_sprinkle_area: remove specks up to this area.\n    apply_non_overlapping_constraints: forwarded to SAM3 tracker\n        post-processing.\n\nReturns:\n    Inline mask image bytes (grayscale PNG, white = selected\n    region).\n",
+    "inputSchema": {
+      "$defs": {
+        "Annotations": {
+          "additionalProperties": true,
+          "properties": {
+            "audience": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "user",
+                      "assistant"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Audience"
+            },
+            "priority": {
+              "anyOf": [
+                {
+                  "maximum": 1.0,
+                  "minimum": 0.0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Priority"
+            }
+          },
+          "title": "Annotations",
+          "type": "object"
+        },
+        "ImageContent": {
+          "additionalProperties": true,
+          "description": "Image content for a message.",
+          "properties": {
+            "type": {
+              "const": "image",
+              "title": "Type",
+              "type": "string"
+            },
+            "data": {
+              "title": "Data",
+              "type": "string"
+            },
+            "mimeType": {
+              "title": "Mimetype",
+              "type": "string"
+            },
+            "annotations": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Annotations"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "_meta": {
+              "anyOf": [
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Meta"
+            }
+          },
+          "required": [
+            "type",
+            "data",
+            "mimeType"
+          ],
+          "title": "ImageContent",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "image": {
+          "$ref": "#/$defs/ImageContent"
+        },
+        "points": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Points",
+          "type": "array"
+        },
+        "negative_points": {
+          "anyOf": [
+            {
+              "items": {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Negative Points"
+        },
+        "labels": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Labels"
+        },
+        "normalized": {
+          "default": false,
+          "title": "Normalized",
+          "type": "boolean"
+        },
+        "multimask_output": {
+          "default": true,
+          "title": "Multimask Output",
+          "type": "boolean"
+        },
+        "mask_index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mask Index"
+        },
+        "mask_threshold": {
+          "default": 0.0,
+          "title": "Mask Threshold",
+          "type": "number"
+        },
+        "max_hole_area": {
+          "default": 0.0,
+          "title": "Max Hole Area",
+          "type": "number"
+        },
+        "max_sprinkle_area": {
+          "default": 0.0,
+          "title": "Max Sprinkle Area",
+          "type": "number"
+        },
+        "apply_non_overlapping_constraints": {
+          "default": false,
+          "title": "Apply Non Overlapping Constraints",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "image",
+        "points"
+      ],
+      "title": "segment_pointsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "segment_boxes",
+    "description": "Run box-prompt segmentation (SAM3 Tracker / PVS) on an image.\n\nArgs:\n    image: image to segment (ImageContent).\n    boxes: [x1, y1, x2, y2] boxes; all resulting object masks are\n        merged.\n    normalized: treat coordinates as 0-1 fractions of image\n        width/height instead of absolute pixels.\n    multimask_output: request candidate masks per box.\n    mask_index: force a specific candidate mask.\n    mask_threshold: mask decoding threshold.\n    max_hole_area: fill holes up to this area in post-processing.\n    max_sprinkle_area: remove specks up to this area.\n    apply_non_overlapping_constraints: forwarded to SAM3 tracker\n        post-processing.\n\nReturns:\n    Inline mask image bytes (grayscale PNG, white = selected\n    region).\n",
+    "inputSchema": {
+      "$defs": {
+        "Annotations": {
+          "additionalProperties": true,
+          "properties": {
+            "audience": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "user",
+                      "assistant"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Audience"
+            },
+            "priority": {
+              "anyOf": [
+                {
+                  "maximum": 1.0,
+                  "minimum": 0.0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Priority"
+            }
+          },
+          "title": "Annotations",
+          "type": "object"
+        },
+        "ImageContent": {
+          "additionalProperties": true,
+          "description": "Image content for a message.",
+          "properties": {
+            "type": {
+              "const": "image",
+              "title": "Type",
+              "type": "string"
+            },
+            "data": {
+              "title": "Data",
+              "type": "string"
+            },
+            "mimeType": {
+              "title": "Mimetype",
+              "type": "string"
+            },
+            "annotations": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Annotations"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "_meta": {
+              "anyOf": [
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Meta"
+            }
+          },
+          "required": [
+            "type",
+            "data",
+            "mimeType"
+          ],
+          "title": "ImageContent",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "image": {
+          "$ref": "#/$defs/ImageContent"
+        },
+        "boxes": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Boxes",
+          "type": "array"
+        },
+        "normalized": {
+          "default": false,
+          "title": "Normalized",
+          "type": "boolean"
+        },
+        "multimask_output": {
+          "default": false,
+          "title": "Multimask Output",
+          "type": "boolean"
+        },
+        "mask_index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mask Index"
+        },
+        "mask_threshold": {
+          "default": 0.0,
+          "title": "Mask Threshold",
+          "type": "number"
+        },
+        "max_hole_area": {
+          "default": 0.0,
+          "title": "Max Hole Area",
+          "type": "number"
+        },
+        "max_sprinkle_area": {
+          "default": 0.0,
+          "title": "Max Sprinkle Area",
+          "type": "number"
+        },
+        "apply_non_overlapping_constraints": {
+          "default": false,
+          "title": "Apply Non Overlapping Constraints",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "image",
+        "boxes"
+      ],
+      "title": "segment_boxesArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "invert_mask",
+    "description": "Invert a mask (255 \u2194 0). Pure pixel operation \u2014 no model loaded.\n\nArgs:\n    mask: grayscale mask to invert (ImageContent).\n\nReturns:\n    Inline mask image bytes (grayscale PNG).\n",
+    "inputSchema": {
+      "$defs": {
+        "Annotations": {
+          "additionalProperties": true,
+          "properties": {
+            "audience": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "user",
+                      "assistant"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Audience"
+            },
+            "priority": {
+              "anyOf": [
+                {
+                  "maximum": 1.0,
+                  "minimum": 0.0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Priority"
+            }
+          },
+          "title": "Annotations",
+          "type": "object"
+        },
+        "ImageContent": {
+          "additionalProperties": true,
+          "description": "Image content for a message.",
+          "properties": {
+            "type": {
+              "const": "image",
+              "title": "Type",
+              "type": "string"
+            },
+            "data": {
+              "title": "Data",
+              "type": "string"
+            },
+            "mimeType": {
+              "title": "Mimetype",
+              "type": "string"
+            },
+            "annotations": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Annotations"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "_meta": {
+              "anyOf": [
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Meta"
+            }
+          },
+          "required": [
+            "type",
+            "data",
+            "mimeType"
+          ],
+          "title": "ImageContent",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "mask": {
+          "$ref": "#/$defs/ImageContent"
+        }
+      },
+      "required": [
+        "mask"
+      ],
+      "title": "invert_maskArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "upscale_image",
+    "description": "Super-resolution upscale of an image (FaithDiff).\n\n\nSpecify either `scale` or both `target_width` and `target_height`;\nif both are given, target dimensions win. Tile-based; reports\nprogress per-tile.\n\nArgs:\n    image: image to upscale (ImageContent).\n    scale: size multiplier like 2 or 4.\n    target_width: explicit output width in pixels.\n    target_height: explicit output height in pixels.\n    steps: diffusion steps per tile.\n    guidance: guidance scale.\n    target_tile_size: SR tile size in pixels.\n    overlap: tile overlap fraction.\n\nReturns:\n    Inline image bytes (PNG) at the target size.\n\nRaises:\n    ValueError: if neither `scale` nor both target dimensions are\n        provided.\n",
+    "inputSchema": {
+      "$defs": {
+        "Annotations": {
+          "additionalProperties": true,
+          "properties": {
+            "audience": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "user",
+                      "assistant"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Audience"
+            },
+            "priority": {
+              "anyOf": [
+                {
+                  "maximum": 1.0,
+                  "minimum": 0.0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Priority"
+            }
+          },
+          "title": "Annotations",
+          "type": "object"
+        },
+        "ImageContent": {
+          "additionalProperties": true,
+          "description": "Image content for a message.",
+          "properties": {
+            "type": {
+              "const": "image",
+              "title": "Type",
+              "type": "string"
+            },
+            "data": {
+              "title": "Data",
+              "type": "string"
+            },
+            "mimeType": {
+              "title": "Mimetype",
+              "type": "string"
+            },
+            "annotations": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Annotations"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "_meta": {
+              "anyOf": [
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Meta"
+            }
+          },
+          "required": [
+            "type",
+            "data",
+            "mimeType"
+          ],
+          "title": "ImageContent",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "image": {
+          "$ref": "#/$defs/ImageContent"
+        },
+        "scale": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scale"
+        },
+        "target_width": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Width"
+        },
+        "target_height": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Height"
+        },
+        "steps": {
+          "default": 20,
+          "title": "Steps",
+          "type": "integer"
+        },
+        "guidance": {
+          "default": 5.0,
+          "title": "Guidance",
+          "type": "number"
+        },
+        "target_tile_size": {
+          "default": 1024,
+          "title": "Target Tile Size",
+          "type": "integer"
+        },
+        "overlap": {
+          "default": 0.5,
+          "title": "Overlap",
+          "type": "number"
+        }
+      },
+      "required": [
+        "image"
+      ],
+      "title": "upscale_imageArguments",
+      "type": "object"
+    }
+  }
+]

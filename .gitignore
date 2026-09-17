@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.venv/
+node_modules/
+runs/
+bench-local/
+bench.log
+.env
+.env.*
+benchmark_env.sh
+ol_token
+*.log

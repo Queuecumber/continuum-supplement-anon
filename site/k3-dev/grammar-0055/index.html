@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Grammar — In the magic forest, an elf boy did not draw the sword at his waist, b</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Grammar — In the magic forest, an elf boy did not draw the sword at his waist, b</h1>
+<blockquote>In the magic forest, an elf boy did not draw the sword at his waist, but spread his palm, and a glowing flower appeared in his palm.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Grammar - Negation</b> &mdash; The prompt specifies that the elf boy did not draw the sword at his waist. In the image, an elf boy is depicted holding a sword by its hilt in his right hand. The sword is unsheathed, which contradicts the instruction that the sword was not drawn.</li>
+<li><span class='tag pass'>PASS</span><b>Action - Hand (Character/Anthropomorphic)</b> &mdash; The prompt describes the elf boy spreading his palm to reveal a glowing flower. In the image, the boy&#x27;s left hand is open, palm up. A single, white flower is floating just above his palm, emitting a bright yellow glow with sparkling particles around it. The hand appears well-formed with a thumb and four visible fingers.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Negation</b> &mdash; The elf boy has a sword in a scabbard attached to a belt around his waist. His hand is not on the hilt, and he is not in the act of drawing the weapon, which correctly adheres to the negation &#x27;did not draw the sword&#x27;.</li>
+<li><span class='tag pass'>PASS</span><b>Action - Hand (Character/Anthropomorphic)</b> &mdash; The image shows the elf boy&#x27;s left hand with the palm spread open, facing upwards. A single pink and yellow flower, glowing brightly with sparkles, is levitating just above the center of his palm. The hand is depicted with five distinct, well-proportioned fingers and no visible anatomical errors.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Generate an image of an elf boy in a magic forest, with a glowing flower in his open palm, sword sheathed at waist (not drawn).</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;flux2-dev&quot;,
+  &quot;prompt&quot;: &quot;Fantasy illustration of a young elf boy standing in an enchanted magic forest. He has pointed elf ears, silver-blond hair, and wears a green forest tunic with a sheathed sword hanging at his waist in its scabbard, untouched. One hand is open with palm facing up at chest level, and a single luminous flower made of glowing golden-pink light floats just above his palm, petals radiating soft magical glow and tiny sparkling light particles. Surrounding him: ancient towering trees with moss, shafts of soft light breaking through the canopy, floating glowing spores, mist, ferns and mushrooms on the forest floor. Dreamlike, ethereal atmosphere, cinematic lighting, highly detailed fantasy art.&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image looks great: elf boy, magic forest, glowing flower above open palm, sword sheathed at waist (hilt visible, blade in scabbard). All elements match. Mark best and stop.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The first generation already captured everything: the elf boy in the enchanted forest, sword sheathed at his waist (clearly not drawn), palm open with a glowing flower floating above it, light particles and mist throughout. Marking it as the final result.</div></div>
+<div class=step><div class=who>Step 2 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;All prompt elements present and correct: elf boy in magic forest, sheathed sword untouched at waist, open palm, glowing flower hovering above it, ethereal forest atmosphere.&quot;
+}</pre></div>
+<div class=step><div class=who>Model</div><div class=said>The image is complete and matches your scene: - **Elf boy** — pointed ears, silver-blond hair, green forest tunic, standing in a misty ancient forest - **Sword undrawn** — the sword rests sheathed at his waist, hilt and scabbard clearly visible and untouched - **Open palm** — his hand is extended with the palm facing up - **Glowing flower** — a radiant pink-gold flower of light hovers just above his palm, surrounded by sparkling magical particles - **Magic forest** — towering moss-covered trees, shafts of light through the canopy, glowing spores, ferns, and mushrooms This result is marked as final. Let me know if you&#x27;d like any changes!</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

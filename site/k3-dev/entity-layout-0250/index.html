@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Entity Layout — On a white tablecloth, on the left side of the picture is a celadon va</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Entity Layout — On a white tablecloth, on the left side of the picture is a celadon va</h1>
+<blockquote>On a white tablecloth, on the left side of the picture is a celadon vase with a red plum branch, and on the right are two stacked tea cups.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Entity Layout - Two-Dimensional Space</b> &mdash; The image shows a celadon vase containing red plum branches positioned on the left side of the frame. To the right of the vase, there is a stack of three tea cups. The prompt specifies &#x27;two stacked tea cups&#x27; on the right, but the image depicts three. Therefore, the layout of the specifically described entities is not entirely accurate.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Entity Layout - Two-Dimensional Space</b> &mdash; The image shows a celadon vase with red plum branches positioned on the left side of the frame. To the right of the vase, located on the right side of the picture, are two stacked tea cups. This spatial arrangement accurately reflects the layout described in the prompt.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Generate a still life: white tablecloth, left side celadon vase with red plum branch, right side two stacked tea cups.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;prompt&quot;: &quot;Still life photograph on a white tablecloth. On the left side of the picture stands a pale green celadon porcelain vase holding a flowering branch of red plum blossoms. On the right side are two small tea cups stacked one on top of the other. Soft natural light, clean minimal composition, high detail.&quot;,
+  &quot;model&quot;: &quot;flux2-dev&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image matches: white tablecloth, celadon vase with red plum branches on the left, two stacked tea cups on the right. Good. Mark best.</div></div>
+<div class=step><div class=who>Step 2 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;All requested elements present and correct: white tablecloth, celadon vase with red plum branches on the left, two stacked tea cups on the right. Clean composition, no fixes needed.&quot;
+}</pre></div>
+<div class=step><div class=who>Model</div><div class=said>The image is complete and matches your description on the first pass: - **Left side**: a pale green celadon vase holding branches of red plum blossoms - **Right side**: two small celadon tea cups neatly stacked - **Surface**: a white tablecloth, with soft natural lighting for a clean, minimal still life No edits were needed — this is the final result.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

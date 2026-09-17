@@ -1,0 +1,191 @@
+{
+    "primary_dimensions": {
+        "Style": {
+            "correct": 976,
+            "total": 1000,
+            "accuracy": 0.976
+        },
+        "World Knowledge": {
+            "correct": 584,
+            "total": 632,
+            "accuracy": 0.9241
+        },
+        "Attribute ": {
+            "correct": 802,
+            "total": 936,
+            "accuracy": 0.8568
+        },
+        "Action ": {
+            "correct": 853,
+            "total": 1052,
+            "accuracy": 0.8108
+        },
+        "Relationship ": {
+            "correct": 677,
+            "total": 788,
+            "accuracy": 0.8591
+        },
+        "Compound ": {
+            "correct": 630,
+            "total": 776,
+            "accuracy": 0.8119
+        },
+        "Grammar ": {
+            "correct": 552,
+            "total": 748,
+            "accuracy": 0.738
+        },
+        "Logical Reasoning": {
+            "correct": 253,
+            "total": 436,
+            "accuracy": 0.5803
+        },
+        "Entity Layout ": {
+            "correct": 478,
+            "total": 536,
+            "accuracy": 0.8918
+        },
+        "Text Generation": {
+            "correct": 155,
+            "total": 348,
+            "accuracy": 0.4454
+        }
+    },
+    "sub_dimensions": {
+        "Action - Animal": {
+            "correct": 117,
+            "total": 136,
+            "accuracy": 0.8603
+        },
+        "Action - Contact Interaction": {
+            "correct": 123,
+            "total": 168,
+            "accuracy": 0.7321
+        },
+        "Action - Full-body (Character/Anthropomorphic)": {
+            "correct": 153,
+            "total": 184,
+            "accuracy": 0.8315
+        },
+        "Action - Hand (Character/Anthropomorphic)": {
+            "correct": 121,
+            "total": 156,
+            "accuracy": 0.7756
+        },
+        "Action - Non-contact Interaction": {
+            "correct": 155,
+            "total": 196,
+            "accuracy": 0.7908
+        },
+        "Action - State": {
+            "correct": 184,
+            "total": 212,
+            "accuracy": 0.8679
+        },
+        "Attribute - Color": {
+            "correct": 117,
+            "total": 120,
+            "accuracy": 0.975
+        },
+        "Attribute - Expression": {
+            "correct": 137,
+            "total": 156,
+            "accuracy": 0.8782
+        },
+        "Attribute - Material": {
+            "correct": 194,
+            "total": 212,
+            "accuracy": 0.9151
+        },
+        "Attribute - Quantity": {
+            "correct": 109,
+            "total": 144,
+            "accuracy": 0.7569
+        },
+        "Attribute - Shape": {
+            "correct": 126,
+            "total": 160,
+            "accuracy": 0.7875
+        },
+        "Attribute - Size": {
+            "correct": 119,
+            "total": 144,
+            "accuracy": 0.8264
+        },
+        "Compound - Feature Matching": {
+            "correct": 301,
+            "total": 384,
+            "accuracy": 0.7839
+        },
+        "Compound - Imagination": {
+            "correct": 329,
+            "total": 392,
+            "accuracy": 0.8393
+        },
+        "Entity Layout - Three-Dimensional Space": {
+            "correct": 234,
+            "total": 264,
+            "accuracy": 0.8864
+        },
+        "Entity Layout - Two-Dimensional Space": {
+            "correct": 244,
+            "total": 272,
+            "accuracy": 0.8971
+        },
+        "Grammar - Consistency": {
+            "correct": 164,
+            "total": 216,
+            "accuracy": 0.7593
+        },
+        "Grammar - Negation": {
+            "correct": 160,
+            "total": 260,
+            "accuracy": 0.6154
+        },
+        "Grammar - Pronoun Reference": {
+            "correct": 228,
+            "total": 272,
+            "accuracy": 0.8382
+        },
+        "Logical Reasoning": {
+            "correct": 253,
+            "total": 436,
+            "accuracy": 0.5803
+        },
+        "Relationship - Comparison": {
+            "correct": 103,
+            "total": 128,
+            "accuracy": 0.8047
+        },
+        "Relationship - Composition": {
+            "correct": 266,
+            "total": 296,
+            "accuracy": 0.8986
+        },
+        "Relationship - Inclusion": {
+            "correct": 174,
+            "total": 184,
+            "accuracy": 0.9457
+        },
+        "Relationship - Similarity": {
+            "correct": 134,
+            "total": 180,
+            "accuracy": 0.7444
+        },
+        "Style": {
+            "correct": 976,
+            "total": 1000,
+            "accuracy": 0.976
+        },
+        "Text Generation": {
+            "correct": 155,
+            "total": 348,
+            "accuracy": 0.4454
+        },
+        "World Knowledge": {
+            "correct": 584,
+            "total": 632,
+            "accuracy": 0.9241
+        }
+    }
+}

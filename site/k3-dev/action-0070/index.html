@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Action — Please generate a picture: Two skiers wearing the same style of ski cl</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Action — Please generate a picture: Two skiers wearing the same style of ski cl</h1>
+<blockquote>Please generate a picture: Two skiers wearing the same style of ski clothing, standing side by side on the top of a snowy mountain in exactly the same posture.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Action - State</b> &mdash; The image shows two people on skis, both of whom are in an upright, standing position.</li>
+<li><span class='tag fail'>FAIL</span><b>Relationship - Similarity</b> &mdash; The two skiers wear jackets of the same style and color pattern, as well as black pants, helmets, and gloves. However, their postures are not exactly the same. Their head positions differ, with the skier on the left tilting their head slightly while the one on the right faces more forward. There are also slight variations in their hand and arm positions. Furthermore, their ski goggles have different colored lenses.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Action - State</b> &mdash; The image shows two figures on skis. They are both upright and stationary on a snowy surface, which corresponds to the state of standing.</li>
+<li><span class='tag pass'>PASS</span><b>Relationship - Similarity</b> &mdash; The two skiers are wearing identical outfits, consisting of a red and black jacket, black pants, a white helmet, and ski goggles. They are also positioned in the same posture: standing front-on, holding ski poles in both hands with arms slightly bent, and their skis are parallel and pointing forward.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Generate with flux2-dev.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;prompt&quot;: &quot;Two skiers standing side by side on the summit of a snowy mountain, both wearing identical ski outfits \u2014 matching red and black insulated ski jackets, black ski pants, white helmets, and mirrored goggles. They stand in exactly the same posture: upright, both hands holding ski poles planted at the same angle, skis parallel on the snow, facing the camera. Crisp sunny winter day, clear blue sky, dramatic alpine peaks and a vast snow-covered slope stretching behind them, sparkling white snow underfoot. Realistic photography style, full-body shot.&quot;,
+  &quot;model&quot;: &quot;flux2-dev&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image looks quite good. Two skiers, matching outfits, same posture, snowy mountain top. Left skier appears slightly larger but postures match well — both holding poles, skis parallel. This meets the prompt. Mark best and stop.</div></div>
+<div class=step><div class=who>Step 2 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;Matches the prompt: two skiers in identical red/black ski outfits, white helmets and goggles, standing side by side in the same posture (poles in both hands, parallel skis) on a snowy mountain summit with alpine peaks behind.&quot;
+}</pre></div>
+<div class=step><div class=who>Model</div><div class=said>Here&#x27;s your picture! It shows two skiers standing side by side on a snowy mountain summit, both wearing identical outfits — matching red and black ski jackets, black pants, white helmets, and mirrored goggles — and standing in the same posture: poles planted in both hands, skis parallel, facing the camera. Majestic snow-covered alpine peaks stretch out behind them under a clear blue sky. The image has been marked as the final result.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

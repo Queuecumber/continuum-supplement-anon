@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Style — A red drone flew low across the calm lake at low altitude, and the fri</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Style — A red drone flew low across the calm lake at low altitude, and the fri</h1>
+<blockquote>A red drone flew low across the calm lake at low altitude, and the frightened fish of fish in the water swam in all directions. There were no ships in the picture. It was a documentary photography style.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Style</b> &mdash; The image is a realistic photograph of a red drone hovering over a body of water filled with fish. The style is clear and realistic, consistent with documentary photography.</li>
+<li><span class='tag pass'>PASS</span><b>Grammar - Negation</b> &mdash; The image depicts a large body of water, a lake, with a distant tree line. There are no ships, boats, or any other watercraft visible in the picture.</li>
+<li><span class='tag fail'>FAIL</span><b>Action - Animal</b> &mdash; The image shows a large school of fish in the water. The fish are clustered together in a dense group near the surface, many with their mouths open. They are not depicted as swimming in all directions as if scattered.</li>
+<li><span class='tag fail'>FAIL</span><b>Action - Non-contact Interaction</b> &mdash; A red drone is flying low over a school of fish. The fish do not appear to be frightened; they are gathered in a dense school directly below the drone, which does not visually convey an interaction of the drone frightening the fish.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Style</b> &mdash; The image is a realistic photograph, not a drawing or painting. It captures a specific moment with natural lighting and a clear focus, which aligns with the characteristics of a documentary photography style.</li>
+<li><span class='tag pass'>PASS</span><b>Grammar - Negation</b> &mdash; The image depicts a body of water, which appears to be a lake, with a drone hovering above it. There are no ships, boats, or other watercraft visible in the picture.</li>
+<li><span class='tag pass'>PASS</span><b>Action - Animal</b> &mdash; In the water, numerous small, silvery fish are visible. They are oriented in various different directions, not swimming in a uniform school, which gives the appearance of them swimming in all directions as if scattering.</li>
+<li><span class='tag pass'>PASS</span><b>Action - Non-contact Interaction</b> &mdash; The image shows a red drone hovering low over the water. Directly beneath it, there are concentric ripples on the water&#x27;s surface, and a school of fish is pictured moving away from this central point of disturbance. This visual composition strongly implies that the presence and action of the drone are causing the fish to scatter.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Generate an image: red drone flying low over calm lake, fish scattering in water, no ships, documentary photography style.</div></div>
+<div class=step><div class=who>Model</div><div class=said>I&#x27;ll generate this image of a red drone flying low over a calm lake with scattered fish, in documentary photography style.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;flux2-dev&quot;,
+  &quot;prompt&quot;: &quot;Documentary photography style photo: a small red quadcopter drone flying at very low altitude over a calm lake, its reflection faintly visible on the water surface. Below the surface, dozens of small silvery fish scatter and dart in all directions, ripples spreading outward from the drone&#x27;s downdraft. Natural overcast daylight, muted realistic colors, photojournalistic candid feel, shot with a telephoto lens from the shoreline, shallow ripples and concentric circles on the water, no boats or ships anywhere, wide landscape framing.&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image looks quite good: red drone low over calm lake, fish scattering, ripples, no ships, documentary style, overcast. Check details. The fish look a bit numerous and above-water-ish, but generally fine. Some fish appear to be on the surface which fits &quot;frightened fish scattering&quot;. Composition: drone centered upper-middle, fish scattering in all directions, ripples. No ships. Good enough — mark best and stop.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The image came out well on the first attempt. Let me evaluate it against the prompt: - **Red drone at low altitude** ✓ — a red quadcopter is hovering just above the water surface - **Calm lake** ✓ — smooth overcast water with gentle concentric ripples from the drone&#x27;s downdraft - **Frightened fish swimming in all directions** ✓ — numerous small silvery fish dart outward in scattered directions around the ripple center - **No ships** ✓ — the water and far shoreline are completely empty of boats - **Documentary photography style** ✓ — muted overcast tones, natural candid framing, photojournalistic feel, distant treeline shore All requested elements are present and correct, and there are no unwanted elements (no boats, no people, no text).</div></div>
+<div class=step><div class=who>Step 2 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;All prompt elements present: red drone low over calm lake, fish scattering in all directions, no ships, documentary photography style. Composition and realism are strong.&quot;
+}</pre></div>
+<div class=step><div class=who>Model</div><div class=said>The image is complete and matches every requirement: - A **red quadcopter drone** flies at very low altitude over the **calm lake**, its downdraft creating concentric ripples on the surface - A school of **frightened small fish** scatters in all directions through the shallow water - **No ships or boats** appear anywhere in the frame — just open water and a distant wooded shoreline - The muted overcast lighting, realistic tones, and candid telephoto framing give it an authentic **documentary photography** feel The result is marked as the final image.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

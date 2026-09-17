@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Grammar — Generated image: A ceramic mushroom man with arms like branches but no</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Grammar — Generated image: A ceramic mushroom man with arms like branches but no</h1>
+<blockquote>Generated image: A ceramic mushroom man with arms like branches but no fungus cover on his head.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Grammar - Negation</b> &mdash; The prompt specifies that the mushroom man should have &#x27;no fungus cover on his head&#x27;. The image depicts a figure with a large, brown, glossy mushroom cap on its head. A mushroom cap is a part of a fungus. Therefore, the image contradicts the negative constraint in the prompt.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image shows a figurine of an anthropomorphic mushroom character. The material has a glazed, shiny surface consistent with ceramic. The character&#x27;s arms are shaped and colored to look like small tree branches. This accurately reflects the description &#x27;A ceramic mushroom man with arms like branches&#x27;.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Negation</b> &mdash; The figure has a smooth, rounded, cream-colored head. There is no fungus cover, cap, or any feature resembling a mushroom cap on its head, fulfilling the negative requirement of the prompt.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image displays a figurine that resembles a mushroom man, made of a material that appears to be ceramic due to its glossy, crackled glaze. The figure&#x27;s two arms are brown and shaped like small, multi-pronged branches.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>The user wants an image: &quot;A ceramic mushroom man with arms like branches but no fungus cover on his head.&quot; So a mushroom-person figure made of ceramic, with branch-like arms, and notably no mushroom cap on his head (bare head). Interesting — &quot;no fungus cover on his head&quot; means the head lacks the typical mushroom cap. Let me generate with flux2-dev.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;prompt&quot;: &quot;A whimsical ceramic figurine of a mushroom man, glossy glazed porcelain, standing upright. His body is the pale cream-colored stalk of a mushroom with subtle gill texture at the shoulders. His arms are thin, twisting brown ceramic tree branches with small twig fingers. His head is bare and smooth \u2014 a rounded glazed ceramic head with no mushroom cap on top, simple hand-painted face with two dot eyes and a small smile. Studio product photo, soft lighting, plain light-gray background, fine ceramic craftsmanship, crackle glaze details.&quot;,
+  &quot;model&quot;: &quot;flux2-dev&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image looks great: ceramic mushroom man, glossy glaze, crackle detail, gill collar at shoulders, branch-like brown arms, bare rounded head with no mushroom cap. This matches the prompt well. Mark best and stop.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The result matches the prompt well on the first pass. Let me verify the details: - **Ceramic mushroom man** ✓ — glossy glazed porcelain body shaped like a mushroom stalk, with a gill-textured collar at the shoulders and subtle crackle glaze. - **Arms like branches** ✓ — both arms are twisting brown ceramic branches with twig-like fingers. - **No fungus cover on his head** ✓ — the head is a smooth, bare rounded ceramic dome with a simple painted face, and there&#x27;s no mushroom cap anywhere.</div></div>
+<div class=step><div class=who>Step 2 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;Matches the prompt on first generation: glazed ceramic mushroom-stalk body with gill collar, brown branch-like arms, and a bare rounded head with no mushroom cap.&quot;
+}</pre></div>
+<div class=step><div class=who>Model</div><div class=said>The image is complete and matches everything the prompt asked for: - A **ceramic mushroom man** with a glossy, crackle-glazed porcelain body shaped like a mushroom stalk, complete with gill texture at the shoulders - **Branch-like arms** — twisting brown ceramic limbs ending in small twig fingers - **No fungus cap on his head** — just a smooth, bare rounded head with a sweet hand-painted face It&#x27;s presented as a clean studio product shot against a soft gray background. Marked as the final result.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

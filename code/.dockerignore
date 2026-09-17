@@ -1,0 +1,14 @@
+.git
+.venv
+**/__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+node_modules
+runs
+benchmarks
+tests
+pi-extension
+*.safetensors
+*.bin
+*.pt

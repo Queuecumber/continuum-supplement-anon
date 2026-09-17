@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Compound — A lion lies quietly on the bottom of the sea. Its majestic mane is com</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Compound — A lion lies quietly on the bottom of the sea. Its majestic mane is com</h1>
+<blockquote>A lion lies quietly on the bottom of the sea. Its majestic mane is composed of colorful corals, and small fish are swimming safely around it.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + FLUX.2-klein-9B</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Compound - Feature Matching</b> &mdash; The lion&#x27;s mane is not entirely composed of colorful corals. The image shows a mane made of hair, with many colorful coral-like structures growing from or placed within it. The underlying material of the mane is still visible as fur.</li>
+<li><span class='tag pass'>PASS</span><b>Grammar - Consistency</b> &mdash; The pronoun &#x27;it&#x27; in the prompt refers to the lion. In the image, numerous small fish are depicted swimming in the water around the lion&#x27;s head, body, and paws.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image shows a lion with a mane that incorporates numerous colorful coral structures. The corals, which are pink, orange, purple, and turquoise, are interspersed with and form part of the lion&#x27;s mane.</li>
+<li><span class='tag pass'>PASS</span><b>Grammar - Consistency</b> &mdash; The image shows several small fish, including clownfish and blue tangs, swimming in the water in the vicinity of the central lion, which is the referent for the pronoun &#x27;it&#x27;.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Let&#x27;s generate this image. A lion lying at the bottom of the sea, a mane made of colorful coral, small fish swimming around. Let&#x27;s create a vivid, detailed prompt using flux2-klein.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;flux2-klein&quot;,
+  &quot;prompt&quot;: &quot;A majestic lion lying quietly on the sandy ocean floor, at the bottom of a bright blue sea. Its mane is not fur but is made entirely of colorful corals \u2014 vibrant orange, pink, purple, and teal coral branches, fans, and polyps growing out of the head like a luxurious mane. The lion&#x27;s face is a realistic golden lion, calm and serene, eyes gently closed as if napping. Small colorful fish (tiny clownfish, blue tangs, and small silver fish) swim safely around the lion, some drifting over its back and near its nose. Sunbeams stream down from the surface through clear turquoise water, scattering light. Soft seaweed and rocks around, gentle bubbles, dreamlike fantasy underwater scene, highly detailed, cinematic lighting, fantasy digital painting style.&quot;,
+  &quot;width&quot;: 1024,
+  &quot;height&quot;: 1024
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image looks very good. The lion is lying at the bottom of the sea, and its mane is made of colorful corals. Small fish are swimming around it. The face has a realistic golden lion appearance with a calm expression. The fish are safely surrounding it. Let me check the details: the mane is composed of coral—yes, there&#x27;s orange, purple, pink, and teal coral on the head. The lion is lying on the sandy seabed. The fish—clownfish, blue tangs, small silver fish—are swimming around it. Light rays are streaming in. This matches the prompt extremely well. Let me inspect the region to check the quality. The image looks clean. If I had to nitpick: on the right side of the body, near the back legs, there&#x27;s a dark spot (a shadow or something like a dark-colored fish?). Let me check that area. There&#x27;s a dark gray shape around [820, 630]. It might be an artifact. Let me inspect it.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The first result looks very close to the prompt. Let me inspect a couple of details to make sure there are no artifacts.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    700,
+    550,
+    1024,
+    800
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Step 3 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    250,
+    250,
+    750,
+    650
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_2</div><img class=stepimg data-zoom data-full='steps/img_2.jpg' src='steps/img_2.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The cropped image looks clean. The dark spots I was worried about are actually the lion&#x27;s hind paws / the dark parts of its body, which is fine — realistic lion fur. The face is calm with closed eyes, the coral mane is colorful, and the fish are swimming around it. This image satisfies all the elements: 1. A lion lying at the bottom of the sea ✓ (lying on the sandy ocean floor) 2. A majestic mane made of colorful coral ✓ 3. Small fish swimming safely around it ✓ The quality is good. This is a good result. Let me mark it as the best. The image is in good enough shape — all the elements are in place and it&#x27;s high quality. Good enough is the stopping condition.</div></div>
+<div class=step><div class=who>Model</div><div class=said>Both crops look clean — the mane corals are vibrant and detailed, the lion&#x27;s face is serene with closed eyes, and the fish (clownfish, blue tangs, small silvers) swim peacefully around it. Every element of the prompt is present and well-rendered: - **Lion lying on the sea floor** — resting on the sandy bottom, calm and napping - **Mane of colorful corals** — orange, purple, pink, teal branch and fan corals growing around the head - **Small fish swimming safely around** — scattered across the scene at ease - Sunbeams, bubbles, seaweed complete the dreamlike underwater mood</div></div>
+<div class=step><div class=who>Step 4 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;All prompt elements present and correct: lion lying on the ocean floor, mane fully composed of colorful corals, small fish swimming safely around, clean details on inspection.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Marked as best. The image is complete and matches the prompt. Stopping here—good enough is a stopping condition.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The image is complete and marked as my best result. A serene lion dozes on the sandy ocean floor, its majestic mane a crown of vivid orange, purple, pink, and teal corals, while small colorful fish glide safely around it beneath the sunlit water.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

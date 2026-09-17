@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Grammar — In the watercolor style, a fox has crystal-like horns and its tail is</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Grammar — In the watercolor style, a fox has crystal-like horns and its tail is</h1>
+<blockquote>In the watercolor style, a fox has crystal-like horns and its tail is not fluffy, but consists of flowing nebulae.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + FLUX.2-klein-9B</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Grammar - Negation</b> &mdash; The fox&#x27;s tail is depicted with a fluffy texture and outline, characterized by visible fur-like strokes along its edges. This contradicts the prompt&#x27;s negative constraint that the tail should &#x27;not be fluffy&#x27;.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Imagination</b> &mdash; The image shows a red fox with two blue, faceted, translucent horns that have the appearance of crystals. The tail of the fox is colored with a swirling pattern of purple, blue, red, and orange, interspersed with white specks resembling stars, which depicts flowing nebulae.</li>
+<li><span class='tag pass'>PASS</span><b>Style</b> &mdash; The image is rendered in a watercolor style. This is visible in the blended colors with soft edges, the translucent layers of paint, and the characteristic bleeding effect, especially noticeable in the fox&#x27;s fur and the nebula-patterned tail.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Negation</b> &mdash; The fox&#x27;s tail is depicted as a swirling, colorful mass of what appears to be cosmic gas and stars. It is not rendered with fur or a fluffy texture, thus adhering to the negative constraint &#x27;tail is not fluffy&#x27;.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Imagination</b> &mdash; The image portrays a fox with two multi-colored, translucent, and faceted horns on its head, consistent with the description of &#x27;crystal-like horns&#x27;. The fox&#x27;s tail is a large, flowing shape composed of purple, teal, and gold hues, speckled with white and gold dots, accurately representing &#x27;flowing nebulae&#x27;.</li>
+<li><span class='tag pass'>PASS</span><b>Style</b> &mdash; The image is executed in a watercolor style. This is evident from the soft, blended colors, the characteristic blooms and washes of paint, and the visible bleeding of colors at the edges, particularly in the nebula-like tail and the faint background.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Let me understand the task. The user is asking for a watercolor-style image of a fox with crystal-like horns, with a tail made of flowing nebulae (not fluffy). I&#x27;ll generate this image with flux2-klein (per the benchmark policy). After that, I&#x27;ll inspect and edit as needed, and mark the best. Let me write a good prompt: &quot;watercolor painting, fox with crystal-like translucent horns, tail made of flowing colorful nebulae, cosmic swirls of starlight, not fluffy, watercolor washes, soft edges, paper texture, pastel colors&quot; Now let&#x27;s generate.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;prompt&quot;: &quot;Watercolor painting of a graceful fox with translucent crystal-like horns growing from its head, refracting rainbow light. Its tail is not fluffy fur but a long flowing plume made of swirling cosmic nebulae \u2014 clouds of violet, magenta, teal and gold stardust with tiny stars, streaming and dissolving like ink in water. Soft watercolor washes, wet-on-wet bleeds, delicate paper texture, loose brushwork, gentle pastel background, dreamy and ethereal art style.&quot;,
+  &quot;model&quot;: &quot;flux2-klein&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The result is excellent: watercolor style, a fox with translucent crystal-like horns (two rainbow crystal horns visible), and the tail is not fluffy but a flowing nebulae tail composed of swirling violet/magenta/teal/gold cosmic clouds and stars. Let me check the details — the horns look crystalline and good. The tail is clearly a nebula. This matches the prompt well. Let me quickly zoom in on the horn area to confirm that it looks crystal-like rather than something else.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: &quot;the crystal horns on the fox&#x27;s head&quot;,
+  &quot;padding&quot;: 0.2
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Upon closer inspection, I confirmed that the horns are beautifully rendered as faceted crystal prisms, with iridescent (rainbow) refraction — clearly &quot;crystal-like.&quot; The tail in the full image is a flowing nebula, not fluffy. The watercolor style is also achieved with soft washes of color and paper texture. All elements of the prompt are present and correct: - Watercolor style ✓ - Fox ✓ - Crystal-like horns ✓ (two faceted, iridescent crystal horns) - Tail is not fluffy but a flowing nebula ✓ This is a good result. Let me mark this as the best and stop.</div></div>
+<div class=step><div class=who>Model</div><div class=said>On close-up inspection, confirmed that the horns are rendered as properly faceted crystal prisms with iridescent rainbow refraction, and the full image shows a watercolor fox whose tail is a plume of a flowing starry-sky nebula — not fluffy at all. All the elements of the request are present: watercolor washes with paper texture, fox subject, crystal horns, nebula tail.</div></div>
+<div class=step><div class=who>Step 3 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;Watercolor fox with faceted iridescent crystal horns and a flowing nebula tail (stars, violet/magenta/teal/gold cosmic plume) \u2014 every element of the prompt is present and correct.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Done. This image satisfies all the elements of the prompt. I&#x27;ll stop here and report back to the user.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The painting is complete and marked as the best result. It shows a watercolor fox with two faceted, rainbow-refracting crystal horns on its head, and its tail flows as a long cosmic nebula plume — swirling clouds of violet, magenta, teal, and gold stardust dotted with tiny stars, dissolving into the paper like ink in water. The soft washes, wet bleeds, and visible paper texture carry the watercolor style throughout.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

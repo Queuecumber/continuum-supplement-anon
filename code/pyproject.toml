@@ -1,0 +1,73 @@
+[project]
+name = "continuum"
+version = "0.2.0"
+description = "MCP server for image generation, editing, segmentation, and upscaling"
+requires-python = ">=3.10"
+dependencies = [
+    "accelerate>=0.33.0",
+    "diffusers @ git+https://github.com/huggingface/diffusers.git@main",
+    # SAM3 requires Transformers 5.x.
+    "transformers>=5.0.0,<6.0.0",
+    # diffusers routes all load_lora_weights through the PEFT backend. The cap
+    # that used to sit here existed to keep peft below the torchao floor that
+    # conflicted with the 0.15.0 pin; both are lifted now that the black frames
+    # are known to come from dynamic-activation quantization rather than from a
+    # torchao version. Left as a comment so the coupling is not re-derived: peft
+    # LoRA dispatcher *raises* on the version mismatch even for non-quantized
+    # targets. 0.18.1's floor is 0.4.0, which tolerates 0.15.0.
+    "peft>=0.15.0",
+    "safetensors>=0.4.3",
+    "huggingface_hub>=0.20.0",
+    "pillow>=10.3.0",
+    "pillow-jxl-plugin>=1.2.0",
+    "numpy>=1.26.4",
+    "ftfy",
+    "einops",
+    "sentencepiece",
+    "protobuf>=3.20.0",
+    "torchao>=0.18.0",  # 0.15.0 ships no torch-2.10-compatible C++ extensions
+    "uvicorn>=0.25.0",  # MCP streamable HTTP transport
+    "python-multipart>=0.0.6",
+    "httpx>=0.25.0",
+    "opencv-python-headless>=4.8.0",
+    "timm",
+    "scipy>=1.11.0",
+    "mcp>=1.0.0,<2",  # FastMCP imports use the SDK v1 API.
+]
+
+[project.optional-dependencies]
+# Client-side agent harness: OpenAI-compatible LLM loop over the MCP tools.
+# Kept out of the base install so the server env stays lean.
+agent = ["openai>=1.0"]
+
+[project.scripts]
+continuum-mcp = "continuum.mcp_server:main"
+continuum-batch-agent = "continuum.harnesses.batch_agent:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["continuum"]
+
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15",
+    "pytest>=8.0",
+]
+
+[tool.ruff]
+line-length = 110
+
+[tool.ruff.lint]
+# Defaults (E4/E7/E9, F: unused imports/undefined names) plus import sorting.
+extend-select = ["I"]
+
+[tool.ruff.lint.per-file-ignores]
+# Back-compat re-export shim: imports ARE the public surface.
+"continuum/mcp_server.py" = ["F401"]

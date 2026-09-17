@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Text Generation — A forgotten ancient temple has a mysterious English inscription &quot;We ar</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Text Generation — A forgotten ancient temple has a mysterious English inscription &quot;We ar</h1>
+<blockquote>A forgotten ancient temple has a mysterious English inscription &quot;We are the echoes of a forgotten song&quot; engraved on the wall, which glows in the moonlight.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + FLUX.2-klein-9B</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Text Generation</b> &mdash; The image displays text on the temple wall, but it is misspelled. The text reads &#x27;Waare the echoios of a forgeten song&#x27; instead of the prompted &#x27;We are the echoes of a forgotten song&#x27;. Specifically, &#x27;We are&#x27; is written as &#x27;Waare&#x27;, &#x27;echoes&#x27; is misspelled as &#x27;echoios&#x27;, and &#x27;forgotten&#x27; is misspelled as &#x27;forgeten&#x27;.</li>
+<li><span class='tag pass'>PASS</span><b>Grammar - Pronoun Reference</b> &mdash; The prompt states that the inscription &#x27;which glows in the moonlight&#x27;. In the image, the inscription is indeed glowing with a yellow light. The scene is set at night with a large moon in the sky, providing moonlight that illuminates the ancient temple. The image correctly depicts the inscription as the object that is glowing.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Text Generation</b> &mdash; The image displays the English text &quot;We are the echoes of a forgotten song&quot; on a stone wall. The text is rendered accurately without any spelling errors, omissions, or extra words.</li>
+<li><span class='tag pass'>PASS</span><b>Grammar - Pronoun Reference</b> &mdash; The prompt states that the inscription &#x27;which glows in the moonlight&#x27;. In the image, the inscription itself is depicted as glowing with a blue light. This visual element correctly corresponds to the pronoun &#x27;which&#x27; referring to the inscription.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>The user wants an image: an ancient abandoned temple, on the wall a mysterious English inscription &quot;We are the echoes of a forgotten song&quot; engraved, and in the moonlight it glows. Need to generate with flux2-klein, inspect it (especially the text — need to verify spelling with inspect_region), edit if necessary, mark the best, and confirm the mark at the end. Plan: 1. generate_image with model flux2-klein, prompt describing the scene: an abandoned ancient temple, moonlight, on the stone wall a glowing English inscription &quot;We are the echoes of a forgotten song&quot; engraved, mystical atmosphere. 2. Use inspect_region to check the text area and read the characters. 3. If the text is wrong, edit with edit_image naming the wrong and correct strings. 4. mark_best early and at the end. Let me write a good generation prompt. Text rendering is a key challenge — klein is good at prompt adherence but long text is hard. Let&#x27;s include the exact phrase in quotes in the prompt. Prompt: &quot;Ancient abandoned temple at night, massive weathered stone walls under a full moon, mystical glowing white-blue light emanating from an engraved English inscription on the wall reading &quot;We are the echoes of a forgotten song&quot;, carved letters in archaic script style, moonbeams, moss and vines, dramatic moonlight, cinematic, mysterious atmosphere&quot; Size: default 1024x1024? Landscape might be better for the temple scene — but the instructions say size is fixed for comparison, and the seed and size are controlled by the harness... Actually it says &quot;don&#x27;t set a seed. Size and seed are controlled by the harness.&quot; Hmm, &quot;controlled by the harness&quot; — should I avoid overriding width/height? The default is 1024x1024. For a temple scene with wall text, 1024x1536 portrait might be better, but the note says size is controlled by the harness, so I&#x27;ll use the default (1024). Actually I could set the size, but the note says the harness controls it, suggesting I shouldn&#x27;t. I&#x27;ll go with the default. Let&#x27;s generate.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;flux2-klein&quot;,
+  &quot;prompt&quot;: &quot;A forgotten ancient temple at night under a full moon, massive weathered stone walls carved with archaic reliefs, moss, vines and broken columns, a dramatic beam of moonlight falling across the central wall where a glowing engraved English inscription shines in luminous pale blue-white light: \&quot;We are the echoes of a forgotten song\&quot; \u2014 the words are clearly carved into the stone and glow softly, mystical and mysterious atmosphere, cinematic moonlit scene, fine detail&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image is really good. The scene matches: a forgotten ancient temple, full moon, light beams, a glowing inscription on the wall. However, there&#x27;s a typo in the text: &quot;ecloos of a forgteng song&quot; — the 2nd line shows &quot;ecloos&quot; (a duplication issue: &quot;We are the echoes / ecloos of a / forgteng song&quot;). Let me zoom in to verify. Let&#x27;s use inspect_region to check the text area.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The scene is strong, but the inscription looks garbled on lines 2–3. Let me zoom in to verify the text precisely.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    &quot;We are the echoes&quot;,
+    &quot;the glowing inscription text on the wall&quot;
+  ]
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>The roi needs to be either a single string (a text description) or a list of numeric values. Let&#x27;s pass it as a string: &quot;the glowing inscription text on the wall&quot;.</div></div>
+<div class=step><div class=who>Step 3 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: &quot;the glowing engraved inscription text on the central wall&quot;,
+  &quot;padding&quot;: 0.15
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>SAM didn&#x27;t match the text. Let&#x27;s use a rectangle. The text region within the 1024x1024 image: roughly x is from 230 to 790, y is from 410 to 660. Let&#x27;s pass it as [230, 400, 800, 670].</div></div>
+<div class=step><div class=who>Step 4 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    230,
+    400,
+    800,
+    670
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Confirmed: the text reads &quot;We are the echoes / ecloos of a / forgteng song&quot;. Line 2 should be &quot;echoes of a&quot; but it displays as &quot;ecloos of a&quot; (with &quot;echoes&quot; duplicated on line 1), and line 3&#x27;s &quot;forgotten&quot; is displayed as &quot;forgteng&quot;. Need to fix the text. Best approach: use edit_image with a prompt that explicitly states the incorrect string and the correct string, and instructs to correct the entire inscription to exactly &quot;We are the echoes of a forgotten song&quot;. The text is glowing white on the stone. According to the guidance: &quot;For text in particular: name the incorrect string and the correct string. Do not re-describe the other parts of the scene, or it will drift.&quot; So the prompt would be something like: &quot;Fix the glowing inscription: replace the miswritten text &#x27;ecloos of a forgteng song&#x27; with the correct spelling so the whole inscription reads exactly &#x27;We are the echoes of a forgotten song&#x27; across three lines: &#x27;We are the echoes&#x27; / &#x27;of a forgotten&#x27; / &#x27;song&#x27;&quot;. Hmm — the line breaks might be an issue. Actually, the current line breaks are: &quot;We are the echoes&quot; / &quot;ecloos of a&quot; / &quot;forgteng song&quot;. If we fix the duplication, the natural 3 lines would be: &quot;We are the&quot; / &quot;echoes of a&quot; / &quot;forgotten song&quot;. The first line currently has 3 words. Simpler: instruct to re-render the glowing inscription so it reads exactly &quot;We are the echoes of a forgotten song&quot; in correct English spelling, maintaining the same glowing style. Specify the correct words to fix: &quot;ecloos&quot; → &quot;echoes&quot;, &quot;forgteng&quot; → &quot;forgotten&quot;. edit_image with model flux2-klein. Let&#x27;s write the prompt: &quot;The glowing inscription on the stone wall has typos. Fix it so the text reads exactly: We are the echoes of a forgotten song. Correct the garbled word &#x27;ecloos&#x27; to &#x27;echoes&#x27; and &#x27;forgteng&#x27; to &#x27;forgotten&#x27;. Keep the same glowing pale blue lettering on the stone wall, same size and position.&quot; This is a delta-style prompt. Good. But there&#x27;s also the duplication problem: line 1 &quot;We are the echoes&quot; + line 2 &quot;ecloos of a&quot; — once fixed it becomes &quot;We are the echoes / echoes of a / forgotten song&quot;, which is a duplication of &quot;echoes&quot;. Better to instruct a full rewrite of the inscription with the exact full sentence, specifying the layout: 3 lines: &quot;We are the echoes&quot; / &quot;of a forgotten&quot; / &quot;song&quot;? That doesn&#x27;t flow well either. The cleanest is: the whole sentence &quot;We are the echoes of a forgotten song&quot; — 9 words. In 3 lines of about 3 words each: &quot;We are the&quot; / &quot;echoes of a&quot; / &quot;forgotten song&quot;. So the prompt: &quot;Rewrite the glowing inscription on the wall so it reads exactly &#x27;We are the echoes of a forgotten song&#x27; in three lines: &#x27;We are the&#x27;, &#x27;echoes of a&#x27;, &#x27;forgotten song&#x27;. The current text has typos (&#x27;ecloos&#x27;, &#x27;forgteng&#x27;) and a duplicated word; fix the spelling so every word is correct English. Keep the same glowing pale blue engraved lettering, same font, size and position.&quot; This is explicit. Let&#x27;s run it with model flux2-klein.</div></div>
+<div class=step><div class=who>Model</div><div class=said>Confirmed the typos: the second line is &quot;ecloos of a&quot; (a duplicated, misspelled &quot;echoes&quot;), and the third line is &quot;forgteng song.&quot; I&#x27;ll make targeted text fixes.</div></div>
+<div class=step><div class=who>Step 5 — `edit_image`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;model&quot;: &quot;flux2-klein&quot;,
+  &quot;prompt&quot;: &quot;Fix the glowing inscription on the stone wall so it reads exactly: We are the echoes of a forgotten song. The current text has misspellings and a duplicated word: \&quot;ecloos\&quot; must become \&quot;echoes\&quot; and \&quot;forgteng\&quot; must become \&quot;forgotten\&quot;, with no duplicated words. Arrange it in three centered lines: \&quot;We are the\&quot; / \&quot;echoes of a\&quot; / \&quot;forgotten song\&quot;. Keep the same glowing pale blue engraved lettering, same font, size and position on the wall.&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_2</div><img class=stepimg data-zoom data-full='steps/img_2.jpg' src='steps/img_2.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>In the full image, it looks correct: &quot;We are the / echoes of a / forgotten song&quot;. To check for subtle glyph errors, I&#x27;ll zoom in on the text to verify (e.g., &quot;forgotten&quot; vs. &quot;forgottcn&quot;, etc.).</div></div>
+<div class=step><div class=who>Model</div><div class=said>Looks correct at full scale. Verifying the letters by zooming into the inscription.</div></div>
+<div class=step><div class=who>Step 6 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_2&quot;,
+  &quot;roi&quot;: [
+    280,
+    380,
+    740,
+    640
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_3</div><img class=stepimg data-zoom data-full='steps/img_3.jpg' src='steps/img_3.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Text in the cropped image: Line 1: &quot;We are the&quot; — correct. Line 2: &quot;echoes of a&quot; — &quot;echoes&quot; — e-c-h-o-e-s: yes, reads as &quot;echoes&quot;. &quot;of a&quot; is also correct. Line 3: &quot;forgotten song&quot; — f-o-r-g-o-t-t-e-n: reads as &quot;forgotten&quot;. &quot;song&quot; is also correct. All correct: &quot;We are the echoes of a forgotten song&quot;. The scene matches: an abandoned ancient temple, a full moon, a beam of moonlight, glowing inscriptions, moss, vines, relief carvings. This is a great result. I&#x27;ll mark img_2 as the best and check the mark (since this is the last action, marking now will make the marked image the final one).</div></div>
+<div class=step><div class=who>Step 7 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_2&quot;,
+  &quot;reason&quot;: &quot;Scene matches the prompt fully: forgotten ancient temple, full moon with moonbeam, moss/vines, and the glowing moonlit inscription now reads exactly \&quot;We are the echoes of a forgotten song\&quot; \u2014 verified letter-by-letter via zoomed crop.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Mark confirmed — img_2 is the marked best, and this is the latest image as well. Done. Let me summarize.</div></div>
+<div class=step><div class=who>Model</div><div class=said>Done. The image is complete and verified: - **Forgotten ancient temple** — weathered stone walls with archaic figure reliefs, broken columns, moss, and creeping vines - **Moonlight** — a full moon overhead casting a dramatic beam down onto the central wall - **Inscription** — &quot;We are the echoes of a forgotten song&quot; engraved in the stone, glowing pale blue-white in the moonlight The first draft had garbled text (&quot;ecloos… forgteng song&quot;), so I corrected it with a targeted edit and confirmed the final spelling letter-by-letter with a zoomed crop. The best result is marked and ready to return.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

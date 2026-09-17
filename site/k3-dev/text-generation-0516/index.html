@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Text Generation — Please generate a picture: a simple greeting card placed on a wooden t</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Text Generation — Please generate a picture: a simple greeting card placed on a wooden t</h1>
+<blockquote>Please generate a picture: a simple greeting card placed on a wooden table with the words &quot;Wishing you a future filled with love and happiness&quot; written on the card in elegant handwriting.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Text Generation</b> &mdash; The image displays a card with the text &quot;Wishing you a filled with love and happiness&quot;. This is an inaccurate generation as the word &quot;future&quot; is omitted from the requested phrase &quot;Wishing you a future filled with love and happiness&quot;.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Text Generation</b> &mdash; The image displays a greeting card with the text &#x27;Wishing you a future filled with love and happiness&#x27; written on it. The text is spelled correctly and matches the prompt exactly, with no omissions or additions.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Generate a greeting card image. Use flux2-dev. Then inspect text via inspect_region.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;flux2-dev&quot;,
+  &quot;prompt&quot;: &quot;A simple elegant greeting card standing upright on a rustic wooden table, soft warm natural light. The card is cream-colored with a small floral border, and on the front is written in elegant flowing handwritten calligraphy: \&quot;Wishing you a future filled with love and happiness\&quot;. Photorealistic, shallow depth of field, cozy atmosphere.&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Verify text by zooming into the card text area.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The image looks promising. Let me verify the text by zooming in.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;normalized&quot;: true,
+  &quot;padding&quot;: 0.1,
+  &quot;roi&quot;: [
+    0.35,
+    0.38,
+    0.62,
+    0.63
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Text reads &quot;Wishing you a future filled with love and happiness&quot; — correct spelling, elegant handwriting. Mark best and stop.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The text is perfectly rendered: &quot;Wishing you a future filled with love and happiness&quot; in elegant handwritten script, exactly as requested. The card sits on a rustic wooden table with warm lighting and a delicate floral border.</div></div>
+<div class=step><div class=who>Step 3 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;Card text verified letter-by-letter via zoom: \&quot;Wishing you a future filled with love and happiness\&quot; rendered correctly in elegant calligraphy; composition and lighting match the request.&quot;
+}</pre></div>
+<div class=step><div class=who>Model</div><div class=said>Done! The greeting card image is complete: - **The card**: A simple cream-colored greeting card standing on a rustic wooden table, framed by a delicate floral corner border - **The message**: &quot;Wishing you a future filled with love and happiness&quot; written in elegant flowing handwriting — I zoomed in and verified every word is spelled correctly - **The atmosphere**: Warm, soft natural light with a cozy shallow depth of field The result matched the request on the first generation with no corrections needed, so I&#x27;ve marked it as the final image.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

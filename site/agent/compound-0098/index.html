@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Compound — A lion lies quietly on the bottom of the sea. Its majestic mane is com</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Compound — A lion lies quietly on the bottom of the sea. Its majestic mane is com</h1>
+<blockquote>A lion lies quietly on the bottom of the sea. Its majestic mane is composed of colorful corals, and small fish are swimming safely around it.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + FLUX.2-klein-9B</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Compound - Feature Matching</b> &mdash; The prompt requires the lion&#x27;s mane to be &#x27;composed of&#x27; colorful corals. In the image, the lion has a standard, hairy mane. Colorful corals are arranged within and around the mane, like a wreath or decoration, but the mane itself is made of hair, not coral.</li>
+<li><span class='tag pass'>PASS</span><b>Grammar - Consistency</b> &mdash; The prompt states that &#x27;small fish are swimming safely around it,&#x27; with &#x27;it&#x27; referring to the lion. The image visually depicts this by showing a lion on the seafloor with multiple small fish swimming in the water in its immediate vicinity.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image depicts a lion with a mane that is not made of hair. Instead, it is clearly composed of various types of corals in multiple colors, including pink, orange, purple, yellow, and green, which grow out from its neck and head area.</li>
+<li><span class='tag pass'>PASS</span><b>Grammar - Consistency</b> &mdash; The image shows multiple small, colorful fish swimming in the water surrounding the lion, which is the subject referred to by the pronoun &#x27;it&#x27;. The fish are visible near the lion&#x27;s head, back, and in the general vicinity.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Generate an underwater scene: lion lying on sea floor, mane made of colorful corals, small fish swimming around. Use flux2-klein.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;flux2-klein&quot;,
+  &quot;prompt&quot;: &quot;A majestic lion lying quietly and peacefully on the sandy bottom of the sea, eyes half closed in calm rest. Its full mane is composed entirely of colorful living corals \u2014 branching staghorn corals, pink and purple sea fans, orange tube corals and yellow anemones \u2014 growing where the mane would be. Small colorful tropical fish swim safely around the lion and weave between the coral branches of its mane. Soft blue-green underwater light rays filter down from the surface, gentle caustics on the sand, a few bubbles rising. Photorealistic, cinematic underwater photography style, serene atmosphere.&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image is very good: lion lying on sandy sea bottom, mane composed of colorful corals, small fish swimming around, light rays, bubbles. It matches the prompt well. Mark as best and stop.</div></div>
+<div class=step><div class=who>Step 2 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;All prompt elements present and correct on first generation: lion lying calmly on the sandy sea floor, mane made of colorful corals, small fish swimming safely around it, underwater lighting with rays and bubbles.&quot;
+}</pre></div>
+<div class=step><div class=who>Model</div><div class=said>The first generation came out beautifully and matches every element of the prompt: - **Lion resting on the sea floor** — lying quietly on pale sand with a calm, half-closed-eyed expression - **Mane of colorful corals** — pink, purple, orange, and yellow branching corals and sea fans form the mane - **Small fish swimming safely around** — tropical fish weave all around the lion and between the coral branches - **Underwater atmosphere** — soft light rays from the surface, gentle caustics on the sand, and rising bubbles I&#x27;ve marked this as the final result. No further edits needed!</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Text Generation — A designer is showing off his T-shirt work. The white T-shirt has a bo</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Text Generation — A designer is showing off his T-shirt work. The white T-shirt has a bo</h1>
+<blockquote>A designer is showing off his T-shirt work. The white T-shirt has a bold English letter printed on the chest,&quot;Creativity is the greatest rebellion in existence.&quot;</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + Qwen-Image</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Text Generation</b> &mdash; The text printed on the white T-shirt is &quot;Creativity is the greatest rebellon in existence.&quot;. This contains a spelling error; the word &quot;rebellion&quot; from the prompt is misspelled as &quot;rebellon&quot;.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Text Generation</b> &mdash; The text printed on the white T-shirt reads, &#x27;Creativity is the greatest rebellion in existence.&#x27;. This text exactly matches the prompt, with no omissions, extra words, or spelling errors.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>The user is asking for an image of a designer showcasing his T-shirt work. The white T-shirt has bold English text printed on the chest: &quot;Creativity is the greatest rebellion in existence.&quot; Let me generate this image with qwen-image. I need to pay attention to the rendered text — the exact string is &quot;Creativity is the greatest rebellion in existence.&quot; Since this text is long, it will probably be printed on the T-shirt across multiple lines. Let me create a prompt that describes the designer holding up the T-shirt, or wearing the T-shirt. &quot;A designer is showing off his T-shirt work&quot; — probably the designer holding up or presenting the T-shirt, or standing with the T-shirt on display. Let me go with a studio scene where a designer (a man) holds up / presents a white T-shirt with the text printed on the chest. Actually, to make the text legible, it might be better to have the designer wearing the T-shirt, or holding it up close to the camera. A man holding up a white T-shirt toward the camera, with the text printed on the chest area of the T-shirt. Text on the chest: &quot;Creativity is the greatest rebellion in existence.&quot; — bold letters. Multiple lines: probably &quot;Creativity is the greatest rebellion in existence.&quot; Let me write the prompt including the exact text. After generating, I&#x27;ll use inspect_region on the text area to check the text, and fix it via edits. Alright, let&#x27;s get started.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;qwen-image&quot;,
+  &quot;prompt&quot;: &quot;A male fashion designer standing in a bright minimalist studio, proudly holding up a plain white crew-neck T-shirt with both hands toward the camera, showing off his work. Printed boldly in large black English letters on the chest of the white T-shirt, in three lines, is the exact text: \&quot;Creativity is the greatest rebellion in existence.\&quot; Clean typography, crisp legible letters. Soft even lighting, neutral gray background, shallow depth of field, photorealistic, high detail.&quot;,
+  &quot;width&quot;: 1024,
+  &quot;height&quot;: 1024
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image looks good. Let me inspect the text area at full resolution and verify whether each character is spelled correctly.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The first generation looks close. Let me verify the printed text at full resolution before deciding.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    &quot;the printed text on the T-shirt&quot;,
+    280,
+    400,
+    660,
+    700
+  ]
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>The roi parameter needs to be either a string, a list of four floats, or a dict. I passed a mixed list. Let me pass just the rectangle [x1, y1, x2, y2] as four floats.</div></div>
+<div class=step><div class=who>Step 3 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    280,
+    400,
+    660,
+    700
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Let me try reading the text character by character: Line 1: &quot;Creativity is&quot; — C-r-e-a-t-i-v-i-t-y i-s ✓ Line 2: &quot;the greatest&quot; ✓ Line 3: &quot;rebellion in&quot; ✓ Line 4: &quot;existence.&quot; ✓ The full text: &quot;Creativity is the greatest rebellion in existence.&quot; — matches the requested string exactly, including the trailing period. The image depicts a designer holding up a white T-shirt with bold black text on the chest. Everything looks good. Let me mark this as the best and stop.</div></div>
+<div class=step><div class=who>Model</div><div class=said>When I zoom in and check the text, it reads exactly &quot;Creativity is / the greatest / rebellion in / existence.&quot; — the correct wording, capitalization, and final period are all present, and the bold black letters on the white T-shirt are also legible. The scene matches the prompt too: a designer proudly showing off his white T-shirt work in a studio. Since everything checks out, I&#x27;ll mark this as the final result.</div></div>
+<div class=step><div class=who>Step 4 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;Designer holding up a white T-shirt with the exact requested text \&quot;Creativity is the greatest rebellion in existence.\&quot; printed boldly in black on the chest; spelling verified at full resolution via crop inspection.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Mark complete. Image is finished. Stopping here.</div></div>
+<div class=step><div class=who>Model</div><div class=said>Done. The final image shows a designer in a bright studio proudly holding up a plain white T-shirt toward the camera, with the phrase **&quot;Creativity is the greatest rebellion in existence.&quot;** printed in bold black letters across the chest in four centered lines. I verified the text by inspecting a full-resolution crop — every word, the capitalization, and the trailing period match the requested string exactly. The best version is marked and ready to return.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

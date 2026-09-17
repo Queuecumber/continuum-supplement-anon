@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Grammar — A pair of twin sisters who look alike are standing together. The older</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Grammar — A pair of twin sisters who look alike are standing together. The older</h1>
+<blockquote>A pair of twin sisters who look alike are standing together. The older sister is smiling happily, but the younger sister is expressionless. Their temperament is not similar at all.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + FLUX.2-klein-9B</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Negation</b> &mdash; The image displays two women with opposite facial expressions. The woman on the left is smiling with her teeth showing, while the woman on the right has a neutral, unsmiling expression. This visual difference directly corresponds to the prompt&#x27;s statement that their temperaments are &#x27;not similar at all&#x27;.</li>
+<li><span class='tag fail'>FAIL</span><b>Relationship - Similarity</b> &mdash; The image shows two women who do not appear to be twin sisters who look alike. There is a clear and noticeable age difference between the two individuals; the woman on the left appears significantly older than the woman on the right. Their facial features are also distinct and not those of identical twins.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image shows two women of different apparent ages. The woman who appears older (on the left) is smiling happily, showing her teeth. The woman who appears younger (on the right) has a neutral, expressionless face. This arrangement correctly matches the specified expressions to the perceived age of each sister as described in the prompt.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Negation</b> &mdash; The prompt&#x27;s requirement that the sisters&#x27; temperaments are &#x27;not similar at all&#x27; is visually represented by their contrasting facial expressions. The female on the left has a wide, happy smile, while the female on the right has a neutral, unsmiling expression. This clear difference in expression successfully conveys the negation.</li>
+<li><span class='tag pass'>PASS</span><b>Relationship - Similarity</b> &mdash; The image shows two females who &#x27;look alike,&#x27; fulfilling the similarity requirement. Both individuals have long, reddish-brown hair, light-colored eyes, and similar facial features, establishing a clear family resemblance consistent with being sisters.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image correctly matches the specified expressions to the two individuals. The female on the left, who appears older, is &#x27;smiling happily,&#x27; showing her teeth. The female on the right, who appears younger, is &#x27;expressionless,&#x27; with her mouth closed in a neutral line and a direct, unsmiling gaze.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>I need to investigate this in more detail. Let me confirm the specifics. Let me generate an image of twin sisters: two sisters with similar appearances (twins), one smiling happily (the older one), the other expressionless (the younger one). Their temperaments are completely different — that&#x27;s more of a conceptual element, but I might be able to show it through contrast. Let me write a good prompt. Generate with flux2-klein.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;flux2-klein&quot;,
+  &quot;prompt&quot;: &quot;A portrait of twin sisters standing side by side. They look nearly identical: same long auburn hair, same face shape, same hazel eyes. The taller one (older sister) is smiling broadly and happily, bright warm expression, wearing a bright yellow cardigan. The shorter one (younger sister) is completely expressionless, neutral face, flat stare, wearing a dark grey turtleneck. Soft natural lighting, plain warm background, photorealistic, medium shot from the waist up.&quot;,
+  &quot;width&quot;: 1024,
+  &quot;height&quot;: 1024
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image is very good. Two similar-looking sisters, one smiling happily, the other expressionless. Let me verify the details—the expressions and the similarity of their faces. Let me check the faces up close and confirm the expressions. Looking at it: the woman on the left is wearing a yellow cardigan, smiling broadly and happily. The person on the right is wearing a gray turtleneck, with a neutral, expressionless face. They look like twins with the same reddish-brown hair and similar facial features. Let me look more closely at the faces to verify the similarity and the expressions.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    220,
+    80,
+    780,
+    620
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Zoomed-in view confirmed the following: - Left: Older sister, smiling happily (broad, warm smile) - Right: Younger sister, completely expressionless, neutral face, flat stare - Both have similar reddish-brown hair, similar facial features (twin resemblance) The image matches the prompt very well. The expressions are clearly different — one is happy, the other is expressionless. The similarity is good. The temperament difference is conveyed through the contrast in expression and clothing (bright yellow vs. dark gray). This is a good result. I&#x27;ll mark it as the best and stop.</div></div>
+<div class=step><div class=who>Model</div><div class=said>This image meets the prompt requirements — in the close-up view, it was confirmed that both sisters have similar faces and the same auburn hair (twin resemblance), while at the same time it was also confirmed that their expressions are completely different: the older sister is smiling radiantly and happily, while the younger sister&#x27;s face is completely expressionless with a flat stare. The contrast is further emphasized through the bright yellow cardigan and the dark gray turtleneck.</div></div>
+<div class=step><div class=who>Step 3 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;Twin sisters with near-identical faces; older sister beaming happily, younger sister completely expressionless, matching the prompt precisely.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image is marked as the best. Everything in the prompt is present and correct. Stop here and tell the user.</div></div>
+<div class=step><div class=who>Model</div><div class=said>Done! The final image shows the twin sisters standing together: - **The older sister** (left, in the bright yellow cardigan) is smiling broadly — warm, open, and happily engaged. - **The younger sister** (right, in the dark grey turtleneck) is completely expressionless — flat stare, neutral mouth, zero warmth. They clearly look alike — same auburn hair, same face shape and coloring — yet their temperaments couldn&#x27;t be more different, exactly as requested. I&#x27;ve marked it as the best result.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

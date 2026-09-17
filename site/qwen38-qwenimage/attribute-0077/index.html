@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Attribute — Generating picture: Two sparrows are next to each other on the edge of</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Attribute — Generating picture: Two sparrows are next to each other on the edge of</h1>
+<blockquote>Generating picture: Two sparrows are next to each other on the edge of a rough stone drinking basin, one of them sorting feathers on the other wing with its beak.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + Qwen-Image</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Attribute - Material</b> &mdash; The drinking basin is depicted with a grey, uneven surface with visible cracks and texture, which is consistent with the description of &#x27;rough stone&#x27;.</li>
+<li><span class='tag pass'>PASS</span><b>Attribute - Quantity</b> &mdash; The image clearly shows two birds, which are identifiable as sparrows, perched on the edge of the drinking basin.</li>
+<li><span class='tag fail'>FAIL</span><b>Action - Contact Interaction</b> &mdash; The image shows two sparrows facing each other, holding a single white feather between their beaks. Neither sparrow is sorting the feathers on the other&#x27;s wing with its beak.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Attribute - Material</b> &mdash; The image features a drinking basin made of a material that has a gray, uneven, and pitted texture with some visible weathering and patches of moss, consistent with the description of &#x27;rough stone&#x27;.</li>
+<li><span class='tag pass'>PASS</span><b>Attribute - Quantity</b> &mdash; The image clearly depicts two sparrows perched on the edge of the drinking basin.</li>
+<li><span class='tag pass'>PASS</span><b>Action - Contact Interaction</b> &mdash; The sparrow on the left has its beak in direct contact with the feathers on the back, near the wing, of the sparrow on the right. The feathers on the right sparrow are slightly ruffled at the point of contact, visually representing the action of sorting feathers.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Let&#x27;s generate the image: two sparrows side by side at the rim of a rough stone water basin, one of which is using its beak to preen the other sparrow&#x27;s wing feathers. Generate with qwen-image, omitting steps/guidance, with no seed.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;prompt&quot;: &quot;Close-up nature photograph: two small brown sparrows perched side by side on the rough weathered edge of an old stone water basin in a garden. One sparrow is grooming the other, its beak tucked into the partner&#x27;s wing feathers sorting and preening them, wing held slightly open. The other sparrow sits calmly beside it. Soft natural daylight, shallow depth of field, muted green and gray background, fine feather detail, realistic wildlife photography, 50mm lens.&quot;,
+  &quot;model&quot;: &quot;qwen-image&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image is very close to what the user asked for: two sparrows on the edge of a rough stone water basin, one of them using its beak to preen the other sparrow&#x27;s wing. The preening sparrow is stretching out its beak toward the other sparrow&#x27;s wing/shoulder area. Let&#x27;s check the details—there&#x27;s a white fluffy bit between the two birds, which might be a rendering artifact (it looks like a white tuft of feathers). Let&#x27;s try zooming in on the interaction area and check whether it looks natural.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: &quot;the area where the left sparrow&#x27;s beak meets the right sparrow&#x27;s wing&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Text-based segmentation failed. Using a rectangle instead. The interaction area is roughly the center of the image, somewhere around x 430-560, y 280-400 (in a 768px image). Going to use normalized coordinates: roughly [0.5, 0.3, 0.75, 0.6].</div></div>
+<div class=step><div class=who>Step 3 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    0.48,
+    0.28,
+    0.78,
+    0.62
+  ],
+  &quot;normalized&quot;: true
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Looking at the crop, the left sparrow&#x27;s beak is near the right sparrow&#x27;s shoulder/upper wing area, with a fluffy white tuft in between. This white tuft looks like a weird floating white fluff — it could be interpreted as wing feathers the preening sparrow is sorting through, but it&#x27;s unnaturally bright white for a sparrow (sparrows have brown/tan wings). It looks like a small white feather tuft that the beak is picking at. A bit unnatural but acceptable. The preening action is readable: the beak is at the wing position. The user&#x27;s request: &quot;One of them is using its beak to sort through the feathers on the other sparrow&#x27;s wing.&quot; In the image, the left bird&#x27;s beak is touching the right bird&#x27;s wing/shoulder area, and there&#x27;s a white fluffy part that could be read as feathers being combed. It&#x27;s reasonably readable. The white tuft is a bit odd — sparrow wing feathers are brown. A small fix might make it more realistic: change the white tuft to match the brown wing feathers. Is it worth editing? The core request is satisfied: two sparrows on the edge of a rough stone basin, one preening the other&#x27;s wing with its beak. The white tuft is a small artifact. A small targeted edit to change the white fluff to brown wing feathers would improve realism. Let&#x27;s try one edit: &quot;change the white feather tuft between the two sparrows to brown wing feathers matching the sparrow&#x27;s plumage.&quot; Actually, let me think about risk vs. reward. Edit risk: could disturb the beak/interaction. The white tuft is small. Let&#x27;s try edit_image with a specific instruction.</div></div>
+<div class=step><div class=who>Step 4 — `edit_image`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;prompt&quot;: &quot;Change the small bright white feather tuft between the two sparrows to natural brown and buff sparrow wing feathers, matching the right sparrow&#x27;s brown wing plumage. Keep everything else exactly the same: the beak of the left sparrow touching the wing of the right sparrow, the stone basin, the lighting.&quot;,
+  &quot;model&quot;: &quot;qwen-image&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_2</div><img class=stepimg data-zoom data-full='steps/img_2.jpg' src='steps/img_2.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The white fluffy part is now brown and matches the wing feathers. Let me zoom in on the interaction area to check the quality.</div></div>
+<div class=step><div class=who>Step 5 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_2&quot;,
+  &quot;normalized&quot;: true,
+  &quot;roi&quot;: [
+    0.45,
+    0.25,
+    0.8,
+    0.65
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_3</div><img class=stepimg data-zoom data-full='steps/img_3.jpg' src='steps/img_3.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Now the interaction looks natural: the left sparrow&#x27;s beak is preening/tidying the right sparrow&#x27;s brown wing feathers. The wing feathers on top of the right bird&#x27;s back look a little like a spiky crest, but it can be read as raised/splayed wing feathers being tidied. This is good enough—the prompt is satisfied: two sparrows on the rim of a rough stone basin, one of them tidying the other&#x27;s wing feathers with its beak. Comparing img_0 and img_2: img_2 is better (natural brown feathers). Mark img_2 as the best and stop. The prompt has been fully satisfied, so no further editing is needed.</div></div>
+<div class=step><div class=who>Step 6 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_2&quot;,
+  &quot;reason&quot;: &quot;Two sparrows perched on the edge of a rough stone drinking basin; the left sparrow&#x27;s beak is preening the brown wing feathers of the right sparrow. Feathers read naturally now that the odd white tuft from img_0 was replaced with brown wing feathers.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Completed. Marked img_2 as the best. All prompt elements are in place. Time to stop and report back to the user.</div></div>
+<div class=step><div class=who>Model</div><div class=said>Done. The image shows two sparrows perched side by side on the rough, lichen-flecked edge of a stone drinking basin, with the left sparrow leaning over and using its beak to sort through the brown wing feathers of the other, which sits calmly beside it. I refined one detail from the first pass — an unnatural bright-white feather tuft at the preening spot — into natural brown wing feathers, and verified the interaction up close. The best result (img_2) is marked.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

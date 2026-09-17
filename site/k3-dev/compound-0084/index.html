@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Compound — Generating picture: A little tabloid cat discovered a huge mouse. Inst</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Compound — Generating picture: A little tabloid cat discovered a huge mouse. Inst</h1>
+<blockquote>Generating picture: A little tabloid cat discovered a huge mouse. Instead of being afraid, it curiously stretched out its claws to fiddle with the creature bigger than itself.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Compound - Feature Matching</b> &mdash; The image shows a small cat with tabby markings, which corresponds to the &quot;little tabloid cat&quot;. It also shows a dark-colored mouse. However, the prompt specifies a &quot;huge mouse&quot; and a &quot;creature bigger than itself&quot; (the cat). In the image, the cat is visibly larger than the mouse. Therefore, the feature of the mouse being bigger than the cat is not met.</li>
+<li><span class='tag fail'>FAIL</span><b>Logical Reasoning</b> &mdash; The image depicts a small cat touching a mouse with its paw, which aligns with the cat showing curiosity and fiddling with the creature. However, the core of the prompt&#x27;s logical scenario is the &quot;inverted dynamic&quot; of a cat interacting with a mouse that is &quot;bigger than itself&quot;. Since the cat in the image is larger than the mouse, this specific dynamic is not present.</li>
+<li><span class='tag pass'>PASS</span><b>Grammar - Pronoun Reference</b> &mdash; The pronoun &quot;it&quot; in the prompt refers to the little tabloid cat. The image correctly portrays the cat as the agent performing the action, as it is the one stretching out its paw to touch the mouse.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image shows a small cat with striped and spotted fur, which matches the description of a &#x27;little tabloid cat&#x27; (tabby cat). Next to it is a large grey rodent that is comparable in size to the kitten, fulfilling the &#x27;huge mouse&#x27; attribute.</li>
+<li><span class='tag pass'>PASS</span><b>Logical Reasoning</b> &mdash; The image illustrates the specified inverted dynamic. A small kitten is shown reaching out with its paw and extended claws toward a mouse that is roughly its own size. This posture and action suggest curiosity and an attempt to touch or &#x27;fiddle with&#x27; the mouse, rather than showing fear, which aligns with the logical requirement of the prompt.</li>
+<li><span class='tag pass'>PASS</span><b>Grammar - Pronoun Reference</b> &mdash; The pronoun &#x27;it&#x27; in the prompt refers to the &#x27;little tabloid cat&#x27;. The image correctly depicts the cat as the subject performing the action of stretching out its claws to touch the mouse, thus resolving the pronoun reference accurately.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Generate an image: a little tabloid cat — probably &quot;tabby cat&quot;. &quot;A little tabloid cat&quot; — likely mistranslation of tabby. A small tabby kitten discovers a huge mouse, bigger than itself, curiously reaching out its paw with claws to poke at it. Use flux2-dev.</div></div>
+<div class=step><div class=who>Model</div><div class=said>I&#x27;ll generate this charming scene — a small tabby kitten curiously pawing at a mouse that&#x27;s bigger than it is.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;flux2-dev&quot;,
+  &quot;prompt&quot;: &quot;A small tabby kitten crouching on a wooden floor, eyes wide with curiosity, one front paw stretched out with tiny claws extended, gently poking at an enormous plump mouse sitting in front of it \u2014 the mouse is comically bigger than the kitten, roughly twice its size. The kitten shows curiosity, not fear: head tilted, ears perked forward. The huge mouse looks calm, sitting on its haunches with whiskers twitching. Warm indoor lighting, soft shadows, whimsical storybook atmosphere, detailed fur textures, photorealistic rendering.&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>This is quite good already. The kitten is small, tabby, curious, reaching out with claws extended toward a huge mouse bigger than itself. Composition is cute, lighting warm. The mouse reads slightly like a rat (long tail visible) but it&#x27;s plump and mouse-like enough — though it has a rat tail. It could be considered a huge mouse. Details look good. Let me inspect for artifacts — the paws look a bit odd maybe. Let me inspect the kitten&#x27;s paw region.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;padding&quot;: 0.3,
+  &quot;roi&quot;: &quot;the kitten&#x27;s outstretched paws&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The paws look fine — claws extended, natural. The mouse&#x27;s front paws look fine. The image is good: small tabby kitten, curious (not afraid), reaching out with claws toward a much bigger mouse. Warm lighting, whimsical. I&#x27;ll mark it best and stop.</div></div>
+<div class=step><div class=who>Step 3 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;Matches the prompt: a small tabby kitten, curious rather than afraid, reaching out with extended claws toward a mouse clearly bigger than itself; warm, whimsical, clean details with no visible artifacts.&quot;
+}</pre></div>
+<div class=step><div class=who>Model</div><div class=said>Done! The image captures the scene beautifully: - **A little tabby kitten** with classic striped markings, crouched low with wide, curious eyes and perked ears - **A huge, plump mouse** — comically bigger than the kitten itself — sitting calmly on its haunches - **Curiosity, not fear**: the kitten leans in with both front paws stretched out, tiny claws extended, gently fiddling with the oversized creature - Warm indoor lighting on a wooden floor gives it a whimsical, storybook feel The marked image is ready as the final result.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

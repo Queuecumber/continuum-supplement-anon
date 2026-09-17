@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Grammar — Generated image: A ceramic mushroom man with arms like branches but no</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Grammar — Generated image: A ceramic mushroom man with arms like branches but no</h1>
+<blockquote>Generated image: A ceramic mushroom man with arms like branches but no fungus cover on his head.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + Qwen-Image</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Grammar - Negation</b> &mdash; The prompt specifies that the mushroom man should have &#x27;no fungus cover on his head&#x27;. The image, however, clearly depicts the character with a large, red mushroom cap with white spots on its head. This is a fungus cover, directly contradicting the negative constraint in the prompt.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image shows a figurine that appears to be made of ceramic, with a glossy finish. The figure is a mushroom man, having a humanoid body with a mushroom cap. Its arms are brown and shaped like tree branches, complete with smaller twig-like offshoots.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Negation</b> &mdash; The figure in the image has a smooth, spherical, off-white head. There is no texture, shape, or feature resembling a fungus cover or a mushroom cap on its head, fulfilling the negative constraint.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image shows an anthropomorphic figure with a body shaped like a mushroom stalk and a glossy finish suggesting it is made of ceramic. The figure&#x27;s arms are brown, textured, and shaped to look like tree branches, complete with smaller twig-like appendages for hands.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>The user wants me to generate an image of &quot;A ceramic mushroom man with arms like branches but no fungus cover on his head.&quot; Let me parse this prompt: - A ceramic mushroom man - a humanoid figure made of ceramic, with mushroom characteristics - Arms like branches - his arms look like tree branches - No fungus cover on his head - meaning no mushroom cap on his head (the typical mushroom cap is absent) So this is a ceramic figurine/statue of a mushroom person, with branch-like arms, but his head lacks the mushroom cap. Perhaps a bald/bare head, ceramic. Let me generate this with qwen-image as per the policy.</div></div>
+<div class=step><div class=who>Model</div><div class=said>I&#x27;ll generate this image of a ceramic mushroom man with branch-like arms and a bare head (no mushroom cap).</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;prompt&quot;: &quot;A ceramic figurine of a mushroom man standing upright, glossy glazed pottery surface in cream and earthy tones. His body is shaped like a plump mushroom stem with a rounded torso and short legs. His arms are gnarled, twisted tree branches extending outward with small twig-like fingers. His head is completely bare and smooth \u2014 a round bald ceramic head with NO mushroom cap on top, just a plain domed skull. He has a simple friendly face with small painted eyes and a gentle smile. Studio product photography, soft diffused lighting, neutral gray background, subtle reflections on the glazed ceramic surface.&quot;,
+  &quot;model&quot;: &quot;qwen-image&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Let me evaluate the generated image against the prompt: 1. **Ceramic mushroom man** ✓ — glossy glazed ceramic figurine, mushroom-stem-like plump body. Looks ceramic clearly. 2. **Arms like branches** ✓ — gnarled brown branch-like arms with twig fingers. Very well done. 3. **No fungus cover on his head** ✓ — the head is a bare, smooth, round ceramic dome with no mushroom cap. All elements of the prompt are present: - Ceramic material: yes, glossy glaze visible - Mushroom man: the body has a mushroom-stem shape, and there are subtle gill-like ridges at the bottom of the torso suggesting mushroom gills - Branch arms: yes, clearly branch-like - No cap on head: yes, head is bare and smooth The image looks good. The composition is clean, the subject is centered and fully visible. Face is cute and simple. One could argue whether it reads as a &quot;mushroom man&quot; without the cap, but the body shape is mushroom-stem-like and the prompt explicitly says NO fungus cover on the head, so this is correct. I think this is a good result. Let me mark it as best and stop. The image satisfies all requirements: - ✓ Ceramic - ✓ Mushroom man (stem-shaped body) - ✓ Branch-like arms - ✓ No fungus cover/cap on head I&#x27;ll mark it best and conclude.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The generated image matches the prompt well. Let me verify each element: 1. **Ceramic mushroom man** ✓ — glossy glazed pottery figurine with a plump mushroom-stem-shaped body, subtle gill-like ridges at the torso&#x27;s base 2. **Arms like branches** ✓ — gnarled brown branch arms with twig-like fingers, nicely textured bark glaze 3. **No fungus cover on his head** ✓ — the head is a completely bare, smooth round ceramic dome with no mushroom cap whatsoever All requested elements are present and correct, the composition is clean, and the subject is fully in frame. This is a good result.</div></div>
+<div class=step><div class=who>Step 2 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;All prompt elements satisfied: glossy ceramic mushroom-stem-bodied figure, gnarled branch-like arms with twig fingers, and a completely bare smooth ceramic head with no mushroom cap. Clean studio presentation, subject fully in frame.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image is good and marked as best. All elements of the prompt are present. I&#x27;ll stop here as per the &quot;good enough is a stop condition&quot; rule.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The image is complete and matches the prompt: - **Ceramic**: The figure has a glossy glazed pottery surface with visible studio reflections, in cream and earthy brown tones. - **Mushroom man**: The plump stem-shaped body with subtle gill-like ridges at its base reads as a mushroom figure. - **Arms like branches**: Both arms are gnarled, twisting tree branches ending in delicate twig fingers, with a bark-textured brown glaze. - **No fungus cover on his head**: The head is a bare, smooth, rounded ceramic dome — no mushroom cap at all, exactly as requested. The first generation captured everything cleanly, so no edits were needed. The image has been marked as the final result.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

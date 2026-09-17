@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Logical Reasoning — Steampunk style, a mechanical jellyfish made of brass gears and glass</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Logical Reasoning — Steampunk style, a mechanical jellyfish made of brass gears and glass</h1>
+<blockquote>Steampunk style, a mechanical jellyfish made of brass gears and glass tubes, is emitting soft blue light inside its body as it absorbs moonlight.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Logical Reasoning</b> &mdash; The image shows the mechanical jellyfish emitting a soft blue light, and a full moon is present in the sky. However, the act of the jellyfish &quot;absorbing&quot; the moonlight to produce the light is a causal relationship and a process, which cannot be visually verified in a static image. We can see the elements (moonlight and blue light) but not the action connecting them.</li>
+<li><span class='tag pass'>PASS</span><b>Style</b> &mdash; The image clearly adheres to a steampunk style. The central object is made of brass-colored metals, intricate and exposed gears, rivets, and tubes, which are all characteristic elements of the steampunk aesthetic.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image features an object that combines the form of a jellyfish (a bell-shaped body with trailing tentacles) with the features of a machine (gears, metalwork, artificial lighting). It is therefore accurately described as a mechanical jellyfish.</li>
+<li><span class='tag pass'>PASS</span><b>Relationship - Composition</b> &mdash; The jellyfish is visibly composed of the materials specified in the prompt. The bell-shaped body is a complex structure made of brass-colored metal and covered in gears. Hanging from the bell are several transparent tubes that appear to be made of glass.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Logical Reasoning</b> &mdash; The image displays a full moon in the dark, starry sky, providing the source of moonlight. The jellyfish itself is shown with a glowing blue light emanating from within its body, visually representing the effect described in the prompt. The juxtaposition of the moon and the glowing jellyfish supports the logical inference that the light is emitted as a result of absorbing moonlight.</li>
+<li><span class='tag pass'>PASS</span><b>Style</b> &mdash; The image clearly exhibits a steampunk style. This is characterized by the jellyfish&#x27;s construction from riveted metal plates, which appear to be brass or copper, and the prominent display of intricate, interlocking gears and cogs on the surface of its bell.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The central figure in the image is a mechanical jellyfish. It possesses the distinct silhouette of a jellyfish, with a large, rounded bell and long, trailing tentacles, but it is visibly constructed from non-biological, man-made components like metal and glass, fulfilling the &#x27;mechanical&#x27; attribute.</li>
+<li><span class='tag pass'>PASS</span><b>Relationship - Composition</b> &mdash; The jellyfish&#x27;s composition aligns with the prompt&#x27;s description. The bell is adorned with numerous brass-colored gears. The lower portion of the bell, from which the light shines, is made of a transparent, ribbed material resembling glass. The tentacles are also constructed from articulated metal sections and what appear to be glass or crystalline segments, consistent with the mention of &#x27;glass tubes&#x27;.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Generate a steampunk mechanical jellyfish image with flux2-dev.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;flux2-dev&quot;,
+  &quot;prompt&quot;: &quot;Steampunk mechanical jellyfish floating in a dark night sky, its bell-shaped body constructed from polished brass gears, riveted copper plates, and delicate glass tubes, glowing soft blue light emanating from within its translucent core as it absorbs moonlight, long articulated mechanical tentacles of interlocking brass segments and copper wire hanging below, full moon in the background casting silver light, faint stars, misty atmosphere, intricate Victorian-era machinery details, photorealistic rendering, cinematic lighting&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image looks quite good: brass gear dome, glass glowing blue interior, mechanical tentacles, moon, stars. Matches the prompt well. Mark best and stop.</div></div>
+<div class=step><div class=who>Step 2 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;Matches the prompt: brass-gear dome, glowing blue glass interior, articulated brass tentacles, full moon and starry night sky \u2014 all elements present and well rendered.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Good enough — stop.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The image came out beautifully on the first pass and I&#x27;ve marked it as the best result. Here&#x27;s what it captures: - **Brass gears &amp; riveted copper dome** — the jellyfish&#x27;s bell is a Victorian-era mechanical shell with visible gear assemblies and rivets - **Glass tubes with soft blue glow** — the inner body is translucent glass, lit from within by a gentle cyan-blue light - **Moonlight absorption** — a full, detailed moon hangs in the starry night sky, with a visible beam of light touching the bell - **Mechanical tentacles** — long articulated brass segments and copper wires trail beneath it - **Atmosphere** — misty depth and cinematic lighting complete the steampunk mood Every element from your prompt is present and correctly rendered, so I&#x27;m stopping here rather than risking over-editing a good result.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

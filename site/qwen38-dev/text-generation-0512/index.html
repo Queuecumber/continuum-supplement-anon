@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Text Generation — A forgotten ancient temple has a mysterious English inscription &quot;We ar</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Text Generation — A forgotten ancient temple has a mysterious English inscription &quot;We ar</h1>
+<blockquote>A forgotten ancient temple has a mysterious English inscription &quot;We are the echoes of a forgotten song&quot; engraved on the wall, which glows in the moonlight.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Text Generation</b> &mdash; The image displays text on a stone wall that reads, &#x27;We are the echos of a forgotten song&#x27;. The prompt specified the text &#x27;We are the echoes of a forgotten song&#x27;. The word &#x27;echoes&#x27; is misspelled as &#x27;echos&#x27; in the generated image.</li>
+<li><span class='tag pass'>PASS</span><b>Grammar - Pronoun Reference</b> &mdash; The prompt states that the inscription glows (&#x27;...inscription...which glows...&#x27;). In the image, the text itself is clearly depicted with a bright, warm-toned glow, appearing as the source of light. This visually represents the inscription as the object that is glowing.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Text Generation</b> &mdash; The image displays text on a stone wall. The glowing text reads, &quot;We are the echoes of a forgotten song&quot;. This matches the text specified in the prompt exactly, with no omissions, additions, or spelling errors.</li>
+<li><span class='tag pass'>PASS</span><b>Grammar - Pronoun Reference</b> &mdash; The prompt specifies that the inscription &#x27;which glows in the moonlight&#x27;. The pronoun &#x27;which&#x27; refers to the inscription. In the image, the inscription &quot;We are the echoes of a forgotten song&quot; is clearly depicted as glowing with a bluish-white light, correctly representing the action described by the relative clause.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>The user is asking for an image of a forgotten ancient temple with the English inscription &quot;We are the echoes of a forgotten song&quot; glowing on the wall in moonlight. First let me generate the image with flux2-dev. The prompt should be visual details: an ancient forgotten temple, moonlit night, a wall with a glowing English inscription engraved. Since the prompt asks for rendered text, I must verify the text with inspect_region and edit any misspellings. Let me generate first.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;prompt&quot;: &quot;A forgotten ancient temple at night, weathered stone walls covered in vines and moss, moonlight streaming from a bright full moon, mystical atmosphere. On the main stone wall there is a long horizontal English inscription engraved in an ancient rune-like but clearly Latin alphabet, glowing with a soft ethereal blue-white light: \&quot;We are the echoes of a forgotten song\&quot; \u2014 the glowing engraved text is legible and clearly readable, carved in a row across the wall. Cinematic, dramatic moonlight, mist, atmospheric, highly detailed.&quot;,
+  &quot;width&quot;: 1024,
+  &quot;height&quot;: 1024,
+  &quot;model&quot;: &quot;flux2-dev&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image looks good. Let me inspect the text region to check whether the inscription is correctly spelled. The text reads &quot;We are the echoes of a forgotten song&quot; — but I need to verify the spelling of each character. Let me zoom in.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The first generation looks promising. Let me zoom in to verify the inscription text character by character.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    120,
+    440,
+    900,
+    540
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The text reads &quot;We are the echoes of a forgotten song&quot; — checking each word: - &quot;We&quot; ✓ - &quot;are&quot; ✓ - &quot;the&quot; ✓ - &quot;echoes&quot; ✓ - &quot;of&quot; ✓ - &quot;a&quot; ✓ - &quot;forgotten&quot; ✓ - &quot;song&quot; ✓ The text is correct and fully legible. The scene shows an ancient, long-forgotten temple, the full moon, glowing inscriptions, mist, and vines — all matching the prompt. One point: the prompt says the inscription is &quot;engraved on the wall.&quot; In the image, the glowing text appears somewhat floating/illuminated, and above and below it there are rows of what look like runes. The text appears to be engraved and glowing — that&#x27;s fine. The rows of runic characters above and below could be interpreted as additional ancient carvings, which adds atmosphere. The glowing English inscription is the focal point and is legible. This is a good result. Mark it as the best. Actually, let me consider whether there&#x27;s anything that should be improved. The prompt says the inscription &quot;glows in the moonlight&quot; — in the image the text glows in blue-white, which could be said to be due to the moonlight. No problem. Everything in the prompt is present: - Forgotten ancient temple ✓ - Mysterious English inscription ✓ - &quot;We are the echoes of a forgotten song&quot; ✓ (verified) - Engraved on the wall ✓ (looks carved with a glow) - Glows in the moonlight ✓ I&#x27;m satisfied with this. I&#x27;ll mark it as the best and stop.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The text can be clearly read as &quot;We are the echoes of a forgotten song&quot;, and each word has been verified: &quot;We&quot;, &quot;are&quot;, &quot;the&quot;, &quot;echoes&quot;, &quot;of&quot;, &quot;a&quot;, &quot;forgotten&quot;, &quot;song&quot;. The scene contains everything the prompt requested — a forgotten ancient temple, moonlight, glowing inscriptions carved on the wall, mist, and overgrown ruins. This matches the prompt.</div></div>
+<div class=step><div class=who>Step 3 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;Temple scene with moonlight and mist matches the prompt, and the inscription \&quot;We are the echoes of a forgotten song\&quot; is engraved, glowing, and verified letter-by-letter to be correctly spelled and legible.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>The mark has been set. All the elements of the prompt are in place, and the text has been verified too. I&#x27;ll stop here and let the user know.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The image is complete. It depicts a forgotten ancient temple at night — weathered stone walls draped in vines and moss, a bright full moon beaming down through the ruins, mist pooling on the flagstones — with the inscription &quot;We are the echoes of a forgotten song&quot; engraved across the main wall, glowing in a soft blue-white moonlight. I zoomed in and verified the inscription character by character, and it&#x27;s spelled correctly and fully legible. The result is marked as the best.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

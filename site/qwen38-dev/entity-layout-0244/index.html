@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Entity Layout — A flat-style badge design shows a happy astronaut hugging a small plan</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Entity Layout — A flat-style badge design shows a happy astronaut hugging a small plan</h1>
+<blockquote>A flat-style badge design shows a happy astronaut hugging a small planet on the left. They all smile and the background is the deep universe.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Entity Layout - Two-Dimensional Space</b> &mdash; The image shows an astronaut hugging a small planet in the center of the circular frame, not on the left.</li>
+<li><span class='tag pass'>PASS</span><b>Style</b> &mdash; The image is rendered in a cartoon illustration style with bold outlines and mostly flat colors, presented within a circular frame, which is consistent with a flat-style badge design.</li>
+<li><span class='tag fail'>FAIL</span><b>Grammar - Consistency</b> &mdash; The astronaut is smiling, but the planet, depicted as a realistic globe, does not have a face or a smile. Therefore, the &#x27;they all smile&#x27; condition is not met.</li>
+<li><span class='tag pass'>PASS</span><b>Action - Contact Interaction</b> &mdash; The astronaut&#x27;s arms are wrapped around the small planet, holding it close to their chest in a hugging gesture.</li>
+<li><span class='tag pass'>PASS</span><b>Attribute - Expression</b> &mdash; The astronaut&#x27;s face, visible through the helmet, shows a wide-open mouth smile, rosy cheeks, and eyes crinkled shut, clearly expressing happiness.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Entity Layout - Two-Dimensional Space</b> &mdash; In the circular design, the main subject, which is an astronaut hugging a small planet, is positioned slightly to the left of the center.</li>
+<li><span class='tag pass'>PASS</span><b>Style</b> &mdash; The image is rendered in a flat style, characterized by bold outlines, simple shapes, and minimal shading. The composition is contained within a circular border, giving it the appearance of a badge.</li>
+<li><span class='tag pass'>PASS</span><b>Grammar - Consistency</b> &mdash; Both the astronaut and the planet are depicted with smiles. The astronaut has a wide, open-mouthed smile visible through its helmet&#x27;s visor, and the planet has a simple, curved line for a smiling mouth.</li>
+<li><span class='tag pass'>PASS</span><b>Action - Contact Interaction</b> &mdash; The astronaut&#x27;s arms are wrapped around the small planet, with its hands resting on the planet&#x27;s sides, clearly depicting the action of hugging.</li>
+<li><span class='tag pass'>PASS</span><b>Attribute - Expression</b> &mdash; The astronaut is shown with a wide, open-mouthed smile, which is a clear visual representation of a happy expression.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Let me analyze the prompt: &quot;In a flat-style badge design, a happy astronaut on the left is hugging a small planet. Everyone is smiling, and the background is a deep universe.&quot; So what I need: 1. Flat-style badge design (circular badge shape is typical) 2. A happy astronaut hugging a small planet, positioned on the left 3. All smiling (astronaut smiling, planet also has a smiling face) 4. Background: deep universe (space with stars) Let me generate the image with flux2-dev. I&#x27;ll fill in visual details: flat design, minimal shapes, limited color palette, circular badge, astronaut in white suit with helmet, smiling small planet (with a face), stars, maybe crescent moon and planet, deep navy/black cosmic background. Let me write a good prompt: &quot;Flat-style circular badge design: a happy cartoon astronaut in a white spacesuit on the left side, hugging a small smiling planet with a cute face (pale blue/teal planet with a happy smile), both of them beaming smiles. Deep universe background in deep navy blue with small white stars, tiny stars, and faint nebula dots. Flat vector illustration style, bold simple shapes, limited color palette, no gradients, centered circular badge, clean edges, sticker/badge look.&quot; The image size is fixed — probably 1024x1024. Let me generate it.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;prompt&quot;: &quot;Flat-style circular badge design, flat vector illustration. A happy cartoon astronaut in a white spacesuit with a clear helmet stands on the left, arms wrapped around a small cute planet, hugging it tightly. The small planet is teal-blue with green patches and has a big happy smiling face with simple dot eyes and a curved smile. The astronaut has a wide joyful smile visible in the helmet. Background is a deep dark navy universe filled with small white stars, a few tiny plus-shaped sparkles and small distant planets, subtle flat nebula shapes. Limited flat color palette, simple bold shapes, no gradients, clean vector edges, centered circular badge composition with a thin cream ring border.&quot;,
+  &quot;model&quot;: &quot;flux2-dev&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The result is pretty good. Let me evaluate it against the prompt: 1. Flat-style badge design ✓ (circular badge with ring border) 2. Happy astronaut hugging a small planet on the left — the astronaut is in the left-center and hugging the planet. The planet is on the right side of the astronaut. &quot;Astronaut hugging a small planet on the left&quot; — probably means the astronaut (on the left side of the badge) is hugging the planet. The composition has the astronaut on the left hugging the planet, so it works. 3. Everyone is smiling ✓ — astronaut is smiling (big open smile), planet also has a smile ✓ 4. Background is deep universe ✓ — deep navy with stars, sparkles, small planet. Looks pretty good. Flat style, happy expressions, everything is in place. Minor nitpicks: the background is dark navy which reads as deep universe, no problem. The badge ring is cream-colored, which is good. Are there any flaws? The astronaut&#x27;s smile is visible through the dark visor — good. The planet&#x27;s face has a smile — good. The hugging pose — the astronaut&#x27;s arms are wrapping around the planet — good. I think this is a good result. Let me zoom in and check the face to make sure the smile is clearly readable.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The first result looks close to the goal. Let me zoom into the faces to verify the smiles read clearly.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    280,
+    280,
+    560,
+    620
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The astronaut&#x27;s face has a big open smile, and the planet has a smiling face with pink cheeks. The hugging pose is also clear. All elements are present: 1. Flat-style badge design ✓ 2. Astronaut on the left, hugging a small planet ✓ 3. Both are smiling ✓ 4. Deep universe background ✓ This is a good result. Marking it as the best and stopping — following the policy of &quot;good enough is a stopping condition.&quot;</div></div>
+<div class=step><div class=who>Model</div><div class=said>On zooming in, the details are clearly confirmed: the astronaut has a big, cheerful open-mouthed smile visible through the helmet, and the planet has a sweet smiling face with rosy cheeks. The hugging pose is clear, the flat badge style with the ring border is preserved, and the deep starry sky background is well rendered too. All the elements of the prompt are present and correct.</div></div>
+<div class=step><div class=who>Step 3 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;Flat circular badge with a happy astronaut on the left hugging a small smiling planet, both beaming, deep starry universe background. All prompt elements verified by zoomed inspection.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Marked. The task is complete. I&#x27;ll convey the final summary to the user.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The badge is done. It features: - **Flat-style circular badge** with a thin cream ring border - **Happy astronaut on the left** in a white spacesuit, arms wrapped around a small teal-and-green planet - **Both smiling** — the astronaut has a big open-mouthed grin behind the helmet, and the planet has a cute smiling face with rosy cheeks - **Deep universe background** in dark navy, dotted with stars, sparkles, and a few tiny distant planets The result is marked as the final version.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

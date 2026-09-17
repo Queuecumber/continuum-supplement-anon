@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Grammar — In the watercolor style, a fox has crystal-like horns and its tail is</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Grammar — In the watercolor style, a fox has crystal-like horns and its tail is</h1>
+<blockquote>In the watercolor style, a fox has crystal-like horns and its tail is not fluffy, but consists of flowing nebulae.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Qwen3.8-27B + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Grammar - Negation</b> &mdash; The prompt specifies that the fox&#x27;s tail is &#x27;not fluffy&#x27;. However, the image depicts a fox where the base of its tail, connecting to its body, is clearly covered in typical orange and grey fur, giving it a fluffy appearance. Only the end of the tail transforms into the nebula, so the negative constraint is not fully met.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Imagination</b> &mdash; The image shows a fox with a cluster of translucent, pointed, and faceted crystals growing from its head, which aligns with &#x27;crystal-like horns&#x27;. The end portion of the fox&#x27;s tail is depicted as a swirling cloud of blue, purple, and pink gas dotted with white specks, matching the description of &#x27;flowing nebulae&#x27;.</li>
+<li><span class='tag pass'>PASS</span><b>Style</b> &mdash; The image is presented in a watercolor style, evident from the soft color blending, bleeding edges of the paint (especially in the blue background wash), and the visible texture that suggests paint on paper.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Negation</b> &mdash; The fox&#x27;s tail is not depicted with a fluffy, fur-like texture. Instead, it is shown as a flowing, ethereal substance, which adheres to the negative constraint in the prompt.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Imagination</b> &mdash; The image displays a fox with two prominent horns growing from its head, composed of translucent, faceted crystals in shades of pink and light blue. The fox&#x27;s tail is not made of fur but is a swirling mass of purple, magenta, and teal colors, filled with white specks resembling stars, consistent with the description of &#x27;flowing nebulae&#x27;.</li>
+<li><span class='tag pass'>PASS</span><b>Style</b> &mdash; The artwork is rendered in a distinct watercolor style, evident from the soft blending of colors, the texture of the paper visible through the paint, the characteristic water blooms and splatters, and the transparent quality of the pigments, especially in the nebula tail and the background washes.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>The user is asking for a watercolor-style image of a fox with crystal-like horns, and whose tail is not fluffy but is composed of flowing nebulae (starry clouds). Let me generate the first version. I&#x27;ll write a detailed visual prompt that fills in the implied visual details: - Watercolor style, soft washes, bleeding pigments, textured paper - A fox with crystal horns (translucent, gem-like, glowing) - Tail made of flowing nebulae (cosmic cloud-like, purple/blue/teal, starry dust, flowing) - Composition: the fox sitting, or a full-body fox portrait Let me generate using flux2-dev, default 1024x1024 (size is controlled by the harness; the default is 1024). I&#x27;ll use the default dimensions. Prompt: &quot;Watercolor painting of a small fox with translucent crystal-like horns on its head, its long tail dissolving into flowing cosmic nebulae — swirling clouds of purple, teal and magenta with fine stardust, wispy smoke-like tendrils, the fluffy fur of the fox&#x27;s body rendered in soft ochre and orange watercolor washes on textured paper, delicate ink linework, dreamy ethereal atmosphere, white paper background with soft pigment blooms&quot; Let me generate this.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;flux2-dev&quot;,
+  &quot;prompt&quot;: &quot;Watercolor painting of a fox with translucent crystal-like horns growing from its forehead, the horns faceted like gemstones catching light. The fox&#x27;s body is rendered in soft ochre and warm orange watercolor washes with delicate ink linework, sitting gracefully in profile. Its long tail is not fluffy fur but dissolves into flowing cosmic nebulae: swirling gaseous clouds of violet, magenta, teal and blue with fine stardust and wispy smoke-like tendrils trailing behind. Textured cold-press paper background with soft pigment blooms and gentle wash bleeds, ethereal dreamlike atmosphere, minimalist composition, lots of white paper space.&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The result is really good. Let me verify: 1. Watercolor style ✓ — yes, soft washes, texture, ink outlines 2. Fox ✓ — sitting fox, orange/white 3. Crystal-like horns ✓ — there are crystal structures on the head. However, these look more like a crown of crystals/rocks (multiple quartz crystals) than &quot;horns.&quot; The prompt said &quot;crystal-like horns&quot; — a cluster of crystals could arguably be called crystal horns, but it looks more like a crystal crown/cap. The crystals are on top of the head rather than on the sides of the forehead. As &quot;crystal-like horns&quot; it&#x27;s within acceptable range, but horns are usually more curved/horn-like. Hmm. The crystals look like a quartz crown. You could say it works as &quot;crystal-like horns&quot; in a stylized form, but it could be better — horns should extend from the forehead like antlers/horns. 4. Tail made of flowing nebula ✓ — yes, a beautiful flowing nebula tail. Let me zoom in and inspect the horn region to decide.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The first result is very good — the watercolor texture is soft, and the nebula tail reads as clearly flowing rather than fluffy. Let me zoom in on the head to check the &quot;crystal horn&quot; portion.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    180,
+    90,
+    460,
+    340
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The crystals look more like a quartz crown/cap sitting on top of the head rather than horns growing from the forehead. The prompt asks for &quot;crystal-like horns.&quot; A crown of crystals is a reasonable interpretation, but &quot;horns&quot; implies structures that extend from the head like a deer&#x27;s antlers or a goat&#x27;s horns — typically two, curving backward from the forehead. Current state: a cluster of crystals rising from the top of the head, looking like a tiara/crown. This is a stylistic choice that could pass as &quot;crystal-like horns&quot; in a stylized form, but it leans heavily toward &quot;crown.&quot; To be more faithful to &quot;crystal-like horns,&quot; I could edit to make the crystals into two more distinct horn-like structures curving back from the forehead. I think a targeted edit is worthwhile: &quot;reshape the cluster of crystals into two crystal horns curving backward from the forehead, like translucent gemstone antlers.&quot; Let me try an edit_image with a targeted instruction. Let&#x27;s try editing: &quot;reshape the crown of crystals into two crystal horns curving backward from the forehead, like translucent faceted gemstone antlers, keeping the same watercolor style&quot; Risk: the edit could destroy the good part. The rest of the image is excellent. I&#x27;ll try the edit, and if it gets worse, I&#x27;ll mark_best the original image. Actually, let me think about whether it&#x27;s even necessary in the first place. The prompt: &quot;a fox with crystal-like horns.&quot; The current image shows crystals on the head — many people would describe that as crystal horns, but in reality it&#x27;s clearly a &quot;crystal crown,&quot; and the crystals sit on top of the head rather than emerging as horns. A two-horned shape would be more accurate. Let me try one edit.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The crystal looks more like a crown perched on top of the head rather than a horn growing out of the head. Let&#x27;s shape it into a proper crystal horn.</div></div>
+<div class=step><div class=who>Step 3 — `edit_image`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;model&quot;: &quot;flux2-dev&quot;,
+  &quot;prompt&quot;: &quot;Reshape the cluster of crystals on the fox&#x27;s head into two translucent crystal horns that grow from the forehead and curve backward, like faceted gemstone antlers, one on each side. Keep the same soft watercolor style, same crystal colors and paper look, keep everything else exactly the same.&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_2</div><img class=stepimg data-zoom data-full='steps/img_2.jpg' src='steps/img_2.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Now the crystals are clearly shaped like two antler/horn-like crystal structures curving upward from the head — it reads far better as &quot;crystal-like horns.&quot; Everything else is preserved: the watercolor fox, the flowing nebula tail. Let me zoom in on the head again and check the quality of the edit.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The crystals now read as two horn/antler-like structures. Let me verify the detail up close.</div></div>
+<div class=step><div class=who>Step 4 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_2&quot;,
+  &quot;roi&quot;: [
+    170,
+    20,
+    500,
+    330
+  ]
+}</pre></div>
+<div class=step><div class=who>Result img_3</div><img class=stepimg data-zoom data-full='steps/img_3.jpg' src='steps/img_3.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The crystal horns now read very well — two branching crystal antlers/horns rising from the head, with a faceted gemstone-like appearance, rendered in the same watercolor ink style. The integration looks clean. Now, let me evaluate the whole image against the prompt: 1. Watercolor style ✓ 2. Fox ✓ 3. Crystal-like horns ✓ (two crystal antler-horns) 4. The tail isn&#x27;t fluffy, it&#x27;s a flowing nebula ✓ The image is in good shape. Let me mark this as the best and finish. img_2 is the best result.</div></div>
+<div class=step><div class=who>Step 5 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_2&quot;,
+  &quot;reason&quot;: &quot;Watercolor fox with two crystal antler-horns growing from the head and a tail of flowing nebulae (violet, magenta, teal gas clouds with stardust), not fluffy fur. All prompt elements present and well rendered.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Done. The image meets all the requirements: - Watercolor style ✓ - Fox ✓ - Crystal-like horns ✓ - Tail made of a flowing nebula, not fluffy ✓ I&#x27;ll tell the user what was done.</div></div>
+<div class=step><div class=who>Model</div><div class=said>Done! The final watercolor painting features: - **The fox** — a graceful sitting fox in soft ochre and orange watercolor washes with delicate ink linework, on textured paper with gentle pigment blooms. - **Crystal horns** — two branching, faceted crystal antlers growing from the forehead and curving upward, like translucent gemstones with pale blue and pink facets (initially they read as a crystal crown, so I reshaped them into true horn/antler forms). - **Nebula tail** — instead of fluffy fur, the tail dissolves into flowing cosmic gas: swirling clouds of violet, magenta, and teal with stardust and wispy tendrils trailing behind. The result is marked as your best, and I consider it a faithful match to the prompt.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Relationship — In the huge crystal cave, the shining stalactites are like a magnifice</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Relationship — In the huge crystal cave, the shining stalactites are like a magnifice</h1>
+<blockquote>In the huge crystal cave, the shining stalactites are like a magnificent glass organ, and a knight in lava armor is playing with his fingers.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Relationship - Similarity</b> &mdash; In the center of the image, within a cave, there is a large formation of vertical, shining, translucent crystals of varying heights. This formation, combined with the stalactites hanging from the ceiling, visually resembles the pipes of a magnificent organ made of glass or crystal.</li>
+<li><span class='tag fail'>FAIL</span><b>Action - Hand (Character/Anthropomorphic)</b> &mdash; The knight is holding a small, dark rod in his right hand, pointed towards the crystal formation. He is not touching the crystals, nor is he shown performing the action of &#x27;playing with his fingers&#x27;. His hands are covered by gauntlets, and their structure appears intact, but the specific action is not depicted.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image shows a figure wearing a full suit of dark armor, including a helmet, identifying it as a knight. The surface of the armor is covered in a network of glowing orange and red cracks, giving it the distinct appearance of lava.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Relationship - Similarity</b> &mdash; The image displays a large formation of vertical, shining crystals arranged in rows of different heights, which closely resembles the pipes of a magnificent organ made of glass. This fulfills the visual analogy in the prompt, even though the crystals are growing from the ground (stalagmites) rather than hanging from the ceiling (stalactites).</li>
+<li><span class='tag pass'>PASS</span><b>Action - Hand (Character/Anthropomorphic)</b> &mdash; The knight is depicted with both hands raised, gesturing towards the crystal formation as if playing an instrument. The fingers on both hands are visible and appear to be correctly formed, with no missing, broken, or distorted digits.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image shows a knight wearing a full suit of dark armor. This armor is visually characterized by glowing orange and red cracks across its surface, giving it the distinct appearance of lava or cooling magma.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Huge crystal cave, shining stalactites like a magnificent glass organ, a knight in lava armor playing it with his fingers. Generate with flux2-dev.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;flux2-dev&quot;,
+  &quot;prompt&quot;: &quot;A colossal underground crystal cave, its walls glittering with amethyst and quartz formations. Towering translucent crystal stalactites hang from the ceiling in ordered rows like the pipes of a magnificent glass organ, glowing and refracting rainbow light. In front of them stands a knight in ornate black armor veined with glowing molten lava cracks, orange firelight pulsing between the plates. He is reaching up and playing the crystal stalactite pipes with his armored fingers, touching them like organ keys, small musical sparks and glowing notes shimmering where his fingers strike. Dramatic volumetric light beams, drifting dust motes, epic fantasy atmosphere, cinematic wide shot, highly detailed.&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image is quite good: crystal cave, lava-armored knight, crystal pipes like an organ, glowing musical notes, he&#x27;s playing with his fingers. Stalactites technically hang from ceiling — the image shows crystal columns rising up, plus stalactites on ceiling edges. The prompt asked for stalactites like a glass organ. The organ pipes look more like rising crystals. But the overall effect matches &quot;crystal organ&quot;. This is good enough. Mark best and stop.</div></div>
+<div class=step><div class=who>Step 2 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;All requested elements are present and well-composed: the huge crystal cave, the towering glowing crystal formations arranged like a magnificent glass organ, the knight in black lava-veined armor playing the pipes with his fingers, plus glowing musical notes, volumetric light, and purple amethyst framing the cave. No obvious flaws or artifacts.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Good enough — stop.</div></div>
+<div class=step><div class=who>Model</div><div class=said>The image captures everything in your description on the first pass: - **The huge crystal cave** — framed by purple amethyst clusters, with light beams cutting down from above. - **The stalactite organ** — a towering array of glowing translucent crystal pipes arranged like a magnificent glass organ, refracting rainbow light. - **The knight in lava armor** — black plate armor cracked with molten orange veins, standing at the pipes and striking them with his fingers, golden musical notes and sparks shimmering where he plays. I&#x27;ve marked this as the final result since every element is present and the composition is clean.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

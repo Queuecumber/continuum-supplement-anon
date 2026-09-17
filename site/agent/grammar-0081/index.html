@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Grammar — A pair of twin sisters who look alike are standing together. The older</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Grammar — A pair of twin sisters who look alike are standing together. The older</h1>
+<blockquote>A pair of twin sisters who look alike are standing together. The older sister is smiling happily, but the younger sister is expressionless. Their temperament is not similar at all.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + FLUX.2-klein-9B</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Negation</b> &mdash; The image displays two women with opposite facial expressions. The woman on the left is smiling with her teeth showing, while the woman on the right has a neutral, unsmiling expression. This visual difference directly corresponds to the prompt&#x27;s statement that their temperaments are &#x27;not similar at all&#x27;.</li>
+<li><span class='tag fail'>FAIL</span><b>Relationship - Similarity</b> &mdash; The image shows two women who do not appear to be twin sisters who look alike. There is a clear and noticeable age difference between the two individuals; the woman on the left appears significantly older than the woman on the right. Their facial features are also distinct and not those of identical twins.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image shows two women of different apparent ages. The woman who appears older (on the left) is smiling happily, showing her teeth. The woman who appears younger (on the right) has a neutral, expressionless face. This arrangement correctly matches the specified expressions to the perceived age of each sister as described in the prompt.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Negation</b> &mdash; The image displays two women with distinctly different facial expressions. The woman on the left is smiling widely, suggesting a happy temperament, while the woman on the right has a neutral, unsmiling expression, suggesting a different temperament. This visual contrast aligns with the prompt&#x27;s statement that their temperaments are &#x27;not similar at all&#x27;.</li>
+<li><span class='tag pass'>PASS</span><b>Relationship - Similarity</b> &mdash; The image shows two women who share a strong facial resemblance. They have the same dark, shoulder-length hair, similar eyebrow shapes, nose structures, and overall face shapes, which is consistent with the description &#x27;twin sisters who look alike&#x27;.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image correctly depicts two women with contrasting expressions. The woman on the left is visibly smiling, showing her teeth, which matches the description &#x27;smiling happily&#x27;. The woman on the right has a neutral expression with a straight mouth and a flat gaze, fulfilling the &#x27;expressionless&#x27; attribute.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>We need generate image. User wording maybe potentially sensitive? &quot;younger sister expressionless&quot; but likely adults? Could create adults. Need benchmark fixed flux2-klein, no seed. Prompt visual detail implied, avoid non-visual like names/backstory. Need generate then inspect then edit as needed. Need likely twin sisters standing together, older happy, younger expressionless, contrasting temperaments. Age indeterminate. Need maybe say adult twin sisters to avoid ambiguity? User says older/younger sister, not minors necessarily. We can generate. Need identify image ids from outputs. Let&#x27;s call generate_image with detailed visual prompt. We need maybe use 1024. Composition likely waist-up, same face, distinctive styling, one smile, one neutral. &quot;two adult identical twin sisters standing side by side...&quot; Similar appearance but wardrobe/posture conveys contrast. Could use symmetrical framing. Need maybe &quot;older sister&quot; can&#x27;t depict age when identical twins. We can signal by subtle visual: left sister slightly taller/more composed? Older vs younger identical twins visually impossible. Better one labeled? Text not asked. Could represent with visual styling: older sister classic clothing, younger casual. But prompt says look alike, temperament dissimilar. We&#x27;ll aim same facial features, different expressions. Generate.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;model&quot;: &quot;flux2-klein&quot;,
+  &quot;prompt&quot;: &quot;Photorealistic waist-up portrait of two adult identical twin sisters standing side by side against a softly lit neutral studio background. They have the same face, dark brown eyes, black shoulder-length hair, and similar natural features, clearly looking alike. The sister on the left has a joyful, broad, genuine smile and warm relaxed posture. The sister on the right has a completely neutral, expressionless face with relaxed lips and calm steady eyes, her posture more reserved and still. Their clothing subtly contrasts their temperaments: the smiling sister wears a warm cream blouse, while the expressionless sister wears a muted charcoal top. Balanced symmetrical composition, both fully visible, natural skin texture, soft diffused lighting, sharp focus, realistic photography.&quot;,
+  &quot;width&quot;: 1024,
+  &quot;height&quot;: 1024
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>We need inspect. It looks good. Are they &quot;look alike&quot; yes similar but not identical? They look like sisters/twins but facial features differ somewhat: left rounder, right slimmer, but likely okay. Older vs younger ambiguous. Older sister left appears perhaps older due smile. Prompt asks older sister smiling, younger expressionless. They look both adults. Contrasting temperament clearly conveyed. Need maybe mark best. The procedure says mark early. Good enough stop. Need mark_best. Then final concise.</div></div>
+<div class=step><div class=who>Step 2 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;The two women clearly resemble twin sisters, with the left sister smiling warmly and the right sister maintaining a neutral expression; their contrasting temperaments are visually clear.&quot;
+}</pre></div>
+<div class=step><div class=who>Model</div><div class=said>Created the portrait: two similar-looking adult twin sisters, with the older sister smiling warmly and the younger sister remaining expressionless.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Grammar — Please design an interface for a weather app. There is a cartoon girl</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Grammar — Please design an interface for a weather app. There is a cartoon girl</h1>
+<blockquote>Please design an interface for a weather app. There is a cartoon girl wearing a yellow raincoat. All icons and buttons in the interface also adopt a round yellow cartoon style consistent with the girl.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + FLUX.2-klein-9B</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag fail'>FAIL</span><b>Grammar - Consistency</b> &mdash; The prompt requires that all icons and buttons adopt a style consistent with the girl. The girl is drawn in a rounded, cartoon style. The icons and buttons in the interface also share this rounded, cartoon aesthetic, including similar line work and simplicity. However, the prompt specifies a &#x27;round yellow cartoon style&#x27; for &#x27;All icons and buttons&#x27;. While most icons are indeed round and yellow, there is one prominent circular icon above the girl on the right that is light blue, not yellow. Because not &#x27;all&#x27; icons are yellow, this condition is not fully met.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image contains a cartoon girl wearing a yellow, hooded raincoat and blue boots, which matches the first part of the prompt. The image also displays an interface with multiple icons and a large button at the bottom. The majority of these icons are circular and yellow, and the button is a rounded rectangle and yellow. All these elements are drawn in a cartoon style. Therefore, the image successfully matches the described features.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Grammar - Consistency</b> &mdash; The image displays a weather app interface featuring a central cartoon girl. The various icons and buttons, including the sun icon, the plus button, and the row of daily weather icons at the bottom, are all rendered in a yellow, rounded, cartoon style. This style, characterized by soft shapes, a uniform yellow color, and simple outlines, is visually consistent with the style of the cartoon girl.</li>
+<li><span class='tag pass'>PASS</span><b>Compound - Feature Matching</b> &mdash; The image shows a cartoon girl positioned in the center of a smartphone screen. She is wearing a yellow raincoat and matching yellow boots. The app interface also contains multiple icons and buttons. These interactive elements, such as the sun, cloud, and plus icons, are all designed in a round or rounded shape, are colored yellow, and are rendered in a cartoon style.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>We need answer by generating image. Need use flux2-klein always. Need generate interface weather app with cartoon girl yellow raincoat, all icons/buttons round yellow cartoon style. Need likely create polished UI mockup. We should call generate_image. Need maybe include text? Prompt asks design interface, could have weather text maybe &quot;Sunny 24°&quot; etc. Need inspect and edit if wrong. We need follow benchmark policy. No seeds. Size fixed by harness? generate_image default 1024. User didn&#x27;t specify. We can generate 1024. Need maybe portrait mobile app interface. Let&#x27;s craft detailed prompt: mobile weather app UI mockup, rounded card, cartoon girl in yellow raincoat, yellow circular icons/buttons, consistent style, clean vector illustration, pastel rainy background, temperature, conditions, forecast. Since model might render text poorly; we can include minimal text maybe &quot;24°&quot;, &quot;Sunny&quot;, &quot;Today&quot;. Need verify with inspect_region if text. We can avoid complex words perhaps use numerals and simple labels. But weather app interface needs UI elements. Let&#x27;s generate.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;prompt&quot;: &quot;A polished mobile weather app interface design, portrait smartphone screen mockup on a soft pastel background. The UI features a cheerful cartoon girl wearing a bright yellow hooded raincoat and yellow boots, standing under a small umbrella in gentle rain. All icons and buttons are rounded, chunky, glossy yellow cartoon style consistent with the girl&#x27;s raincoat: circular sun icon, cloud icon, rain icon, wind icon, plus pill-shaped yellow buttons. Clean rounded cards, soft shadows, playful vector illustration, cohesive yellow-and-cream palette with sky-blue accents. Show a large temperature reading \&quot;24\u00b0\&quot;, simple weather label \&quot;RAINY\&quot;, location \&quot;SEOUL\&quot;, and a weekly forecast row with five round yellow icons. Modern UI/UX, high quality app design, crisp edges, balanced composition, no real photo, no extra people, no cluttered text.&quot;,
+  &quot;width&quot;: 1024,
+  &quot;height&quot;: 1024,
+  &quot;model&quot;: &quot;flux2-klein&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>We need inspect image. It looks generally good but has issues: weather label rendered &quot;RANY&quot; instead of &quot;RAINY&quot;. Forecast labels gibberish: Yen, Vehy, Reue, 2all, Farr. Top right icon maybe odd white blob, yellow buttons. User asks design interface, likely text should be correct? Prompt included text. We need verify via zoom perhaps inspect_region around text. Need mark best? First image mostly good but text wrong. We should mark best early because willing? It has obvious misspelling, perhaps not willing yet? Policy says mark as soon as have image willing to submit. It is mostly good but text errors; maybe mark anyway to protect. But only one mark, can update. Let&#x27;s inspect text areas with inspect_region. Need maybe use multi_tool parallel for multiple crops? Could inspect top label and forecast row. Use inspect_region with rectangles. The displayed image is 768? actual maybe 1024. Need coordinate based actual image. We can use normalized rectangles. Top label around [0.38,0.20,0.62,0.30]; forecast around [0.30,0.70,0.70,0.85]. Use parallel.</div></div>
+<div class=step><div class=who>Step 2 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    0.35,
+    0.12,
+    0.68,
+    0.32
+  ],
+  &quot;normalized&quot;: true,
+  &quot;padding&quot;: 0.05
+}</pre></div>
+<div class=step><div class=who>Result img_1</div><img class=stepimg data-zoom data-full='steps/img_1.jpg' src='steps/img_1.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Step 3 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;roi&quot;: [
+    0.28,
+    0.68,
+    0.72,
+    0.88
+  ],
+  &quot;normalized&quot;: true,
+  &quot;padding&quot;: 0.05
+}</pre></div>
+<div class=step><div class=who>Result img_2</div><img class=stepimg data-zoom data-full='steps/img_2.jpg' src='steps/img_2.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Need edit text. Since edit_image targeted instruction. Fix &quot;RANY&quot; to &quot;RAINY&quot; and forecast labels to MON TUE WED THU FRI perhaps. Also maybe top-right icon is splat not weather; could fix to cloud. The girl is good. UI icons mostly yellow round. Need edit image with model flux2-klein per benchmark policy (fixed). Prompt: change only misspelled weather label RANY to RAINY; change five small forecast day labels under SEOUL to MON, TUE, WED, THU, FRI; keep everything else unchanged. Maybe edit_image handles text. Let&#x27;s call edit_image on img_0. Also mark best? The current image not yet marked; maybe mark before edit? If edit goes wrong we can mark img_0 as best (though flawed). Policy says mark early. Do mark_best img_0 now with reason current strong composition but text errors. Then edit. Need call mark_best and edit maybe sequential because edit doesn&#x27;t depend on mark. Could parallel? mark_best independent, edit depends on image but not on mark. We can do sequential maybe mark then edit. Let&#x27;s mark.</div></div>
+<div class=step><div class=who>Step 4 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;Strong overall weather-app composition with the yellow-raincoat girl and matching rounded yellow UI; keeping as fallback while fixing small text errors.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Now edit. Use image img_0 or best? best points to img_0. Prompt delta only. Mention preserve girl/icons/layout. Need concrete. &quot;Replace the misspelled label &#x27;RANY&#x27; under 24° with &#x27;RAINY&#x27;. Replace the five small forecast day labels under SEOUL with &#x27;MON&#x27;, &#x27;TUE&#x27;, &#x27;WED&#x27;, &#x27;THU&#x27;, &#x27;FRI&#x27;. Keep all artwork, colors, icons, buttons and layout unchanged.&quot; This is text edit; name incorrect and correct. Could have two changes in one prompt (multi-step says split multiple distinct changes). Text edits are both text; but instructions say for multiple changes split. Could do one edit for RANY then forecast. But maybe one text correction prompt can handle. Better split to avoid leakage. First fix RANY. Then forecast. Let&#x27;s edit RANY only.</div></div>
+<div class=step><div class=who>Step 5 — `edit_image`</div><pre>{
+  &quot;image&quot;: &quot;best&quot;,
+  &quot;prompt&quot;: &quot;Replace only the misspelled weather label \&quot;RANY\&quot; under the large \&quot;24\u00b0\&quot; with the correctly spelled word \&quot;RAINY\&quot; in the same gray rounded sans-serif style. Keep the girl, umbrella, yellow icons, buttons, colors, and layout unchanged.&quot;,
+  &quot;model&quot;: &quot;flux2-klein&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_3</div><img class=stepimg data-zoom data-full='steps/img_3.jpg' src='steps/img_3.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>RAINY fixed. Forecast labels still gibberish. Need edit forecast labels. Use img_3. Prompt delta: replace five small gray labels under SEOUL with MON TUE WED THU FRI, same small gray sans-serif. Keep icons etc. Let&#x27;s do.</div></div>
+<div class=step><div class=who>Step 6 — `edit_image`</div><pre>{
+  &quot;image&quot;: &quot;img_3&quot;,
+  &quot;prompt&quot;: &quot;Replace only the five small gibberish day labels under \&quot;SEOUL\&quot; with the clean labels \&quot;MON\&quot;, \&quot;TUE\&quot;, \&quot;WED\&quot;, \&quot;THU\&quot;, \&quot;FRI\&quot;, in the same small gray sans-serif style and positions. Keep the five yellow round forecast icons and everything else unchanged.&quot;,
+  &quot;model&quot;: &quot;flux2-klein&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_4</div><img class=stepimg data-zoom data-full='steps/img_4.jpg' src='steps/img_4.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Now looks good. Need inspect text zoom maybe forecast and top. It appears MON TUE WED THU FRI correct. Top right icon is a white splat on yellow circle, could be a star? User asked all icons/buttons round yellow cartoon style consistent. It is round yellow, but icon is weird. Could improve to a cloud or wind? But maybe acceptable? Need evaluate against intent. Interface design: cartoon girl yellow raincoat, all icons/buttons round yellow cartoon style. In img_4, top left sun button good; top right maybe yellow circle with white splash (not recognizable); right side buttons yellow pill with menu and plus; small cloud button. Forecast icons include clipboard/calendar, rain cloud, square/photo, cloud, sun — some not weather-specific (clipboard, photo) but round yellow. The user didn&#x27;t demand specific weather icons, just all icons/buttons adopt style. Good enough? Could perhaps fix top-right splat to a simple white cloud or wind. But editing risks. Maybe need inspect full details. Use inspect_region for forecast and top right? The text seems correct at full, but policy says when prompt asks rendered text, verify by zooming. We already zoomed before edits. Need verify after edits. Use inspect_region for top and forecast on img_4. Also maybe top-right. Let&#x27;s inspect. Then mark best if good.</div></div>
+<div class=step><div class=who>Step 7 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_4&quot;,
+  &quot;roi&quot;: [
+    0.35,
+    0.13,
+    0.68,
+    0.3
+  ],
+  &quot;normalized&quot;: true,
+  &quot;padding&quot;: 0.04
+}</pre></div>
+<div class=step><div class=who>Result img_5</div><img class=stepimg data-zoom data-full='steps/img_5.jpg' src='steps/img_5.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Step 8 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_4&quot;,
+  &quot;roi&quot;: [
+    0.3,
+    0.69,
+    0.7,
+    0.86
+  ],
+  &quot;normalized&quot;: true,
+  &quot;padding&quot;: 0.04
+}</pre></div>
+<div class=step><div class=who>Result img_6</div><img class=stepimg data-zoom data-full='steps/img_6.jpg' src='steps/img_6.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Step 9 — `inspect_region`</div><pre>{
+  &quot;image&quot;: &quot;img_4&quot;,
+  &quot;roi&quot;: [
+    0.58,
+    0.13,
+    0.72,
+    0.25
+  ],
+  &quot;normalized&quot;: true,
+  &quot;padding&quot;: 0.05
+}</pre></div>
+<div class=step><div class=who>Result img_7</div><img class=stepimg data-zoom data-full='steps/img_7.jpg' src='steps/img_7.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>Text correct. Top right icon is a splat/star, not weather. Could be okay as round yellow button. But for a weather app, top-right icon maybe settings/menu should be consistent. It looks like a white splat, maybe not good. We could edit it to a simple white cloud outline or gear, but risk. Since user asked all icons/buttons round yellow cartoon style; this one is round yellow but symbol is odd. Could change only that icon to a white cloud cartoon, matching. Is it worth? The image is strong. Stopping policy: good enough is stop. But top-right weird icon may be considered flaw. The prompt didn&#x27;t demand meaningful icons; &quot;all icons and buttons ... round yellow cartoon style&quot;. It satisfies style. The forecast icons include calendar/photo not exactly weather but still yellow. Should we mark img_4 best now. Need mark best. Then final with concise. But before final, ensure marked image is latest intended. Mark img_4. Then answer. Should we attempt to improve top-right? Let&#x27;s consider risk/benefit. edit_image could localize replacing white splat with white cloud. It might also alter other things. But text now correct; risk of breaking text if edit. Could use inpaint for top-right precise. But not necessary. If we use edit_image, it may affect nearby text/24? Not worth. Good enough. Mark best img_4. Final mention created and corrected labels. Keep concise. Need include image? Tool outputs inline already. In final, no markdown image necessary maybe state done. Since user asked design; we can say done. Ensure marked. Call mark_best.</div></div>
+<div class=step><div class=who>Step 10 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_4&quot;,
+  &quot;reason&quot;: &quot;Latest version preserves the cohesive yellow cartoon UI and girl while fixing the visible text to RAINY and MON-FRI.&quot;
+}</pre></div>
+<div class=step><div class=who>Thinking</div><div class=said>Need final answer. Mention completed weather app interface. No extra. Ensure not claim too much. Could say &quot;Done — I designed... final version marked.&quot; We can include concise description. The image is in conversation; final can summarize. Use maybe no bullet. Oververbosity 5. Need no further tools. Final.</div></div>
+<div class=step><div class=who>Model</div><div class=said>Done — the final marked design is a cohesive mobile weather app UI with a cartoon girl in a yellow raincoat, matching rounded yellow buttons/icons, rainy weather visuals, “24° RAINY,” Seoul location, and a clean MON–FRI forecast row.</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>

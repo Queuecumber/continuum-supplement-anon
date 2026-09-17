@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width,initial-scale=1'>
+<title>Entity Layout — Generating pictures: On the left and right sides of the screen, there</title>
+<link rel=stylesheet href='../style.css'>
+<body>
+<div class=wrap>
+<a class=back href='../index.html'>&larr; All examples</a>
+<h1>Entity Layout — Generating pictures: On the left and right sides of the screen, there</h1>
+<blockquote>Generating pictures: On the left and right sides of the screen, there is a girl in similar posture. They are dancing on a huge circular carpet in a soft cartoon illustration style.</blockquote>
+<div class=pairwide>
+<figure><img data-zoom data-full='direct-full.jpg' src='direct.jpg' alt='single-pass baseline result'><figcaption><b>Direct</b> &mdash; one call, no iteration</figcaption></figure>
+<figure><img data-zoom data-full='agent-full.jpg' src='agent.jpg' alt='agent loop result'><figcaption><b>Continuum</b> &mdash; Kimi K3 + FLUX.2-dev</figcaption></figure>
+</div>
+<h3>Judge &mdash; Direct</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Entity Layout - Two-Dimensional Space</b> &mdash; The image is split vertically into two panels. There is a girl depicted on the left side and another depiction of a girl on the right side.</li>
+<li><span class='tag fail'>FAIL</span><b>Relationship - Similarity</b> &mdash; The two girls are in different postures. The girl on the left has both arms raised and her left leg kicked back. The girl on the right has one arm raised and the other bent downwards, with her legs crossed in front. The postures are not similar.</li>
+<li><span class='tag pass'>PASS</span><b>Attribute - Shape</b> &mdash; There is a large carpet at the bottom of the image, spanning both panels. The carpet is depicted as an ellipse due to perspective but is clearly intended to be circular, with a round border and circular patterns.</li>
+<li><span class='tag pass'>PASS</span><b>Action - Full-body (Character/Anthropomorphic)</b> &mdash; Both girls are shown in dynamic, full-body poses that clearly represent the act of dancing. Their limbs are in motion, and their bodies are mid-movement.</li>
+<li><span class='tag pass'>PASS</span><b>Style</b> &mdash; The image is rendered in an illustrative style with clean lines, soft and warm colors, and simplified, cute character designs, which aligns with the description of a &#x27;soft cartoon illustration style&#x27;.</li>
+</ul>
+<h3>Judge &mdash; Continuum</h3><ul class=verdict>
+<li><span class='tag pass'>PASS</span><b>Entity Layout - Two-Dimensional Space</b> &mdash; The image displays two figures of girls, one positioned on the left side of the frame and the other on the right side.</li>
+<li><span class='tag pass'>PASS</span><b>Relationship - Similarity</b> &mdash; The two girls are depicted in a mirrored, symmetrical posture. Both have their arms outstretched and raised, and one leg bent up behind them.</li>
+<li><span class='tag pass'>PASS</span><b>Attribute - Shape</b> &mdash; The two girls are positioned on top of a large, distinctly circular carpet that features floral and geometric patterns.</li>
+<li><span class='tag pass'>PASS</span><b>Action - Full-body (Character/Anthropomorphic)</b> &mdash; The girls are shown in a full-body pose that is characteristic of dancing, with arms extended and one leg lifted, as if in mid-motion.</li>
+<li><span class='tag pass'>PASS</span><b>Style</b> &mdash; The image is rendered in a soft cartoon illustration style, characterized by gentle colors, clean outlines, and a warm, pleasant aesthetic.</li>
+</ul>
+<hr class=rule>
+<h2>What the agent did</h2>
+<div class=step><div class=who>Thinking</div><div class=said>Generate a cartoon-style illustration: two girls in similar poses, left and right sides of the frame, dancing on a huge circular carpet.</div></div>
+<div class=step><div class=who>Step 1 — `generate_image`</div><pre>{
+  &quot;prompt&quot;: &quot;Soft cartoon illustration style, warm pastel colors. On the left and right sides of the frame, two cute girls in similar mirrored dance poses, both mid-dance with arms gracefully raised and one leg lifted. They are dancing on a huge circular patterned carpet with ornate rings of flowers and geometric motifs, viewed from a slightly elevated angle so the round carpet fills the center of the scene. Gentle flat shading, rounded shapes, soft outlines, cozy storybook atmosphere, subtle warm lighting. Wide composition, the two girls balanced symmetrically on the left and right edges, the circular carpet centered between them.&quot;,
+  &quot;model&quot;: &quot;flux2-dev&quot;
+}</pre></div>
+<div class=step><div class=who>Result img_0</div><img class=stepimg data-zoom data-full='steps/img_0.jpg' src='steps/img_0.jpg' alt='intermediate result'></div>
+<div class=step><div class=who>Thinking</div><div class=said>The image looks quite good: two girls in similar mirrored poses on left and right, dancing on a huge circular carpet, soft cartoon style. The carpet is more oval due to perspective but that&#x27;s a natural elevated view. This matches the prompt well. Mark best and stop.</div></div>
+<div class=step><div class=who>Model</div><div class=said>This first generation already matches the prompt well: two girls in mirrored dance poses on the left and right, a huge ornate circular carpet beneath them, and a soft pastel cartoon style. I&#x27;ll mark it as my best result.</div></div>
+<div class=step><div class=who>Step 2 — `mark_best`</div><pre>{
+  &quot;image&quot;: &quot;img_0&quot;,
+  &quot;reason&quot;: &quot;Matches the prompt: two girls in similar mirrored poses on left and right, dancing on a huge circular carpet, in a soft cartoon illustration style.&quot;
+}</pre></div>
+<div class=step><div class=who>Model</div><div class=said>Done! The image features: - **Two girls on the left and right** of the frame in matching, mirrored dance poses — arms gracefully extended, one leg lifted mid-step - **A huge circular carpet** filling the scene, with ornate concentric rings of floral and geometric patterns - **Soft cartoon illustration style** — warm pastel palette, gentle flat shading, rounded shapes, and a cozy storybook feel The girls wear matching white tops and pink skirts with ballet flats, giving the composition a balanced, symmetrical look. Let me know if you&#x27;d like any changes!</div></div>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+document.addEventListener('click', function (e) {
+  if (e.target.tagName !== 'IMG' || e.target.closest('#lb') || !e.target.dataset.zoom) return;
+  var lb = document.getElementById('lb');
+  lb.querySelector('img').src = e.target.dataset.full || e.target.src;
+  lb.style.display = 'flex';
+});
+</script>
+</body>
+</html>
